@@ -5,6 +5,10 @@ import javax.microedition.khronos.opengles.GL10;
 import rokon.Sprite;
 import rokon.SpriteModifier;
 
+/**
+ * @author Richard Taylor
+ * A very basic SpriteModifier that rotates a Sprite at a given frequency
+ */
 public class Spin extends SpriteModifier {
 
 	private float _frequency;

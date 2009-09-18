@@ -3,6 +3,10 @@ package rokon.SpriteModifiers;
 import rokon.Sprite;
 import rokon.SpriteModifier;
 
+/**
+ * @author Richard Taylor
+ * The gravity modifier allows you to make a Sprite behave under the effects of gravity
+ */
 public class Gravity extends SpriteModifier {
 
 	private float _gravityX;

@@ -2,6 +2,12 @@ package rokon;
 
 import android.graphics.Bitmap;
 
+/**
+ * @author Richard Taylor
+ * Texture's are very important, and can be applied to Sprite's.
+ * A Texture class contains a reference to a particular image loaded by createTextureXXX functions in Rokon
+ * The actual image is held on the hardware, accessed through TextureAtlas
+ */
 public class Texture {
 	
 	public boolean inserted;

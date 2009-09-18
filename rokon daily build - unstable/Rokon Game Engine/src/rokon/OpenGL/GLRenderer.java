@@ -18,16 +18,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLU;
 
+/**
+ * @author A mix of my own code and snippets from various places
+ */
 public class GLRenderer implements GLSurfaceView.Renderer {
-    private static BitmapFactory.Options sBitmapOptions
-        = new BitmapFactory.Options();
-    
-    private int[] mTextureNameWorkspace;
-    private int[] mCropWorkspace;
+    private static BitmapFactory.Options sBitmapOptions = new BitmapFactory.Options();
    
     public GLRenderer(Context context) {
-        mTextureNameWorkspace = new int[1];
-        mCropWorkspace = new int[4];
         sBitmapOptions.inPreferredConfig = Bitmap.Config.RGB_565;
     }
    
@@ -36,7 +33,6 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         return configSpec;
     }
     public void drawFrame(GL10 gl) {
-
     	gl.glClear(GL10.GL_COLOR_BUFFER_BIT);    	
     	gl.glMatrixMode(GL10.GL_MODELVIEW);
     	Rokon.getRokon().drawFrame((GL11)gl);
@@ -86,7 +82,6 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     }
 
     public void shutdown(GL10 gl) {
-    	//todo remove all things from memory
     	Accelerometer.stopListening();
 		try {
 			RokonMusic.end();			

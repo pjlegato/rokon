@@ -18,6 +18,14 @@ import rokon.Handlers.DynamicsHandler;
  * parts of in game objects. Basic dynamics can be applied.
  *
  */
+/**
+ * @author Richard
+ *
+ */
+/**
+ * @author Richard
+ *
+ */
 public class Sprite {
 	
 	private boolean _killMe;
@@ -93,22 +101,37 @@ public class Sprite {
 		resetDynamics();
 	}
 	
+	/**
+	 * @return TRUE if the Sprite is marked for removal from the Layer after the next frame.
+	 */
 	public boolean isDead() {
 		return _killMe;
 	}
 	
+	/**
+	 * Marks the Sprite for removal, it will be taken off the Layer at the end of the current frame 
+	 */
 	public void markForRemoval() {
 		_killMe = true;
 	}
 	
+	/**
+	 * @param visible TRUE if the Sprite is to be drawn on the Layer, default is TRUE
+	 */
 	public void setVisible(boolean visible) {
 		_visible = visible;
 	}
 	
+	/**
+	 * @return TRUE if the Sprite is being drawn onto the Layer
+	 */
 	public boolean isVisible() {
 		return _visible;
 	}
 	
+	/**
+	 * @param texture applies a Texture to the Sprite
+	 */
 	public void setTexture(Texture texture) {
 		_texture = texture;
 		_tileX = 1;
@@ -116,6 +139,16 @@ public class Sprite {
 		_updateTextureBuffer();
 	}
 	
+	/**
+	 * Removes the Texture that has been applied to the Sprite
+	 */
+	public void resetTexture() {
+		_texture = null;
+	}
+	
+	/**
+	 * @param tileIndex the index of the Texture tile to be used by the Sprite, 1-based
+	 */
 	public void setTileIndex(int tileIndex) {
 		if(_texture == null) {
 			Debug.print("Error - Tried setting tileIndex of null texture");
@@ -129,6 +162,9 @@ public class Sprite {
 		_updateTextureBuffer();
 	}
 	
+	/**
+	 * @return the current Texture tile index that is being used by the Sprite
+	 */
 	public int getTileIndex() {
 		int tileIndex = 0;
 		tileIndex += _tileX;
@@ -136,12 +172,20 @@ public class Sprite {
 		return tileIndex;
 	}	
 	
+	/**
+	 * Sets the Texture tile index to be used by the Sprite by columns and rows, rather than index
+	 * @param tileX column
+	 * @param tileY row
+	 */
 	public void setTile(int tileX, int tileY) {
 		_tileX = tileX;
 		_tileY = tileY;
 		_updateTextureBuffer();
 	}
 	
+	/**
+	 * @return the current Texture applied to the Sprite
+	 */
 	public Texture getTexture() {
 		return _texture;
 	}
@@ -156,6 +200,9 @@ public class Sprite {
 	}
 	
 	private void _updateTextureBuffer() {
+		
+		if(_texture == null)
+			return;
 		
 		float x1 = _texture.atlasX;
 		float y1 = _texture.atlasY;
@@ -189,121 +236,219 @@ public class Sprite {
 		});
 	}
 	
+	/**
+	 * Updates the texture buffers used by OpenGL, there should be no need to call this
+	 */
 	public void updateBuffers() {
 		_updateTextureBuffer();
 	}
 	
+	/**
+	 * @param rotation angle, in degrees, to rotate the Sprite relative to its current angle
+	 */
 	public void rotate(float rotation) {
 		_rotation += rotation;
 	}
 	
+	/**
+	 * @param rotation angle, in degrees, to set the Sprite's rotation
+	 */
 	public void setRotation(float rotation) {
 		_rotation = rotation;
 	}
 	
+	/**
+	 * @return the current angle, in degrees, at which the Sprite is at
+	 */
 	public float getRotation() {
 		return _rotation;
 	}
 	
+	/**
+	 * @param scaleX a multiplier to scale your Sprite in the X direction when drawing
+	 */
 	public void setScaleX(float scaleX) {
 		_scaleX = scaleX;
 	}
 	
+	/**
+	 * @return the current scale multiplier in X direction
+	 */
 	public float getScaleX() {
 		return _scaleX;
 	}
 	
+	/**
+	 * @param scaleY a multiplier to scale your Sprite in the Y direction when drawing
+	 */
 	public void setScaleY(float scaleY) {
 		_scaleY = scaleY;
 	}
 	
+	/**
+	 * @return the current scale multiplier in Y direction
+	 */
 	public float getScaleY() {
 		return _scaleY;
 	}
 	
+	/**
+	 * Note that scale is not considered in collisions
+	 * @param scaleX a multiplier to scale your Sprite in the X direction when drawing
+	 * @param scaleY a multiplier to scale your Sprite in the Y direction when drawing
+	 */
 	public void setScale(float scaleX, float scaleY) {
 		_scaleX = scaleX;
 		_scaleY = scaleY;
 	}
 
+	/**
+	 * @param x the top left position of your Sprite, in the X direction
+	 */
 	public void setX(float x) {
 		_x = x;
 	}
 	
+	/**
+	 * @param y the top left position of your Sprite, in the Y direction
+	 */
 	public void setY(float y) {
 		_y = y;
 	}
 	
+	/**
+	 * Sets the position of the Sprite, in pixels
+	 * @param x 
+	 * @param y
+	 */
 	public void setXY(float x, float y) {
 		_x = x;
 		_y = y;
 	}
 	
+	/**
+	 * @param x number of pixels to move the Sprite relative to its current position
+	 */
 	public void moveX(float x) {
 		_x += x;
 	}
+
 	
+	/**
+	 * @param u number of pixels to move the Sprite relative to its current position
+	 */
 	public void moveY(float y) {
 		_y += y;
 	}
 	
+	/**
+	 * Moves the Sprite relative to its current position
+	 * @param x
+	 * @param y
+	 */
 	public void move(float x, float y) {
 		_x += x;
 		_y += y;
 	}
 	
+	/**
+	 * @return the top left X position of the Sprite
+	 */
 	public float getX() {
 		return _x;
 	}
 	
+	/**
+	 * @return the top left X position of the Sprite, rounded to the nearest integer
+	 */
 	public int getScreenX() {
 		return (int)_x;
 	}
 	
+	/**
+	 * @return the top left X position of the Sprite
+	 */
 	public float getY() {
 		return _y;
 	}
 	
+	/**
+	 * @return the top left Y position of the Sprite, rounded to the nearest integer
+	 */
 	public int getScreenY() {
 		return (int)_y;
 	}
 
+	/**
+	 * @param red 0.0 to 1.0
+	 */
 	public void setRed(float red) {
 		_red = red;
 	}
-	
+
+	/**
+	 * @param red 0.0 to 1.0
+	 */
 	public void setGreen(float green) {
 		_green = green;
 	}
-	
+
+	/**
+	 * @param red 0.0 to 1.0
+	 */
 	public void setBlue(float blue) {
 		_blue = blue;
 	}
-	
+
+	/**
+	 * @param red 0.0 to 1.0
+	 */
 	public void setAlpha(float alpha) {
 		_alpha = alpha;
 	}
-	
+
+	/**
+	 * @param red 0 to 255
+	 */
 	public void setRedInt(int red) {
 		_red = (float)red / 255f;
 	}
-	
+
+	/**
+	 * @param red 0 to 255
+	 */
 	public void setGreenInt(int green) {
 		_green = (float)green / 255f;
 	}
-	
+
+	/**
+	 * @param red 0 to 255
+	 */
 	public void setBlueInt(int blue) {
 		_blue = (float)blue / 255f;
 	}
-	
+
+	/**
+	 * @param red 0 to 255
+	 */
 	public void setAlphaInt(int alpha) {
 		_alpha = (float)alpha / 255f;
 	}
 	
+	/**
+	 * @return current alpha value, 0.0 to 1.0
+	 */
 	public float getAlpha() {
 		return _alpha;
 	}
 	
+	/**
+	 * Sets the color of the Sprite, this is still applied when a textured. 1,1,1,1 is white and 0,0,0,1 is black 
+	 * @param red 0.0 to 1.0
+	 * @param green 0.0 to 1.0
+	 * @param blue 0.0 to 1.0 
+	 * @param alpha 0.0 to 1.0
+	 */
 	public void setColor(float red, float green, float blue, float alpha) {
 		setRed(red);
 		setGreen(green);
@@ -311,58 +456,101 @@ public class Sprite {
 		setAlpha(alpha);
 	}
 	
+	/**
+	 * @return current red value, 0.0 to 1.0
+	 */
 	public float getRed() {
 		return _red;
 	}
 	
+	/**
+	 * @return current green value, 0.0 to 1.0
+	 */
 	public float getGreen() {
 		return _green;
 	}
-	
+
+	/**
+	 * @return current blue value, 0.0 to 1.0
+	 */
 	public float getBlue() {
 		return _blue;
 	}
-	
+
+	/**
+	 * @return current red value, 0 to 255
+	 */
 	public int getRedInt() {
 		return Math.round(_red * 255);
 	}
-	
+
+	/**
+	 * @return current green value, 0 to 255
+	 */
 	public int getGreenInt() {
 		return Math.round(_green * 255);
 	}
-	
+
+	/**
+	 * @return current blue value, 0 to 255
+	 */
 	public int getBlueInt() {
 		return Math.round(_blue * 255);
 	}
-	
+
+	/**
+	 * @return current alpha value, 0 to 255
+	 */
 	public int getAlphaInt() {
 		return Math.round(_alpha * 255);
 	}
 	
+	/**
+	 * @param width width of the Sprite, used for collisions and multiplied by scale when drawn
+	 */
 	public void setWidth(float width) {
 		_width = width;
 	}
-	
+
+	/**
+	 * @param height height of the Sprite, used for collisions and multiplied by scale when drawn
+	 */
 	public void setHeight(float height) {
 		_height = height;
 	}
 	
+	/**
+	 * @return current width of the Sprite
+	 */
 	public float getWidth() {
 		return _width;
 	}
 	
+	/**
+	 * @return current height of the Sprite
+	 */
 	public float getHeight() {
 		return _height;
 	}
 	
+	/**
+	 * @return current width of the Sprite, rounded to the nearest Integer
+	 */
 	public int getScreenWidth() {
 		return (int)_width;
 	}
 	
+	/**
+	 * @return current height of the Sprite, rounded to the nearest Integer
+	 */
 	public int getScreenHeight() {
 		return (int)_height;
 	}
 
+	/**
+	 * Draws the Sprite to the OpenGL object, should be no need to call this
+	 * @param gl
+	 */
 	@SuppressWarnings("unchecked")
 	public void drawFrame(GL10 gl) {
 		_detectCollisions();
@@ -392,6 +580,13 @@ public class Sprite {
 		gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
 	}
 	
+	/**
+	 * Note, this is very basic and does represents only the rectangular Sprite
+	 * TODO consider rotation
+	 * @param x
+	 * @param y
+	 * @return TRUE if the Sprite is colliding with the given coordinates
+	 */
 	public boolean isAt(int x, int y) {
 		if(x < getX() || x > getX() + getWidth())
 			return false;
@@ -400,14 +595,23 @@ public class Sprite {
 		return true;
 	}
 	
+	/**
+	 * @param spriteModifier a SpriteModifier to add the Sprite 
+	 */
 	public void addModifier(SpriteModifier spriteModifier) {
 		_spriteModifier.add(spriteModifier);
 	}
 	
+	/**
+	 * @param spriteModifier a SpriteModifier to remove from the Sprite
+	 */
 	public void removeModifier(SpriteModifier spriteModifier) {
 		_spriteModifier.remove(spriteModifier);
 	}
 	
+	/**
+	 * Updates the movement, animation and modifiers. This is called automatically, no need to use this.
+	 */
 	public void updateMovement() {
 		//	if this is the first update, forget about it
 		if(_lastUpdate == 0) {
@@ -481,14 +685,23 @@ public class Sprite {
 		
 	}
 	
+	/**
+	 * @param dynamicsHandler sets a handler for the dynamics, this can track acceleration
+	 */
 	public void setDynamicsHandler(DynamicsHandler dynamicsHandler) {
 		_dynamicsHandler = dynamicsHandler;
 	}
 	
+	/**
+	 * Removes the DynamicsHandler from the Sprite
+	 */
 	public void resetDynamicsHandler() {
 		_dynamicsHandler = null;
 	}
 	
+	/**
+	 * Stops the Sprite, setting acceleration and velocities to zero
+	 */
 	public void stop() {
 		resetDynamics();
 	}
@@ -503,6 +716,13 @@ public class Sprite {
 		_accelerationY = 0;
 	}
 	
+	/**
+	 * Accelerates a Sprite, note that this is relative to current Acceleration.
+	 * @param accelerationX acceleration in X direction, pixels per second
+	 * @param accelerationY acceleration in Y direction, pixels per second
+	 * @param terminalVelocityX specifies a highest possible velocity in X direction, this will trigger reachedTerminalVelocityX
+	 * @param terminalVelocityY specifies a highest possible velocity in Y direction, this will trigger reachedTerminalVelocityY
+	 */
 	public void accelerate(float accelerationX, float accelerationY, float terminalVelocityX, float terminalVelocityY) {
 		_stopAtTerminalVelocity = true;
 		_terminalVelocityX = terminalVelocityX;
@@ -514,6 +734,11 @@ public class Sprite {
 		_lastUpdate = 0;
 	}
 	
+	/**
+	 * Accelerates a Sprite, note that this is relative to current Acceleration. Terminal velocity restrictions are removed.
+	 * @param accelerationX acceleration in X direction, pixels per second
+	 * @param accelerationY acceleration in Y direction, pixels per second
+	 */
 	public void accelerate(float accelerationX, float accelerationY) {
 		_stopAtTerminalVelocity = false;
 		_accelerationX += accelerationX;
@@ -521,51 +746,90 @@ public class Sprite {
 		_lastUpdate = 0;
 	}
 	
+	/**
+	 * @return current acceleration in X direction, pixels per second
+	 */
 	public float getAccelerationX() {
 		return _accelerationX;
 	}
-	
+	/**
+	 * @return current acceleration in Y direction, pixels per second
+	 */
 	public float getAccelerationY() {
 		return _accelerationY;
 	}
 	
+	/**
+	 * @return current velocity in X direction, pixels per second
+	 */
 	public float getVelocityX() {
 		return _velocityX;
 	}
 	
+	/**
+	 * @return current velocity in Y direction, pixels per second
+	 */
 	public float getVelocityY() {
 		return _velocityY;
 	}
 	
+	/**
+	 * @param velocityX instantly sets the velocity of the Sprite in X direction, pixels per second
+	 */
 	public void setVelocityX(float velocityX) {
 		_velocityX = velocityX;
 	}
 	
+	/**
+	 * @param velocityY instantly sets the velocity of the Sprite in Y direction, pixels per second
+	 */
 	public void setVelocityY(float velocityY) {
 		_velocityY = velocityY;
 	}
 	
+	/**
+	 * Instantly sets the velocity of te Sprite in X and Y directions, pixels per second
+	 * @param velocityX
+	 * @param velocityY
+	 */
 	public void setVelocity(float velocityX, float velocityY) {
 		_velocityX = velocityX;
 		_velocityY = velocityY;
 	}
 	
+	/**
+	 * @return the current terminal velocity cap in X direction
+	 */
 	public float getTerminalVelocityX() {
 		return _terminalVelocityX;
 	}
 	
+	/**
+	 * @return the current terminal velocity cap in Y direction
+	 */
 	public float getTerminalVelocityY() {
 		return _terminalVelocityY;
 	}
 	
+	/**
+	 * @param stopAtTerminalVelocity TRUE if Sprite should stop at the terminal velocity, FALSE if it should continue accelerating
+	 */
 	public void setStopAtTerminalVelocity(boolean stopAtTerminalVelocity) {
 		_stopAtTerminalVelocity = stopAtTerminalVelocity;
 	}
 	
+	/**
+	 * @return TRUE if the Sprite is going to stop when it reaches terminal velocity, FALSE if it will continue indefinately
+	 */
 	public boolean isStopAtTerminalVelocity() {
 		return _stopAtTerminalVelocity;
 	}
 	
+	/**
+	 * Sets a terminal velocity at which the Sprite will stop accelerating, this will trigger reachedTerminalVelocityX and reachedTerminalVelocityY in your DynamicsHandler if set
+	 * @param terminalVelocityX
+	 * @param terminalVelocityY
+	 */
 	public void setTerminalVelocity(float terminalVelocityX, float terminalVelocityY) {
 		_stopAtTerminalVelocity = true;
 	}
@@ -578,28 +842,46 @@ public class Sprite {
 		_terminalVelocityY = terminalVelocityY;
 	}
 	
+	/**
+	 * @param collisionHandler defines a CollisionHandler which the Sprite should trigger if it collides with any of the registered targets
+	 */
 	public void setCollisionHandler(CollisionHandler collisionHandler) {
 		_collisionHandler = collisionHandler;
 		_colliders = new HashSet<Sprite>();
 	}
 	
+	/**
+	 * Removes the CollisionHandler, and no longer checks for collisions
+	 */
 	public void resetCollisionHandler() {
 		_collisionHandler = null;
 		_colliders = null;
 	}
 	
-	public void addCollisionSprite(Sprite sprite) {
-		_colliders.add(sprite);
+	/**
+	 * @param target adds a target Sprite for the CollisionHandler to check for each frame
+	 */
+	public void addCollisionSprite(Sprite target) {
+		_colliders.add(target);
 	}
 	
-	public void removeCollisionSprite(Sprite sprite) {
-		_colliders.remove(sprite);
+	/**
+	 * @param target removes a target from the Sprite's list
+	 */
+	public void removeCollisionSprite(Sprite target) {
+		_colliders.remove(target);
 	}
 	
+	/**
+	 * @param animationHandler sets an AnimationHandler, which can keep track of animation loops and ends
+	 */
 	public void setAnimationHandler(AnimationHandler animationHandler) {
 		_animationHandler = animationHandler;
 	}
 	
+	/**
+	 * Removes the AnimationHandler from the Sprite
+	 */
 	public void resetAnimationHandler() {
 		_animationHandler = null;
 	}
@@ -615,6 +897,12 @@ public class Sprite {
 					_collisionHandler.collision(this, sprite);
 	}
 	
+	/**
+	 * Animates a Sprite by using tiles from its Texture. This will loop indefinately.
+	 * @param startTile the first tile index in the animation
+	 * @param endTile the final tile index used in the animation
+	 * @param time the time in milliseconds between each frame
+	 */
 	public void animate(int startTile, int endTile, float time) {
 		_animating = true;
 		_animateStartTile = startTile;
@@ -625,6 +913,14 @@ public class Sprite {
 		setTileIndex(startTile);
 	}
 	
+	/**
+	 * Animates a Sprite by using tiles from its Texture
+	 * @param startTile the first tile index in the animation
+	 * @param endTile the final tile index used in the animation
+	 * @param time the time in milliseconds between each frame
+	 * @param loops the number of loops to go through the animation
+	 * @param returnToStart TRUE if the Sprite should return to startTile when complete, FALSE if the Sprite should stay at endTile when complete
+	 */
 	public void animate(int startTile, int endTile, float time, int loops, boolean returnToStart) {
 		_animating = true;
 		_animateStartTile = startTile;
@@ -636,18 +932,30 @@ public class Sprite {
 		setTileIndex(startTile);
 	}
 	
+	/**
+	 * Stops the animation, and leaving the Sprite at its current frame 
+	 */
 	public void stopAnimation() {
 		_animating = false;
 	}
 	
+	/**
+	 * @return TRUE if the Sprite is being animated
+	 */
 	public boolean isAnimating() {
 		return _animating;
 	}
 	
+	/**
+	 * @return number of SpriteModifier's currently active
+	 */
 	public int getModifierCount() {
 		return _spriteModifier.size();
 	}
 	
+	/**
+	 * Removes all SpriteModifier's from the Sprite
+	 */
 	public void resetModifiers() {
 		_spriteModifier.clear();
 	}

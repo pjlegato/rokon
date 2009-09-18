@@ -39,6 +39,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 /**
+ * @author A mix of my own code and snippets from various places
+ * 
  * An implementation of SurfaceView that uses the dedicated surface for
  * displaying an OpenGL animation.  This allows the animation to run in a
  * separate thread, without requiring that it be driven by the update mechanism

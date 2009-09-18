@@ -7,6 +7,28 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+/**
+ * @author Richard Taylor
+ * TextureAtlas is a way of optimizing the use of multiple textures in OpenGL.
+ * OpenGL stores each of its textures as seperate images on the hardware, and to render
+ * one of these requires a command to tell OpenGL to scrap the image it has loaded, and 
+ * load up a new image into its immediate memory. It makes more sense to provide OpenGL
+ * with one large texture, so it never has to change between which it has selected, and
+ * for us to simply choose which parts of that texture we place onto a Sprite. This is
+ * called texture mapping.
+ * 
+ * TextureAtlas uses a very basic, and rather inefficient, largest-first bin packing 
+ * algorithm to squeeze all your textures and fonts on to one large image. This will be
+ * improved for future versions.
+ * 
+ * TextureAtlas provides OpenGL with a power-of-two sized texture (2,4,8,16,32 etc.) as
+ * this is needed for the hardware to work efficiently. It is possible for you however
+ * to load Texture's of any dimenion into the atlas, and Rokon will clip it for you.
+ * 
+ * Currently, only 1 textureatlas is supported at a time. There appears to be a limit of
+ * 1024x1024 total pixels. I am working on supporting multiple texture atlas's without
+ * impeding performance.
+ */
 public class TextureAtlas {
 	
 	public int id;
@@ -29,19 +51,35 @@ public class TextureAtlas {
 		ready = false;
 	}
 	
+	/**
+	 * @return the width of the texture atlas
+	 */
 	public int getWidth() {
 		return _width;
 	}
 	
+	/**
+	 * @return the height of the texture atlas
+	 */
 	public int getHeight() {
 		return _height;
 	}
 	
+	/**
+	 * Creates a Texture and puts it onto the atlas
+	 * @param resourceId reference to a drawable resource file, as described in R.java
+	 * @return NULL if failed
+	 */
 	public Texture createTextureFromResource(int resourceId) {
 		Bitmap bmp = BitmapFactory.decodeResource(Rokon.getRokon().getActivity().getResources(), resourceId);
 		return createTextureFromBitmap(bmp);
 	}
 	
+	/**
+	 * Creates a Texture and puts it onto the atlas
+	 * @param bmp a Bitmap object to build the texture from
+	 * @return NLUL if failed
+	 */
 	public Texture createTextureFromBitmap(Bitmap bmp) {
 		Texture texture = new Texture(bmp);
 		if(bmp.getWidth() > _greatestWidth)
@@ -52,15 +90,31 @@ public class TextureAtlas {
 		return texture;
 	}
 	
+	/**
+	 * Adds a Texture to the atlas, note: this is done automatically if createTextureXXX functions are used
+	 * @param texture
+	 */
 	public void addTexture(Texture texture) {
 		_texture.put(_textureCount, texture);
 		_textureCount++;
 	}
 	
+	/**
+	 * Calculates a TextureAtlas from all the loaded Texture's
+	 */
 	public void compute() {
 		compute(0);
 	}
 	
+	/**
+	 * Calculates a TextureAtlas from all the loaded Texture's
+	 * The Texture's are sorted into largest-first order, and a bin packing algorithm is used to squeeze 
+	 * into the atlas. There is a maximum total atlas size of 1024x1024 pixels, imposed by OpenGL.
+	 * If your Texture's and Font's do not fit into this space, an exception will be raised.
+	 * 
+	 * An improvement - to allow more atlases simulatenously, is being worked on.
+	 * @param initwidth the minimum width of the atlas
+	 */
 	public void compute(int initwidth) {
 		_height = 0;
 		long now = System.currentTimeMillis();
