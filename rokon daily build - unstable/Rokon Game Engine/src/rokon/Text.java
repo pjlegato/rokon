@@ -12,7 +12,6 @@ import javax.microedition.khronos.opengles.GL10;
  */
 public class Text {
 
-	private boolean _drawing;
 	private boolean _killMe;
 	private boolean _visible;
 	private String _text;
@@ -34,7 +33,6 @@ public class Text {
 		_visible = true;
 		_font = font;
 		_scale = scale;
-		_drawing = false;
 		_updateSprites();
 	}
 	
@@ -155,14 +153,18 @@ public class Text {
 		_y = y;
 	}
 	
+	private int length, x, i, characterIndex;
+	private float width;
+	private String character;
+	private Sprite[] newSprites;
 	private void _updateSprites() {
-		int length = _text.length();
-		int x = _x;
-		Sprite[] newSprites = new Sprite[length];
-		for(int i = 0; i < length; i++) {
-			String character = _text.substring(i, i + 1);
-			int characterIndex = Font.getCharacterPosition(character);
-			float width = (float)_font.getCharacterWidth(characterIndex) / 32f * (float)_scale;
+		length = _text.length();
+		x = _x;
+		newSprites = new Sprite[length];
+		for(i = 0; i < length; i++) {
+			character = _text.substring(i, i + 1);
+			characterIndex = Font.getCharacterPosition(character);
+			width = (float)_font.getCharacterWidth(characterIndex) / 32f * (float)_scale;
 			newSprites[i] = new Sprite(x, _y, _scale, _scale);
 			newSprites[i].setTexture(_font.getTexture());
 			newSprites[i].setTileIndex(characterIndex + 1);

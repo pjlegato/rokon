@@ -1,5 +1,6 @@
 package rokon.SpriteModifiers;
 
+import rokon.Rokon;
 import rokon.Sprite;
 import rokon.SpriteModifier;
 
@@ -11,8 +12,6 @@ public class Gravity extends SpriteModifier {
 
 	private float _gravityX;
 	private float _gravityY;
-	private float _velocityX;
-	private float _velocityY;
 	private long _lastUpdate;
 	
 	public Gravity(float gravityY) {
@@ -22,16 +21,12 @@ public class Gravity extends SpriteModifier {
 	public Gravity(float gravityX, float gravityY) {
 		_gravityX = gravityX;
 		_gravityY = gravityY;
-		_velocityX = 0;
-		_velocityY = 0;
-		_lastUpdate = System.currentTimeMillis();
+		_lastUpdate = Rokon.getTime();
 	}
 	
 	public void onUpdate(Sprite sprite) {
-		long timeDiff = System.currentTimeMillis() - _lastUpdate;
-		_velocityX += _gravityX * (float)(timeDiff / 1000);
-		_velocityY += _gravityY * (float)(timeDiff / 1000);
-		sprite.move(_velocityX, _velocityY);
+		long timeDiff = Rokon.getTime() - _lastUpdate;
+		sprite.setVelocityRelative(_gravityX * (float)(timeDiff / 1000), _gravityY * (float)(timeDiff / 1000));
 	}
 
 }

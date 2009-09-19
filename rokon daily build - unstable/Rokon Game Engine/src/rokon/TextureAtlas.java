@@ -117,7 +117,7 @@ public class TextureAtlas {
 	 */
 	public void compute(int initwidth) {
 		_height = 0;
-		long now = System.currentTimeMillis();
+		long now = Rokon.getTime();
 		int i = 0;
 		_width = initwidth;
 		if(_width == 0)
@@ -192,9 +192,6 @@ public class TextureAtlas {
 				return;
 			}
 		}
-		//Debug.print("First step took " + (System.currentTimeMillis() - now) + "ms");
-		now = System.currentTimeMillis();
-		//Debug.print("Producing an atlas texture " + _width + "x" + _height);
 		_bmp = Bitmap.createBitmap(_width, _height, Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(_bmp);
 		for(Texture texture : _texture.values()) {
@@ -202,6 +199,7 @@ public class TextureAtlas {
 			texture.cleanBitmap();
 		}
 		readyToLoad = true;
+		System.gc();
 	}
 	
 	public Bitmap getBitmap() {

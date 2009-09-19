@@ -15,7 +15,6 @@ public class Texture {
 	public int atlasY;
 	
 	private Bitmap _bmp;
-	private int _texture;
 	private int _width;
 	private int _height;
 	private int _tileCols;
@@ -44,10 +43,6 @@ public class Texture {
 	
 	public int getHeight() {
 		return _height;
-	}
-	
-	public void setTexId(int texture) {
-		_texture = texture;
 	}
 	
 	public void setTileSize(int tileWidth, int tileHeight) {

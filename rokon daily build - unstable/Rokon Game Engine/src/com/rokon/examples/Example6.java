@@ -85,7 +85,7 @@ public class Example6 extends Activity {
         //	It is a static library, and does not need to be initialised.
         //	Files are played from the assets folder. The second parameter
         //	defines whether the track will be repeated when its finished.
-        RokonMusic.play("sounds/iron-man.mp3", true);
+        //RokonMusic.play("sounds/iron-man.mp3", true);
         
         
         Thread gameThread = new Thread(new GameThread());

@@ -24,7 +24,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 /**
- * @version 0.1 alpha
+ * @version 0.11 alpha
  * @author Richard Taylor
  * 
  * Rokon is a full game framework, built for ease of use and extensibility
@@ -44,9 +44,13 @@ import android.view.WindowManager;
  *
  */
 public class Rokon {
+	public static int MAX_HOTSPOTS = 25;
 	
 	private Vibrator _vibrator;
-	private HashSet<Hotspot> _hotspot;
+	private Hotspot[] hotspotArr = new Hotspot[MAX_HOTSPOTS];
+	private int i, j, k, l, m, n, o, p, q, r, s, t;
+	
+	private Transition _transition;
 	
 	private static Rokon _rokon;
 	private TextureAtlas _textureAtlas;
@@ -70,6 +74,10 @@ public class Rokon {
 	
 	private PowerManager _powerManager;
 	private WakeLock _wakeLock;
+	
+	private float[] _setBackgroundColor;
+	
+	private static long _timeMillis = 0;
 	
 	/**
 	 * @return the current TextureAtlas
@@ -158,7 +166,6 @@ public class Rokon {
 		_frameCount = 0;
 		_frameTimer = 0;
 		_textureAtlas = new TextureAtlas();
-		_hotspot = new HashSet<Hotspot>();
 	}
 	
 	/**
@@ -166,7 +173,15 @@ public class Rokon {
 	 * @param hotspot
 	 */
 	public void addHotspot(Hotspot hotspot) {
-		_hotspot.add(hotspot);
+		j = -1;
+		for(k = 0; k < MAX_HOTSPOTS; k++)
+			if(hotspotArr[k] == null)
+				j = k;
+		if(j == -1) {
+			Debug.print("TOO MANY HOTSPOTS");
+			System.exit(0);
+		}
+		hotspotArr[j] = hotspot;
 	}
 	
 	/**
@@ -174,14 +189,17 @@ public class Rokon {
 	 * @param hotspot
 	 */
 	public void removeHotspot(Hotspot hotspot) {
-		_hotspot.remove(hotspot);
+		for(l = 0; l < MAX_HOTSPOTS; l++)
+			if(hotspotArr[l] != null)
+				if(hotspotArr[l].equals(hotspot))
+					hotspotArr[l] = null;
 	}
 	
 	/**
 	 * @return a HashSet of all active Hotspot's
 	 */
-	public HashSet<Hotspot> getHotspots() {
-		return _hotspot;
+	public Hotspot[] getHotspots() {
+		return hotspotArr;
 	}
 	
 	/**
@@ -274,19 +292,26 @@ public class Rokon {
 	 */
 	public void drawFrame(GL11 gl) {
 		
-		//if(_background != null)
-		//	_background.drawFrame(gl);
+		_timeMillis = System.currentTimeMillis(); //android.os.SystemClock.elapsedRealtime();
 		
-		for(int i = 0; i < _maxLayerCount; i++)
-			_layer[i].updateMovement();
+		if(_setBackgroundColor != null) {
+			gl.glClearColor(_setBackgroundColor[0], _setBackgroundColor[1], _setBackgroundColor[2], 1);
+			_setBackgroundColor = null;
+		}
 		
-		for(int i = 0; i < _maxLayerCount; i++)
-			_layer[i].drawFrame(gl);
+		if(_background != null)
+			_background.drawFrame(gl);
 		
-		if(System.currentTimeMillis() > _frameTimer) {
+		for(int m = 0; m < _maxLayerCount; m++)
+			_layer[m].updateMovement();
+		
+		for(int m = 0; m < _maxLayerCount; m++)
+			_layer[m].drawFrame(gl);
+		
+		if(_timeMillis > _frameTimer) {
 			_frameRate = _frameCount;
 			_frameCount = 0;
-			_frameTimer = System.currentTimeMillis() + 1000;
+			_frameTimer = _timeMillis + 1000;
 			Debug.print("FPS=" + _frameRate);
 		}
 		_frameCount++;
@@ -298,19 +323,22 @@ public class Rokon {
 	 * There is no need to call this.
 	 * @param gl
 	 */
+	private int[] tmp_tex;
+	public int tex;
+	private Bitmap bmp;
 	public void loadTextures(GL10 gl) {
 		if(_textureAtlas.readyToLoad) {
 			Debug.print("Loading Textures");
-			Bitmap bmp = _textureAtlas.getBitmap();
-			int[] tmp_tex = new int[1];
+			bmp = _textureAtlas.getBitmap();
+			tmp_tex = new int[1];
 			gl.glGenTextures(1, tmp_tex, 0);
-			int tex = tmp_tex[0];
+			tex = tmp_tex[0];
 			gl.glBindTexture(GL10.GL_TEXTURE_2D, tex);
             gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
             gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
             gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
             gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
-            gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_REPLACE);
+            gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_MODULATE);
 			GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bmp, 0);
 			Debug.print("Texture created tex=" + tex + " w=" + bmp.getWidth() + " h=" + bmp.getHeight());
 			_textureAtlas.readyToLoad = false;
@@ -486,6 +514,42 @@ public class Rokon {
 		if(_vibrator == null)
 			initVibrator();
 		_vibrator.vibrate(pattern, loops);
+	}
+	
+	/**
+	 * Sets the background color of the OpenGL surface
+	 * @param red 0.0 to 1.0
+	 * @param green 0.0 to 1.0
+	 * @param blue 0.0 to 1.0
+	 */
+	public void setBackgroundColor(float red, float green, float blue) {
+		_setBackgroundColor = new float[3];
+		_setBackgroundColor[0] = red;
+		_setBackgroundColor[1] = green;
+		_setBackgroundColor[2] = blue;
+	}
+	
+	/**
+	 * @return the system time, in milliseconds, for the current visible frame
+	 */
+	public static long getTime() {
+		if(_timeMillis == 0)
+			_timeMillis = System.currentTimeMillis();
+		return _timeMillis;
+	}
+	
+	/**
+	 * @param transition creates a transition effect as defined by an extension of Transition
+	 */
+	public void setTransition(Transition transition) {
+		_transition = transition;
+	}
+	
+	/**
+	 * @return the current Transition applied to the scene
+	 */
+	public Transition getTransition() {
+		return _transition;
 	}
 	
 }

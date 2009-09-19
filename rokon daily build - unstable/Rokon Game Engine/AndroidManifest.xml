@@ -19,6 +19,7 @@
     <activity android:name=".Example7"></activity>
     <activity android:name=".Example8"></activity>
     <activity android:name=".Example9"></activity>
+    <activity android:name=".Example10"></activity>
 </application>
     <uses-sdk android:minSdkVersion="3" />
 <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>

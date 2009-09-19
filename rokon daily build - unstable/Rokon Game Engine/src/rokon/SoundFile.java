@@ -8,6 +8,9 @@ package rokon;
 public class SoundFile {
 	
 	private int _id;
+	private int result;
+	private AudioStream audioStream;
+	private boolean res;
 	
 	public SoundFile(int streamId) {
 		_id = streamId;
@@ -21,9 +24,9 @@ public class SoundFile {
 	 * @return the AudioStream through which the sound is playing
 	 */
 	public AudioStream play() {
-		int result = RokonAudio.singleton.getSoundPool().play(_id, RokonAudio.singleton.getMasterVolume(), RokonAudio.singleton.getMasterVolume(), 1, 0, 1f);
+		result = RokonAudio.singleton.getSoundPool().play(_id, RokonAudio.singleton.getMasterVolume(), RokonAudio.singleton.getMasterVolume(), 1, 0, 1f);
 		if(result != 0) {
-			AudioStream audioStream = new AudioStream(result, false, RokonAudio.singleton.getMasterVolume());
+			audioStream = new AudioStream(result, false, RokonAudio.singleton.getMasterVolume());
 			return audioStream;
 		} else
 			return null;
@@ -35,7 +38,7 @@ public class SoundFile {
 	public AudioStream playContinuous() {
 		int result = RokonAudio.singleton.getSoundPool().play(_id, RokonAudio.singleton.getMasterVolume(), RokonAudio.singleton.getMasterVolume(), 0, -1, 1);
 		if(result != 0) {
-			AudioStream audioStream = new AudioStream(result, true, RokonAudio.singleton.getMasterVolume());
+			audioStream = new AudioStream(result, true, RokonAudio.singleton.getMasterVolume());
 			return audioStream;
 		} else
 			return null;
@@ -45,7 +48,7 @@ public class SoundFile {
 	 * Removes this file from the memory. Should be used when this file is no longer needed.
 	 */
 	public void unload() {
-		boolean res = RokonAudio.singleton.getSoundPool().unload(_id);
+		res = RokonAudio.singleton.getSoundPool().unload(_id);
 		Debug.print("Unloading " + _id + " " + res);
 	}
 }

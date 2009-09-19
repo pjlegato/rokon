@@ -15,6 +15,9 @@ package com.rokon.examples;
 import rokon.Rokon;
 import rokon.Sprite;
 import rokon.Texture;
+import rokon.SpriteModifiers.Blink;
+import rokon.SpriteModifiers.Colorize;
+import rokon.SpriteModifiers.Fade;
 import rokon.SpriteModifiers.Spin;
 import android.app.Activity;
 import android.os.Bundle;
@@ -30,25 +33,33 @@ public class Example7 extends Activity {
         rokon = Rokon.createEngine(this);
         rokon.setFullscreen();
         rokon.fixLandscape();
+    	rokon.setBackgroundColor(0.3f, 0.3f, 0.7f);
         rokon.init();
 
         crabTexture = rokon.createTextureFromResource(R.drawable.crab); 
     	rokon.prepareTextureAtlas();
+
+    	Sprite sprite = new Sprite(0, 0, 100, 100, crabTexture);
+    	sprite.addModifier(new Blink(250));
+    	rokon.addSprite(sprite);
+
+    	sprite = new Sprite(100, 0, 100, 100, crabTexture);
+    	sprite.addModifier(new Colorize(1));
+    	rokon.addSprite(sprite);
+
+    	sprite = new Sprite(200, 0, 100, 100, crabTexture);
+    	sprite.addModifier(new Fade(1000, -1));
+    	rokon.addSprite(sprite);
+
+    	sprite = new Sprite(300, 0, 100, 100, crabTexture);
+    	sprite.addModifier(new Spin(1));
+    	rokon.addSprite(sprite);
     	
-    	for(int i = 0; i < 5; i++) {
-    		Sprite sprite = new Sprite((int)(Math.random() * 480), (int)(Math.random() * 320), 100, 100, crabTexture);
-    		//	Each sprite is assigned the Spin modifier
-    		//	This is a very basic modifier, which rotates the sprite
-    		//	at a given frequency (1 = 1 full rotation per second)
-    		//	It is important to remember when rotating objects like this
-    		//	that you create time-based rotations rather than frame based,
-    		//	this will keep your game looking constant even if frame rate
-    		//	drops below the noticable limit. Modifiers can be removed by 
-    		//	removeModifier(SpriteModifier). There is no limit to the number
-    		//	of active  modifiers, and they can all be wiped by resetModifiers()
-    		sprite.addModifier(new Spin((float)Math.random() * 2));    		
-    		rokon.addSprite(sprite);
-    	}
+    	sprite = new Sprite(200, 100, 200, 200, crabTexture);
+    	sprite.addModifier(new Spin(0.2f));
+    	sprite.addModifier(new Fade(1000, -1));
+    	sprite.addModifier(new Colorize(1));
+    	rokon.addSprite(sprite);
 
         Thread gameThread = new Thread(new GameThread());
         gameThread.start();

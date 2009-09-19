@@ -21,6 +21,7 @@ public class Launcher extends Activity implements OnClickListener {
 		findViewById(R.id.btnExample7).setOnClickListener(this);
 		findViewById(R.id.btnExample8).setOnClickListener(this);
 		findViewById(R.id.btnExample9).setOnClickListener(this);
+		findViewById(R.id.btnExample10).setOnClickListener(this);
 	}
 	
 	public void onClick(View v) {
@@ -69,6 +70,11 @@ public class Launcher extends Activity implements OnClickListener {
 			case R.id.btnExample9:
 		        Debug.print("Starting Example 9");
 				intent = new Intent(Launcher.this, Example9.class);
+				startActivity(intent);
+				break;
+			case R.id.btnExample10:
+		        Debug.print("Starting Example 10");
+				intent = new Intent(Launcher.this, Example10.class);
 				startActivity(intent);
 				break;
 		}

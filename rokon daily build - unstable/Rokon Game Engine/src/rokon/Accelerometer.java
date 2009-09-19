@@ -103,7 +103,7 @@ public class Accelerometer {
 		}
 
 		public void onSensorChanged(SensorEvent event) {
-			long now = System.currentTimeMillis();
+			long now = Rokon.getTime();
 			
     		x = event.values[0];
     		y = event.values[1];

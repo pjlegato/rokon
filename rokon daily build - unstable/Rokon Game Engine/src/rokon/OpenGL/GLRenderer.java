@@ -33,6 +33,16 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         return configSpec;
     }
     public void drawFrame(GL10 gl) {
+		if(Rokon.getRokon().getTransition() != null) {
+			if(Rokon.getRokon().getTransition().isWaiting()) {
+				Rokon.getRokon().getTransition().grabScreen(gl);
+			} else if(Rokon.getRokon().getTransition().isActive()) {
+				
+			} else {
+				Rokon.getRokon().setTransition(null);
+			}
+		}
+		
     	gl.glClear(GL10.GL_COLOR_BUFFER_BIT);    	
     	gl.glMatrixMode(GL10.GL_MODELVIEW);
     	Rokon.getRokon().drawFrame((GL11)gl);
@@ -45,6 +55,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         gl.glShadeModel(GL10.GL_FLAT);
         gl.glEnable(GL10.GL_BLEND);
         gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+        //gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE);
         gl.glEnable(GL10.GL_TEXTURE_2D);
 		GLU.gluOrtho2D(gl, 0, width, height, 0);
 		gl.glVertexPointer(2, GL11.GL_FLOAT, 0, _vertexBuffer);

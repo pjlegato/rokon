@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.HashSet;
+import java.util.Iterator;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -18,24 +19,21 @@ import rokon.Handlers.DynamicsHandler;
  * parts of in game objects. Basic dynamics can be applied.
  *
  */
-/**
- * @author Richard
- *
- */
-/**
- * @author Richard
- *
- */
 public class Sprite {
+	public static final int MAX_COLLIDERS = 10;
+	public static final int MAX_MODIFIERS = 10;
 	
-	private boolean _killMe;
+	private int i, j, k;
 	
-	private HashSet<Sprite> _colliders;
+	private Sprite[] collidersArr = new Sprite[MAX_COLLIDERS];
+	private SpriteModifier[] modifierArr = new SpriteModifier[MAX_MODIFIERS];
+	private int colliderCount = 0;
 	
 	private AnimationHandler _animationHandler;
 	private CollisionHandler _collisionHandler;
 	private DynamicsHandler _dynamicsHandler;
-	
+
+	private boolean _killMe;
 	private boolean _animating;
 	private int _animateStartTile;
 	private int _animateEndTile;
@@ -54,13 +52,13 @@ public class Sprite {
 	private float _accelerationX;
 	private float _accelerationY;
 	private long _lastUpdate;
-	
-	private HashSet<SpriteModifier> _spriteModifier;
 
 	private boolean _visible;
 	private float _x;
 	private float _y;
 	private float _rotation;
+	private float _offsetX;
+	private float _offsetY;
 	
 	private float _width;
 	private float _height;
@@ -95,10 +93,21 @@ public class Sprite {
 		_alpha = 1;
 		_visible = true;
 		_killMe = false;
-		_spriteModifier = new HashSet<SpriteModifier>();
+		_offsetX = 0;
+		_offsetY = 0;
 		if(texture != null)
 			setTexture(texture);
 		resetDynamics();
+	}
+	
+	/**
+	 * Sets the offset at which the sprite is drawn on screen
+	 * @param offsetX
+	 * @param offsetY
+	 */
+	public void setOffset(float offsetX, float offsetY) {
+		_offsetX = offsetX;
+		_offsetY = offsetY;
 	}
 	
 	/**
@@ -189,44 +198,41 @@ public class Sprite {
 	public Texture getTexture() {
 		return _texture;
 	}
-
+	
+	private ByteBuffer bb;
+	private FloatBuffer fb;
 	private FloatBuffer _makeFloatBuffer(float[] arr) {
-		ByteBuffer bb = ByteBuffer.allocateDirect(arr.length*4);
+		bb = ByteBuffer.allocateDirect(arr.length*4);
 		bb.order(ByteOrder.nativeOrder());
-		FloatBuffer fb = bb.asFloatBuffer();
+		fb = bb.asFloatBuffer();
 		fb.put(arr);
 		fb.position(0);
 		return fb;
 	}
 	
+	private float x1, y1, x2, y2, xs, ys, fx1, fx2, fy1, fy2;
 	private void _updateTextureBuffer() {
 		
 		if(_texture == null)
 			return;
 		
-		float x1 = _texture.atlasX;
-		float y1 = _texture.atlasY;
-		float x2 = _texture.atlasX + _texture.getWidth();
-		float y2 = _texture.atlasY + _texture.getHeight();
+		x1 = _texture.atlasX;
+		y1 = _texture.atlasY;
+		x2 = _texture.atlasX + _texture.getWidth();
+		y2 = _texture.atlasY + _texture.getHeight();
 
-		float xs = (x2 - x1) / _texture.getTileCols();
-		float ys = (y2 - y1) / _texture.getTileRows();
+		xs = (x2 - x1) / _texture.getTileCols();
+		ys = (y2 - y1) / _texture.getTileRows();
 
 		x1 = _texture.atlasX + (xs * (_tileX - 1));
 		x2 = _texture.atlasX + (xs * (_tileX - 1)) + xs; 
 		y1 = _texture.atlasY + (ys * (_tileY - 1));
 		y2 = _texture.atlasY + (ys * (_tileY - 1)) + ys; 
 		
-		//Debug.print("Coords found at " + x1 + " " + x2 + " - " + y1 + " " + y2);
-		
-		//Debug.print("Texture is " + _texture.getWidth() + "x" + _texture.getHeight());
-
-		float fx1 = x1 / (float)Rokon.getRokon().getAtlas().getWidth();
-		float fx2 = x2 / (float)Rokon.getRokon().getAtlas().getWidth();
-		float fy1 = y1 / (float)Rokon.getRokon().getAtlas().getHeight();
-		float fy2 = y2 / (float)Rokon.getRokon().getAtlas().getHeight();
-		
-		//Debug.print("Floats found at " + fx1 + " " + fx2 + " - " + fy1 + " " + fy2);
+		fx1 = x1 / (float)Rokon.getRokon().getAtlas().getWidth();
+		fx2 = x2 / (float)Rokon.getRokon().getAtlas().getWidth();
+		fy1 = y1 / (float)Rokon.getRokon().getAtlas().getHeight();
+		fy2 = y2 / (float)Rokon.getRokon().getAtlas().getHeight();
 		
 		_texBuffer = _makeFloatBuffer(new float[] {
 			fx1, fy1,
@@ -551,33 +557,47 @@ public class Sprite {
 	 * Draws the Sprite to the OpenGL object, should be no need to call this
 	 * @param gl
 	 */
-	@SuppressWarnings("unchecked")
+	private boolean hasTexture;
 	public void drawFrame(GL10 gl) {
 		_detectCollisions();
 		
 		if(!_visible)
 			return;
 		
-		gl.glLoadIdentity();
-
-		HashSet<SpriteModifier> _spriteModifierClone = (HashSet<SpriteModifier>)_spriteModifier.clone();
-		for(SpriteModifier spriteModifier : _spriteModifierClone)
-			spriteModifier.onUpdate(this);
-		_spriteModifierClone = null;
+		if(_texture == null)
+			hasTexture = false;
+		else
+			hasTexture = true;
 		
-		if(_rotation != 0) {
-			gl.glTranslatef(_x + (_width / 2), _y + (_height / 2), 0);
-			gl.glRotatef(_rotation, 0, 0, 1);
-			gl.glTranslatef(-(_x + (_width / 2)), -(_y + (_height / 2)), 0);
+		if(!hasTexture) {
+			gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+			gl.glDisable(GL10.GL_TEXTURE_2D);
 		}
 		
-		gl.glTranslatef(_x, _y, 0);
+		gl.glLoadIdentity();
+
+		for(i = 0; i < MAX_MODIFIERS; i++)
+			if(modifierArr[i] != null)
+				modifierArr[i].onDraw(this, gl);
+		
+		if(_rotation != 0) {
+			gl.glTranslatef(_x + (_width / 2) + _offsetX, _y + (_height / 2) + _offsetY, 0);
+			gl.glRotatef(_rotation, 0, 0, 1);
+			gl.glTranslatef(-(_x + (_width / 2)) + _offsetX, -(_y + (_height / 2)) + _offsetY, 0);
+		}		
+		gl.glTranslatef(_x + _offsetX, _y + _offsetY, 0);
 		gl.glScalef(_width * _scaleX, _height * _scaleY, 0);
 		gl.glColor4f(_red, _green, _blue, _alpha);
-
-		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, _texBuffer);
+		
+		if(hasTexture)
+			gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, _texBuffer);	
 		
 		gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
+		
+		if(!hasTexture) {
+			gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+			gl.glEnable(GL10.GL_TEXTURE_2D);
+		}
 	}
 	
 	/**
@@ -599,30 +619,43 @@ public class Sprite {
 	 * @param spriteModifier a SpriteModifier to add the Sprite 
 	 */
 	public void addModifier(SpriteModifier spriteModifier) {
-		_spriteModifier.add(spriteModifier);
+		j = -1;
+		for(i = 0; i < MAX_MODIFIERS; i++)
+			if(modifierArr[i] == null)
+				j = i;
+		if(j == -1) {
+			Debug.print("TOO MANY SPRITE MODIFIERS");
+			System.exit(0);
+		}
+		modifierArr[j] = spriteModifier;
 	}
 	
 	/**
 	 * @param spriteModifier a SpriteModifier to remove from the Sprite
 	 */
 	public void removeModifier(SpriteModifier spriteModifier) {
-		_spriteModifier.remove(spriteModifier);
+		for(i = 0; i < MAX_MODIFIERS; i++)
+			if(modifierArr[i].equals(spriteModifier))
+				modifierArr[i] = null;
 	}
 	
 	/**
 	 * Updates the movement, animation and modifiers. This is called automatically, no need to use this.
 	 */
+	private long timeDiff;
+	private float timeDiffModifier;
+	private int nextTile;
 	public void updateMovement() {
 		//	if this is the first update, forget about it
 		if(_lastUpdate == 0) {
-			_lastUpdate = System.currentTimeMillis();
+			_lastUpdate = Rokon.getTime();
 			return;
 		}
 		
 		//	save ourselves some processing time if there's nothing worth doing
 		if(_accelerationX != 0 || _accelerationY != 0 || _velocityX != 0 || _velocityY != 0) {
-			long timeDiff = System.currentTimeMillis() - _lastUpdate;
-			float timeDiffModifier = (float)timeDiff / 1000f;
+			timeDiff = Rokon.getTime() - _lastUpdate;
+			timeDiffModifier = (float)timeDiff / 1000f;
 			if(_accelerationX != 0 || _accelerationY != 0) {
 				_velocityX += _accelerationX * timeDiffModifier;
 				_velocityY += _accelerationY * timeDiffModifier;
@@ -650,13 +683,13 @@ public class Sprite {
 			_x += _velocityX * timeDiffModifier;
 			_y += _velocityY * timeDiffModifier;
 		}
-		_lastUpdate = System.currentTimeMillis();
+		_lastUpdate = Rokon.getTime();
 		
 		//	update animation
 		if(_animating) {
-			long timeDiff = System.currentTimeMillis() - _animateLastUpdate;
+			timeDiff = Rokon.getTime() - _animateLastUpdate;
 			if(timeDiff >= _animateTime) {
-				int nextTile = getTileIndex() + 1;
+				nextTile = getTileIndex() + 1;
 				//Debug.print("next frame " + nextTile);
 				if(nextTile > _animateEndTile) {
 					if(_animateRemainingLoops > -1)
@@ -679,9 +712,13 @@ public class Sprite {
 					}
 				}
 				setTileIndex(nextTile);
-				_animateLastUpdate = System.currentTimeMillis();
+				_animateLastUpdate = Rokon.getTime();
 			}
 		}
+
+		for(i = 0; i < MAX_MODIFIERS; i++)
+			if(modifierArr[i] != null)
+				modifierArr[i].onUpdate(this);
 		
 	}
 	
@@ -847,7 +884,6 @@ public class Sprite {
 	 */
 	public void setCollisionHandler(CollisionHandler collisionHandler) {
 		_collisionHandler = collisionHandler;
-		_colliders = new HashSet<Sprite>();
 	}
 	
 	/**
@@ -855,21 +891,35 @@ public class Sprite {
 	 */
 	public void resetCollisionHandler() {
 		_collisionHandler = null;
-		_colliders = null;
+		for(i = 0; i < MAX_MODIFIERS; i++)
+			modifierArr[i] = null;
 	}
 	
 	/**
 	 * @param target adds a target Sprite for the CollisionHandler to check for each frame
 	 */
 	public void addCollisionSprite(Sprite target) {
-		_colliders.add(target);
+		j = -1;
+		for(i = 0; i < MAX_COLLIDERS; i++)
+			if(collidersArr[i] == null)
+				j = i;
+		if(j == -1) {
+			Debug.print("TOO MANY SPRITE COLLIDERS");
+			System.exit(0);
+		}
+		collidersArr[j] = target;
+		colliderCount++;
 	}
 	
 	/**
 	 * @param target removes a target from the Sprite's list
 	 */
 	public void removeCollisionSprite(Sprite target) {
-		_colliders.remove(target);
+		for(i = 0; i < MAX_COLLIDERS; i++)
+			if(collidersArr[i] != null)
+				if(collidersArr[i].equals(target))
+					collidersArr[i] = null;
+		colliderCount--;
 	}
 	
 	/**
@@ -885,16 +935,17 @@ public class Sprite {
 	public void resetAnimationHandler() {
 		_animationHandler = null;
 	}
-	
+
 	private void _detectCollisions() {
-		if(_collisionHandler == null || _colliders.size() == 0)
+		if(_collisionHandler == null || colliderCount == 0)
 			return;
-		if(_colliders.size() == 0)
-			return;
-		for(Sprite sprite : _colliders)
-			if((_x >= sprite.getX() && _x <= sprite.getX() + sprite.getWidth()) || (_x <= sprite.getX() && _x + _width >= sprite.getX()))
-				if((_y >= sprite.getY() && _y <= sprite.getY() + sprite.getHeight()) || (_y <= sprite.getY() && _y + _height >= sprite.getY()))
-					_collisionHandler.collision(this, sprite);
+
+		for(i = 0; i < MAX_COLLIDERS; i++) {
+			if(collidersArr[i] != null)
+				if((_x >= collidersArr[i].getX() && _x <= collidersArr[i].getX() + collidersArr[i].getWidth()) || (_x <= collidersArr[i].getX() && _x + _width >= collidersArr[i].getX()))
+					if((_y >= collidersArr[i].getY() && _y <= collidersArr[i].getY() + collidersArr[i].getHeight()) || (_y <= collidersArr[i].getY() && _y + _height >= collidersArr[i].getY()))
+						_collisionHandler.collision(this, collidersArr[i]);
+		}
 	}
 	
 	/**
@@ -909,7 +960,7 @@ public class Sprite {
 		_animateEndTile = endTile;
 		_animateTime = time;
 		_animateRemainingLoops = -1;
-		_animateLastUpdate = System.currentTimeMillis();
+		_animateLastUpdate = Rokon.getTime();
 		setTileIndex(startTile);
 	}
 	
@@ -928,7 +979,7 @@ public class Sprite {
 		_animateTime = time;
 		_animateRemainingLoops = loops;
 		_animateReturnToStart = returnToStart;
-		_animateLastUpdate = System.currentTimeMillis();
+		_animateLastUpdate = Rokon.getTime();
 		setTileIndex(startTile);
 	}
 	
@@ -947,16 +998,20 @@ public class Sprite {
 	}
 	
 	/**
-	 * @return number of SpriteModifier's currently active
-	 */
-	public int getModifierCount() {
-		return _spriteModifier.size();
-	}
-	
-	/**
 	 * Removes all SpriteModifier's from the Sprite
 	 */
 	public void resetModifiers() {
-		_spriteModifier.clear();
+		for(i = 0; i < MAX_MODIFIERS; i++)
+			modifierArr[i] = null;
+	}
+	
+	/**
+	 * Increases the current velocity by a given value
+	 * @param velocityX
+	 * @param velocityY
+	 */
+	public void setVelocityRelative(float velocityX, float velocityY) {
+		_velocityX += velocityX;
+		_velocityY += velocityY;
 	}
 }

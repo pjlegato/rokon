@@ -1,5 +1,5 @@
 package rokon.Backgrounds;
 
-public class Fixed {
+public class TiledBackground {
 
 }

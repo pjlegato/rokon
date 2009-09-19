@@ -55,16 +55,22 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
         init();
     }
     
+    private Hotspot[] hotspotArr;
+    private int i;
+    
     public boolean onTouchEvent(MotionEvent event) {
     	if(Rokon.getRokon().getInputHandler() != null) {
     		boolean hit = false;
-    		for(Hotspot hotspot : Rokon.getRokon().getHotspots()) {
-    			if(hotspot.sprite != null)
-    				if(event.getX() >= hotspot.sprite.getX() && event.getX() <= hotspot.sprite.getX() + hotspot.sprite.getWidth() && event.getY() >= hotspot.sprite.getY() && event.getY() <= hotspot.sprite.getY() + hotspot.sprite.getHeight())
-        				Rokon.getRokon().getInputHandler().onHotspotTouched(hotspot);
-    				else if(event.getX() >= hotspot.x && event.getX() <= hotspot.x + hotspot.width && event.getY() >= hotspot.y && event.getY() <= hotspot.y + hotspot.height)
-    					Rokon.getRokon().getInputHandler().onHotspotTouched(hotspot);
-    			
+    		hotspotArr = Rokon.getRokon().getHotspots();
+    		
+    		for(i = 0; i < Rokon.MAX_HOTSPOTS; i++) {
+    			if(hotspotArr[i] != null)
+	    			if(hotspotArr[i].sprite != null)
+						if(event.getX() >= hotspotArr[i].sprite.getX() && event.getX() <= hotspotArr[i].sprite.getX() + hotspotArr[i].sprite.getWidth() && event.getY() >= hotspotArr[i].sprite.getY() && event.getY() <= hotspotArr[i].sprite.getY() + hotspotArr[i].sprite.getHeight())
+		    				Rokon.getRokon().getInputHandler().onHotspotTouched(hotspotArr[i]);
+						else if(event.getX() >= hotspotArr[i].x && event.getX() <= hotspotArr[i].x + hotspotArr[i].width && event.getY() >= hotspotArr[i].y && event.getY() <= hotspotArr[i].y + hotspotArr[i].height)
+							Rokon.getRokon().getInputHandler().onHotspotTouched(hotspotArr[i]);
+			
     		}
     		Rokon.getRokon().getInputHandler().onTouchEvent(event, hit);
     	}

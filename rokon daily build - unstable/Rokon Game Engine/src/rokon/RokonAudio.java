@@ -16,17 +16,19 @@ import android.media.SoundPool;
  */
 public class RokonAudio {
 
-	private static final int MAX_STREAMS = 4;
+	public static final int MAX_SOUNDS = 50;
+	public static final int MAX_STREAMS = 5;
+	
 	public static RokonAudio singleton;
+	private int i, j;
 	
 	private float _masterVolume;
 	private SoundPool _soundPool;
-	private HashSet<SoundFile> _soundFile;
+	private SoundFile[] soundArr = new SoundFile[MAX_SOUNDS];
 	
 	public RokonAudio() {
 		RokonAudio.singleton = this;
 		_soundPool = new SoundPool(MAX_STREAMS, AudioManager.STREAM_MUSIC, 0);
-		_soundFile = new HashSet<SoundFile>();
 		_masterVolume = 1;
 	}
 	
@@ -35,8 +37,8 @@ public class RokonAudio {
 	 */
 	public void destroy() {
 		try {
-			for(SoundFile soundFile : RokonAudio.singleton.soundHash())
-				soundFile.unload();
+			for(i = 0; i < MAX_STREAMS; i++)
+				soundArr[i].unload();
 			_soundPool.release();
 		} catch (Exception e) { }
 		_soundPool = null;
@@ -45,8 +47,8 @@ public class RokonAudio {
 	/**
 	 * @return a HashSet of all current SoundFile's 
 	 */
-	public HashSet<SoundFile> soundHash() {
-		return _soundFile;
+	public SoundFile[] getSounds() {
+		return soundArr;
 	}
 	
 	/**
@@ -66,6 +68,15 @@ public class RokonAudio {
 			int id = _soundPool.load(Rokon.getRokon().getActivity().getAssets().openFd(filename), 0);
 			SoundFile soundFile = new SoundFile(id);
 			Debug.print("SoundFile loaded as id=" + id);
+			j = -1;
+			for(i = 0; i < MAX_SOUNDS; i++)
+				if(soundArr[i] == null)
+					j = i;
+			if(j == -1) {
+				Debug.print("TOO MANY SOUNDS");
+				System.exit(0);
+			}
+			soundArr[j] = soundFile;
 			return soundFile;
 		} catch (Exception e) {
 			Debug.print("CANNOT FIND " + filename + " IN ASSETS");
@@ -79,14 +90,18 @@ public class RokonAudio {
 	 */
 	public void removeSoundFile(SoundFile soundFile) {
 		_soundPool.unload(soundFile.getId());
-		_soundFile.remove(soundFile);
+		for(i = 0; i < MAX_SOUNDS; i++)
+			if(soundArr[i] != null)
+				if(soundArr[i].equals(soundFile))
+					soundArr[i] = null;
 	}
 	
 	/**
 	 * Removes all SoundFile's from the memory
 	 */
 	public void removeAllSoundFiles() {
-		_soundFile = new HashSet<SoundFile>();
+		for(i = 0; i < MAX_SOUNDS; i++)
+			soundArr[i] = null;
 		_soundPool.release();
 	}
 	
