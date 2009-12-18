@@ -168,7 +168,7 @@ public class TextureAtlas {
 	public static void compute(int initwidth) {
 		boolean isNew;
 		//Debug.print("# COMPUTING TEXTURES IDSTR=" + idString);
-		if(getLastIdString().equals(idString) && !Rokon.getRokon().isForceTextureRefresh()) {
+		if(getLastIdString() == idString && !Rokon.getRokon().isForceTextureRefresh()) {
 			//Debug.print("## MATCHES LAST ID STRING");
 			isNew = false;
 		} else {
