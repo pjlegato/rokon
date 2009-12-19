@@ -20,7 +20,7 @@ import com.stickycoding.Rokon.Menu.Menu;
 import com.stickycoding.Rokon.OpenGL.RokonSurfaceView;
 
 /**
- * @version 1.0.2
+ * @version 1.0.3
  * @author Richard Taylor - Sticky Coding
  * 
  * See LICENSE for information about copyright.

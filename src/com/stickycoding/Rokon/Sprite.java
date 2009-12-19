@@ -56,6 +56,9 @@ public class Sprite {
 	private float _x;
 	private float _y;
 	private float _rotation;
+	private float _rotationPivotX;
+	private float _rotationPivotY;
+	private boolean _rotationPivotRelative = true;
 	private float _offsetX;
 	private float _offsetY;
 	
@@ -104,6 +107,9 @@ public class Sprite {
 		_offsetX = 0;
 		_offsetY = 0;
 		
+		_rotationPivotX = (_width / 2);
+		_rotationPivotY = (_height / 2);
+		
 		_vertexBuffer = ByteBuffer.allocate(8*4);
 		_vertexBuffer.order(ByteOrder.nativeOrder());
 		
@@ -124,6 +130,8 @@ public class Sprite {
 		_startY = y;
 		_startWidth = _width;
 		_startHeight = _height;
+		_rotationPivotX = (_width / 2);
+		_rotationPivotY = (_height / 2);
 		_updateVertexBuffer();
 	}
 	
@@ -135,6 +143,8 @@ public class Sprite {
 		_startY = 0;
 		_startWidth = _width;
 		_startHeight = _height;
+		_rotationPivotX = (_width / 2);
+		_rotationPivotY = (_height / 2);
 		_updateVertexBuffer();
 	}
 	
@@ -324,6 +334,54 @@ public class Sprite {
 	 */
 	public float getRotation() {
 		return _rotation;
+	}
+	
+	/**
+	 * Sets the rotation pivot x coordinate
+	 * @param x
+	 */
+	public void setRotationPivotX(float x) {
+		_rotationPivotX = x;
+	}
+	
+	/**
+	 * Get rotation pivot x coordinate
+	 */
+	public float getRotationPivotX() {
+		return _rotationPivotX;
+	}
+	
+	/**
+	 * Sets the rotation pivot x coordinate
+	 * @param x
+	 */
+	public void setRotationPivotY(float y) {
+		_rotationPivotY = y;
+	}
+	
+	/**
+	 * Get rotation pivot y coordinate
+	 */
+	public float getRotationPivotY() {
+		return _rotationPivotY;
+	}
+	
+	/**
+	 * Defines rotation pivot coordinates as relative to the sprite. 
+	 * This does not change the actual pivot coordinates, but defines how the
+	 * pivot coordinates are interpreted when rotating
+	 */
+	public void setRotationPivotRelative() {
+		_rotationPivotRelative = true;
+	}
+	
+	/**
+	 * Defines rotation pivot coordinates as absolute/fixed (not relative to sprite). 
+	 * This does not change the actual pivot coordinates, but defines how the
+	 * pivot coordinates are interpreted when rotating
+	 */
+	public void setRotationPivotAbsolute() {
+		_rotationPivotRelative = false;
 	}
 	
 	/**
@@ -658,9 +716,15 @@ public class Sprite {
 
 		
 		if(_rotation != 0) {
-			gl.glTranslatef(_x + (_width * _scaleX / 2), _y + (_height * _scaleY / 2), 0);
-			gl.glRotatef(_rotation, 0, 0, 1);
-			gl.glTranslatef(-1 * (_x + (_width * _scaleX / 2)), -1 * (_y + (_height * _scaleY / 2)), 0);
+			if (_rotationPivotRelative) {
+				gl.glTranslatef(_x + (_scaleX * _rotationPivotX), _y + (_scaleY * _rotationPivotY), 0);
+				gl.glRotatef(_rotation, 0, 0, 1);
+				gl.glTranslatef(-1 * (_x + (_scaleX * _rotationPivotX)), -1 * (_y + (_scaleY * _rotationPivotY)), 0);
+			} else {
+				gl.glTranslatef(_rotationPivotX, _rotationPivotY, 0);
+				gl.glRotatef(_rotation, 0, 0, 1);
+				gl.glTranslatef(-1 * _rotationPivotX, -1 * _rotationPivotY, 0);
+			}
 		}
 
 		gl.glColor4f(_red, _blue, _green, _alpha);
