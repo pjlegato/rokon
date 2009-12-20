@@ -991,6 +991,7 @@ public class Rokon {
 	 */
 	public void end() {
 		Debug.print("############## REQUEST END");
+    	Accelerometer.stopListening();
 		(new Exception()).printStackTrace();
 	}
 	

@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnKeyListener;
 
+import com.stickycoding.Rokon.Handlers.AccelerometerHandler;
 import com.stickycoding.Rokon.Handlers.InputHandler;
 import com.stickycoding.Rokon.Menu.Menu;
 
@@ -21,6 +22,10 @@ import com.stickycoding.Rokon.Menu.Menu;
  * @author Richard
  * 
  * This class does not have to be used, but provides a very simple way of handling events.
+ */
+/**
+ * @author Richard
+ *
  */
 public class RokonActivity extends Activity {
 	
@@ -123,6 +128,20 @@ public class RokonActivity extends Activity {
 	 * Called when the phone notifies the engine of an incoming call 
 	 */
 	public void onIncomingCall() { }
+	
+	/**
+	 * Triggered when the Accelerometer coordinates change (only if startAccelerometer has been called)
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
+	public void onAccelerometerChanged(float x, float y, float z) { }
+	
+	/**
+	 * Called when the Accelerometer detects a shake above the shakeThreshold (only if startAccelerometer has been called)
+	 * @param intensity
+	 */
+	public void onAccelerometerShake(float intensity) { }
 
     /* (non-Javadoc)
      * @see android.app.Activity#onDestroy()
@@ -189,6 +208,8 @@ public class RokonActivity extends Activity {
 		_hasLoadingScreen = (loadingScreen != null);
 		rokon.setFullscreen();
 		rokon.init();
+
+		
 		if(_hasLoadingScreen) {
 			new Thread(new Runnable() {
 	    		public void run() {
@@ -305,6 +326,33 @@ public class RokonActivity extends Activity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if(rokon.getActiveMenu() != null)
 			rokon.getActiveMenu().onKey(keyCode, event);
-		return true;
+		else
+			super.onKeyDown(keyCode, event);
+		return false;
 	} 
+    
+    private AccelerometerHandler _accelerometerHandler = new AccelerometerHandler() {
+    	public void onChanged(float x, float y, float z) {
+    		onAccelerometerChanged(x, y, z);
+    	}
+    	
+    	public void onShake(float intensity) {
+    		onAccelerometerShake(intensity);
+    	}    		
+    };
+    
+    /**
+     * Starts the Accelerometer class, and will trigger the onAccelerometerChanged and onAccelerometerShake events
+     * Anything that needs to be changed with the accelerometer can be done through the static Accelerometer class
+     */
+    public void startAccelerometer() {
+    	Accelerometer.startListening(_accelerometerHandler);
+    }
+    
+    /**
+     * Stops the Accelerometer from listening, this should be done when it is not needed, to save processing time
+     */
+    public void stopAccelerometer() {
+    	Accelerometer.stopListening();
+    }
 }

@@ -26,7 +26,8 @@ public class Launcher extends ListActivity {
 			"Advanced Texture Methods",
 			"Pausing / Freezing",
 			"Basic Menu",
-			"Advanced Menu System"
+			"Advanced Menu System",
+			"Accelerometer"
 		};
 		setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, examples));
 	}
@@ -90,6 +91,10 @@ public class Launcher extends ListActivity {
 				break;
 			case 13: // Advanced Menu
 				intent = new Intent(this, Example14.class);
+				startActivity(intent);
+				break;
+			case 14: // Accelerometer
+				intent = new Intent(this, Example15.class);
 				startActivity(intent);
 				break;
 		}
