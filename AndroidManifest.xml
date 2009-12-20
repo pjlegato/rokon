@@ -13,17 +13,19 @@
         </activity>
         
         <activity android:name=".Example1" android:screenOrientation="landscape"/>
-        <activity android:name=".Example2" />
-        <activity android:name=".Example3" />
-        <activity android:name=".Example4" />
-        <activity android:name=".Example5" />
-        <activity android:name=".Example6" />
-        <activity android:name=".Example7" />
-        <activity android:name=".Example8" />
-        <activity android:name=".Example9" />
-        <activity android:name=".Example10" />
-        <activity android:name=".Example11" />
-        <activity android:name=".Example12" />
+        <activity android:name=".Example2" android:screenOrientation="landscape"/>
+        <activity android:name=".Example3" android:screenOrientation="landscape"/>
+        <activity android:name=".Example4" android:screenOrientation="landscape"/>
+        <activity android:name=".Example5" android:screenOrientation="landscape"/>
+        <activity android:name=".Example6" android:screenOrientation="landscape"/>
+        <activity android:name=".Example7" android:screenOrientation="landscape"/>
+        <activity android:name=".Example8" android:screenOrientation="landscape"/>
+        <activity android:name=".Example9" android:screenOrientation="landscape"/>
+        <activity android:name=".Example10" android:screenOrientation="landscape"/>
+        <activity android:name=".Example11" android:screenOrientation="landscape"/>
+        <activity android:name=".Example12" android:screenOrientation="landscape"/>
+        <activity android:name=".Example13" android:screenOrientation="landscape"/>
+        <activity android:name=".Example14" android:screenOrientation="landscape"/>
 
     </application>
     <uses-sdk android:minSdkVersion="3" />

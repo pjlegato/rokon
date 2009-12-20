@@ -25,10 +25,8 @@ public class Launcher extends ListActivity {
 			"Vibration",
 			"Advanced Texture Methods",
 			"Pausing / Freezing",
-			"Collision Detection",
-			"Custom Sprite Modifiers",
-			"Basic Particle Emitter",
-			"Advanced Particle Systems"
+			"Basic Menu",
+			"Advanced Menu System"
 		};
 		setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, examples));
 	}
@@ -84,6 +82,14 @@ public class Launcher extends ListActivity {
 				break;
 			case 11: // Pausing / Freezing
 				intent = new Intent(this, Example12.class);
+				startActivity(intent);
+				break;
+			case 12: // Basic Menu
+				intent = new Intent(this, Example13.class);
+				startActivity(intent);
+				break;
+			case 13: // Advanced Menu
+				intent = new Intent(this, Example14.class);
 				startActivity(intent);
 				break;
 		}
