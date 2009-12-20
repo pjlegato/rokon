@@ -1,5 +1,3 @@
-//	Sprite Modifiers
-
 package com.stickycoding.RokonExamples;
 
 import com.stickycoding.Rokon.RokonActivity;
@@ -8,6 +6,10 @@ import com.stickycoding.Rokon.Texture;
 import com.stickycoding.Rokon.Backgrounds.FixedBackground;
 import com.stickycoding.Rokon.SpriteModifiers.Resonate;
 
+/**
+ * @author Richard
+ * Utilises some of the SpriteModifiers - these are great ways of organising any actions or changes to a large number of Sprite's
+ */
 public class Example6 extends RokonActivity {
 	
 	public Texture backgroundTexture;

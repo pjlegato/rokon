@@ -1,5 +1,3 @@
-//	TTF Fonts
-
 package com.stickycoding.RokonExamples;
 
 import com.stickycoding.Rokon.Font;
@@ -8,6 +6,11 @@ import com.stickycoding.Rokon.Text;
 import com.stickycoding.Rokon.Texture;
 import com.stickycoding.Rokon.Backgrounds.FixedBackground;
 
+/**
+ * @author Richard
+ * Renders TTF fonts
+ * (currently broken?)
+ */
 public class Example8 extends RokonActivity {
 	
 	public Texture backgroundTexture;

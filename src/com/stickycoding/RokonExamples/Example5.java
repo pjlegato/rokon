@@ -6,6 +6,10 @@ import com.stickycoding.Rokon.Sprite;
 import com.stickycoding.Rokon.Texture;
 import com.stickycoding.Rokon.Backgrounds.FixedBackground;
 
+/**
+ * @author Richard
+ * Uses some of the basic dynamic methods in Sprite
+ */
 public class Example5 extends RokonActivity {
 	
 	public Texture backgroundTexture;

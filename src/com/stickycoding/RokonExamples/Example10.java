@@ -1,9 +1,11 @@
-//	Vibration
-
 package com.stickycoding.RokonExamples;
 
 import com.stickycoding.Rokon.RokonActivity;
 
+/**
+ * @author Richard
+ * Vibrating the device is very simple
+ */
 public class Example10 extends RokonActivity {
 	
     public void onCreate() {

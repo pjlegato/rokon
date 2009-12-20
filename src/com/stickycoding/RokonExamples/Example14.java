@@ -13,13 +13,14 @@ import com.stickycoding.Rokon.Menu.Transitions.MenuFade;
 
 /**
  * @author Richard
- * This is a basic Menu example, it has one button that prints something to the Debug window
+ * A more advanced Menu example, has two Menu's that flow smoothly
  */
 public class Example14 extends RokonActivity {
 
 	public Texture backgroundTexture;
 	public FixedBackground background;
 	public MyMenu myMenu;
+	public MyMenu2 myMenu2;
 
 	public Texture carTexture;
 	public Texture car2Texture;
@@ -35,47 +36,76 @@ public class Example14 extends RokonActivity {
 		car2Texture = rokon.createTexture("graphics/sprites/car2.png");
 		rokon.prepareTextureAtlas();
 		background = new FixedBackground(backgroundTexture);
-		myMenu = new MyMenu();
 	}
 
 	public void onLoadComplete() {
-		rokon.showMenu(myMenu);
+		rokon.showMenu(myMenu = new MyMenu());
 	}
 	
-	/**
-	 * Each menu has its own class, extend and build from there
-	 */
 	public class MyMenu extends Menu {
-		
-		/**
-		 * A button is basic clickable object, which can be given a texture for either pressed and unpressed states
-		 */
 		MenuButton button;
 		
-		/**
-		 * All objects should be created and added to the menu when the class is initialised
-		 */
 		public MyMenu() {
 			setBackground(background);
-			setStartTransition(new MenuFade(2000));
-			addMenuObject(button = new MenuButton(1, 150, 100, carTexture, car2Texture));
+			addMenuObject(button = new MenuButton(1, 150, 100, 100, 100, carTexture, car2Texture));
 		}
 		
-		public void onMenuObjectTouchDown(MenuObject menuObject) { 
-			Debug.print("TOUCH DOWN");
+		/**
+		 * Any transition effects should be put in here, it is called once the Menu is actually visible
+		 */
+		public void onShow() {
+			button.fadeIn(3000);			
 		}
 		
 		public void onMenuObjectTouchUp(MenuObject menuObject) {
-			Debug.print("TOUCH UP");
+			button.fadeOut(1500);
+			gotoMenu(new MyMenu2(), 1500);
 		}
 		
-		/** 
-		 * All key presses are passed onto the Menu, you should always handle atleast the KEYCODE_BACK key
-		 */
 		public void onKey(int keyCode, KeyEvent event) {
 			if(keyCode == KeyEvent.KEYCODE_BACK)
 				finish();
 		}
+	}
+	
+	public class MyMenu2 extends Menu {
+		MenuButton button1, button2, button3, button4, button5;
 		
+		public MyMenu2() {
+			setBackground(background);
+			addMenuObject(button1 = new MenuButton(1, 75, 75, 75, 75, carTexture, car2Texture));
+			addMenuObject(button2 = new MenuButton(2, 380, 75, 75, 75, carTexture, car2Texture));
+			addMenuObject(button3 = new MenuButton(3, 380, 240, 75, 75, carTexture, car2Texture));
+			addMenuObject(button4 = new MenuButton(4, 75, 240, 75, 75, carTexture, car2Texture));
+			addMenuObject(button5 = new MenuButton(5, 220, 140, 50, 50, carTexture, car2Texture));
+		}
+	
+		public void onShow() {
+			button1.slideInTop(4000);
+			button2.slideInRight(4000);
+			button3.slideInBottom(4000);
+			button4.slideInLeft(4000);
+			button5.fadeIn(4000);
+		}
+		
+		public void onMenuObjectTouchUp(MenuObject menuObject) {
+			//You would normally check against menuObject.getId(), but for the purposes of this example, it isn't necessary
+			goBack();
+		}
+		
+		private void goBack() {
+			button1.slideOutUp(200);
+			button2.slideOutRight(200);
+			button3.slideOutDown(200);
+			button4.slideOutLeft(200);
+			button5.fadeOut(2000);
+			gotoMenu(new MyMenu(), 2000);
+		}
+		
+		public void onKey(int keyCode, KeyEvent event) {
+			//Because we are on the '2nd' Menu, we'll just go back to the last one rather than closing the example
+			if(keyCode == KeyEvent.KEYCODE_BACK)
+				goBack();
+		}
 	}
 }

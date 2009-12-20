@@ -1,5 +1,3 @@
-// Pausing / Freezing
-
 package com.stickycoding.RokonExamples;
 
 import com.stickycoding.Rokon.Debug;
@@ -8,6 +6,10 @@ import com.stickycoding.Rokon.Sprite;
 import com.stickycoding.Rokon.Texture;
 import com.stickycoding.Rokon.SpriteModifiers.Resonate;
 
+/**
+ * @author Richard
+ * Pausing and Freezing the engine is useful for a variety of situations, explained here
+ */
 public class Example12 extends RokonActivity {
 	
 	public Texture carTexture;

@@ -1,11 +1,13 @@
-// Advanced Texture Methods
-
 package com.stickycoding.RokonExamples;
 
 import com.stickycoding.Rokon.RokonActivity;
 import com.stickycoding.Rokon.Sprite;
 import com.stickycoding.Rokon.Texture;
 
+/**
+ * @author Richard
+ * More advanced texture use, explaining how and when to use textureSplit to seperate your textures into different atlas's
+ */
 public class Example11 extends RokonActivity {
 	
 	public Texture carTexture1, carTexture2;

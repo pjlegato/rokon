@@ -1,5 +1,3 @@
-//	Sprite Modifiers
-
 package com.stickycoding.RokonExamples;
 
 import com.stickycoding.Rokon.RokonActivity;
@@ -8,6 +6,10 @@ import com.stickycoding.Rokon.Texture;
 import com.stickycoding.Rokon.Backgrounds.FixedBackground;
 import com.stickycoding.Rokon.Handlers.AnimationHandler;
 
+/**
+ * @author Richard
+ * Basic tiled animation
+ */
 public class Example7 extends RokonActivity {
 	
 	public Texture backgroundTexture;

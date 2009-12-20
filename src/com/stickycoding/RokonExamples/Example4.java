@@ -1,5 +1,7 @@
 package com.stickycoding.RokonExamples;
 
+import android.view.KeyEvent;
+
 import com.stickycoding.Rokon.Debug;
 import com.stickycoding.Rokon.Hotspot;
 import com.stickycoding.Rokon.RokonActivity;
@@ -7,6 +9,10 @@ import com.stickycoding.Rokon.Sprite;
 import com.stickycoding.Rokon.Texture;
 import com.stickycoding.Rokon.Backgrounds.FixedBackground;
 
+/**
+ * @author Richard
+ * This example handles basic touch and key input
+ */
 public class Example4 extends RokonActivity {
 	
 	public Texture backgroundTexture;
@@ -66,5 +72,14 @@ public class Example4 extends RokonActivity {
 	
 	public void onHotspotTouchDown(Hotspot hotspot) { 
 		Debug.print("HOTSPOT DOWN");
+	}
+	
+    /**
+     * You can handle key events just as you would in a normal Activity, but be aware you should call the superclass method's, they are handled in RokonActivity for passing on to any active Menu's
+     */
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    	super.onKeyDown(keyCode, event);
+    	Debug.print("KEYBOARD DOWN - " + keyCode);
+    	return true;
 	}
 }

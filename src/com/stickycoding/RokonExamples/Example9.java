@@ -1,5 +1,3 @@
-//	Audio
-
 package com.stickycoding.RokonExamples;
 
 import com.stickycoding.Rokon.AudioStream;
@@ -7,6 +5,11 @@ import com.stickycoding.Rokon.RokonActivity;
 import com.stickycoding.Rokon.RokonAudio;
 import com.stickycoding.Rokon.SoundFile;
 
+/**
+ * @author Richard
+ * Shows basic usage of the RokonAudio class, used for sound effects
+ * RokonMusic should be used for BGM
+ */
 public class Example9 extends RokonActivity {
 	
 	public RokonAudio audio;

@@ -5,6 +5,10 @@ import com.stickycoding.Rokon.Sprite;
 import com.stickycoding.Rokon.Texture;
 import com.stickycoding.Rokon.Backgrounds.FixedBackground;
 
+/**
+ * @author Richard
+ * Applying a Texture to a Sprite
+ */
 public class Example3 extends RokonActivity {
 	
 	public Texture backgroundTexture;

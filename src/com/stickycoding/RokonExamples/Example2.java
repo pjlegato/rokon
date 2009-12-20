@@ -4,6 +4,10 @@ import com.stickycoding.Rokon.RokonActivity;
 import com.stickycoding.Rokon.Texture;
 import com.stickycoding.Rokon.Backgrounds.FixedBackground;
 
+/**
+ * @author Richard
+ * Loading a Texture and applying it to a FixedBackground
+ */
 public class Example2 extends RokonActivity {
 	
 	public Texture backgroundTexture;
