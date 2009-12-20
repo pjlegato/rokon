@@ -2,10 +2,12 @@
 	Overview
 	
 	New Features
-	
-	Changes
 		* Basic and Advanced Menu examples added
+		* Handling the accelerometer can be done through RokonActivity, see Example15
+		
+	Changes
 		* Documentation added to previous examples
+		* Sprite, Particle, Emitter all now extend the superclass DynamicObject - in an attempt to the dynamics' functions
 	
 	Bug Fixes
 

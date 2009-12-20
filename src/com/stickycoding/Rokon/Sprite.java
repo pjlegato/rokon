@@ -17,7 +17,7 @@ import com.stickycoding.Rokon.Handlers.DynamicsHandler;
  *
  * @author Richard
  */
-public class Sprite {
+public class Sprite extends DynamicObject {
 	public static final int MAX_COLLIDERS = 0;
 	public static final int MAX_MODIFIERS = 5;
 	
@@ -29,7 +29,7 @@ public class Sprite {
 	
 	private AnimationHandler _animationHandler;
 	private CollisionHandler _collisionHandler;
-	private DynamicsHandler _dynamicsHandler;
+	//private DynamicsHandler _dynamicsHandler;
 
 	private boolean _killMe;
 	private boolean _animating;
@@ -41,7 +41,7 @@ public class Sprite {
 	private long _animateLastUpdate;
 	private boolean _animateRandom;
 
-	private boolean _triggeredReachTerminalVelocityX;
+	/*private boolean _triggeredReachTerminalVelocityX;
 	private boolean _triggeredReachTerminalVelocityY;
 	private boolean _stopAtTerminalVelocity;
 	private float _terminalVelocityX;
@@ -50,10 +50,10 @@ public class Sprite {
 	private float _velocityY;
 	private float _accelerationX;
 	private float _accelerationY;
-	private long _lastUpdate;
+	private long _lastUpdate;*/
 
 	private boolean _visible;
-	private float _x;
+	/*private float _x;
 	private float _y;
 	private float _rotation;
 	private float _rotationPivotX;
@@ -65,21 +65,20 @@ public class Sprite {
 	private float _width;
 	private float _height;
 	
+	private float _scaleX;
+	private float _scaleY;
+	
+	private float _startX, _startY, _startWidth, _startHeight;*/
+	
 	private float _red;
 	private float _green;
 	private float _blue;
 	private float _alpha;
 	
-	private float _scaleX;
-	private float _scaleY;
-	
-	private float _startX, _startY, _startWidth, _startHeight;
-	
 	private Texture _texture;
 	private int _tileX;
 	private int _tileY;
 	private ByteBuffer _texBuffer;
-	private ByteBuffer _vertexBuffer;
 	
 	public int intVar1, intVar2, intVar3;
 	
@@ -88,30 +87,13 @@ public class Sprite {
 	}
 		
 	public Sprite(float x, float y, float width, float height, Texture texture) {
-		_x = x;
-		_y = y;
-		_startX = x;
-		_startY = y;
-		_startWidth = width;
-		_startHeight = height;
-		_width = width;
-		_height = height;
-		_scaleX = 1;
-		_scaleY = 1;
+		super(x, y, width, height);
 		_red = 1;
 		_green = 1;
 		_blue = 1;
 		_alpha = 1;
 		_visible = true;
 		_killMe = false;
-		_offsetX = 0;
-		_offsetY = 0;
-		
-		_rotationPivotX = (_width / 2);
-		_rotationPivotY = (_height / 2);
-		
-		_vertexBuffer = ByteBuffer.allocate(8*4);
-		_vertexBuffer.order(ByteOrder.nativeOrder());
 		
 		_texBuffer = ByteBuffer.allocate(8*4);
 		_texBuffer.order(ByteOrder.nativeOrder());
@@ -119,44 +101,21 @@ public class Sprite {
 		if(texture != null)
 			setTexture(texture);
 		resetDynamics();
-		_updateVertexBuffer();
+		updateVertexBuffer();
 	}
 	
 	public Sprite(float x, float y, Texture texture) {
 		this(x, y, 0, 0, texture);
-		_width = texture.getWidth() / texture.getTileCols();
-		_height = texture.getHeight() / texture.getTileRows();
-		_startX = x;
-		_startY = y;
-		_startWidth = _width;
-		_startHeight = _height;
-		_rotationPivotX = (_width / 2);
-		_rotationPivotY = (_height / 2);
-		_updateVertexBuffer();
+		setWidth(texture.getWidth() / texture.getTileCols(), true);
+		setHeight(texture.getHeight() / texture.getTileRows(), true);
+		updateVertexBuffer();
 	}
 	
 	public Sprite(Texture texture) {
 		this(0, 0, 0, 0, texture);
-		_width = texture.getWidth() / texture.getTileCols();
-		_height = texture.getHeight() / texture.getTileRows();
-		_startX = 0;
-		_startY = 0;
-		_startWidth = _width;
-		_startHeight = _height;
-		_rotationPivotX = (_width / 2);
-		_rotationPivotY = (_height / 2);
-		_updateVertexBuffer();
-	}
-	
-	/**
-	 * Sets the offset at which the sprite is drawn on screen
-	 * @param offsetX
-	 * @param offsetY
-	 */
-	public void setOffset(float offsetX, float offsetY) {
-		_offsetX = offsetX;
-		_offsetY = offsetY;
-		_updateVertexBuffer();
+		setWidth(texture.getWidth() / texture.getTileCols(), true);
+		setHeight(texture.getHeight() / texture.getTileRows(), true);
+		updateVertexBuffer();
 	}
 	
 	/**
@@ -246,25 +205,6 @@ public class Sprite {
 	 */
 	public Texture getTexture() {
 		return _texture;
-	}	
-	
-	private void _updateVertexBuffer() {
-		_vertexBuffer.position(0);
-		
-		_vertexBuffer.putFloat(_x + _offsetX);
-		_vertexBuffer.putFloat(_y + _offsetY);
-
-		_vertexBuffer.putFloat(_x + _offsetX + (_width * _scaleX));
-		_vertexBuffer.putFloat(_y + _offsetY);
-
-		_vertexBuffer.putFloat(_x + _offsetX);
-		_vertexBuffer.putFloat(_y + _offsetX + (_height * _scaleY));
-
-		_vertexBuffer.putFloat(_x + _offsetX + (_width * _scaleX));
-		_vertexBuffer.putFloat(_y + _offsetX + (_height * _scaleY));
-		
-		_vertexBuffer.position(0);
-		
 	}
 	
 	private float x1, y1, x2, y2, xs, ys, fx1, fx2, fy1, fy2;
@@ -313,199 +253,6 @@ public class Sprite {
 	 */
 	public void updateBuffers() {
 		_updateTextureBuffer();
-	}
-	
-	/**
-	 * @param rotation angle, in degrees, to rotate the Sprite relative to its current angle
-	 */
-	public void rotate(float rotation) {
-		_rotation += rotation;
-	}
-	
-	/**
-	 * @param rotation angle, in degrees, to set the Sprite's rotation
-	 */
-	public void setRotation(float rotation) {
-		_rotation = rotation;
-	}
-	
-	/**
-	 * @return the current angle, in degrees, at which the Sprite is at
-	 */
-	public float getRotation() {
-		return _rotation;
-	}
-	
-	/**
-	 * Sets the rotation pivot x coordinate
-	 * @param x
-	 */
-	public void setRotationPivotX(float x) {
-		_rotationPivotX = x;
-	}
-	
-	/**
-	 * Get rotation pivot x coordinate
-	 */
-	public float getRotationPivotX() {
-		return _rotationPivotX;
-	}
-	
-	/**
-	 * Sets the rotation pivot x coordinate
-	 * @param x
-	 */
-	public void setRotationPivotY(float y) {
-		_rotationPivotY = y;
-	}
-	
-	/**
-	 * Get rotation pivot y coordinate
-	 */
-	public float getRotationPivotY() {
-		return _rotationPivotY;
-	}
-	
-	/**
-	 * Defines rotation pivot coordinates as relative to the sprite. 
-	 * This does not change the actual pivot coordinates, but defines how the
-	 * pivot coordinates are interpreted when rotating
-	 */
-	public void setRotationPivotRelative() {
-		_rotationPivotRelative = true;
-	}
-	
-	/**
-	 * Defines rotation pivot coordinates as absolute/fixed (not relative to sprite). 
-	 * This does not change the actual pivot coordinates, but defines how the
-	 * pivot coordinates are interpreted when rotating
-	 */
-	public void setRotationPivotAbsolute() {
-		_rotationPivotRelative = false;
-	}
-	
-	/**
-	 * @param scaleX a multiplier to scale your Sprite in the X direction when drawing
-	 */
-	public void setScaleX(float scaleX) {
-		_scaleX = scaleX;
-		_updateVertexBuffer();
-	}
-	
-	/**
-	 * @return the current scale multiplier in X direction
-	 */
-	public float getScaleX() {
-		return _scaleX;
-	}
-	
-	/**
-	 * @param scaleY a multiplier to scale your Sprite in the Y direction when drawing
-	 */
-	public void setScaleY(float scaleY) {
-		_scaleY = scaleY;
-		_updateVertexBuffer();
-	}
-	
-	/**
-	 * @return the current scale multiplier in Y direction
-	 */
-	public float getScaleY() {
-		return _scaleY;
-	}
-	
-	/**
-	 * Note that scale is not considered in collisions
-	 * @param scaleX a multiplier to scale your Sprite in the X direction when drawing
-	 * @param scaleY a multiplier to scale your Sprite in the Y direction when drawing
-	 */
-	public void setScale(float scaleX, float scaleY) {
-		_scaleX = scaleX;
-		_scaleY = scaleY;
-		_updateVertexBuffer();
-	}
-
-	/**
-	 * @param x the top left position of your Sprite, in the X direction
-	 */
-	public void setX(float x) {
-		_x = x;
-		_updateVertexBuffer();
-	}
-	
-	/**
-	 * @param y the top left position of your Sprite, in the Y direction
-	 */
-	public void setY(float y) {
-		_y = y;
-		_updateVertexBuffer();
-	}
-	
-	/**
-	 * Sets the position of the Sprite, in pixels
-	 * @param x 
-	 * @param y
-	 */
-	public void setXY(float x, float y) {
-		_x = x;
-		_y = y;
-		_updateVertexBuffer();
-	}
-	
-	/**
-	 * @param x number of pixels to move the Sprite relative to its current position
-	 */
-	public void moveX(float x) {
-		_x += x;
-		_updateVertexBuffer();
-	}
-
-	
-	/**
-	 * @param u number of pixels to move the Sprite relative to its current position
-	 */
-	public void moveY(float y) {
-		_y += y;
-		_updateVertexBuffer();
-	}
-	
-	/**
-	 * Moves the Sprite relative to its current position
-	 * @param x
-	 * @param y
-	 */
-	public void move(float x, float y) {
-		_x += x;
-		_y += y;
-		_updateVertexBuffer();
-	}
-	
-	/**
-	 * @return the top left X position of the Sprite
-	 */
-	public float getX() {
-		return _x;
-	}
-	
-	/**
-	 * @return the top left X position of the Sprite, rounded to the nearest integer
-	 */
-	public int getScreenX() {
-		return (int)_x;
-	}
-	
-	/**
-	 * @return the top left X position of the Sprite
-	 */
-	public float getY() {
-		return _y;
-	}
-	
-	/**
-	 * @return the top left Y position of the Sprite, rounded to the nearest integer
-	 */
-	public int getScreenY() {
-		return (int)_y;
 	}
 
 	/**
@@ -633,48 +380,6 @@ public class Sprite {
 	public int getAlphaInt() {
 		return Math.round(_alpha * 255);
 	}
-	
-	/**
-	 * @param width width of the Sprite, used for collisions and multiplied by scale when drawn
-	 */
-	public void setWidth(float width) {
-		_width = width;
-	}
-
-	/**
-	 * @param height height of the Sprite, used for collisions and multiplied by scale when drawn
-	 */
-	public void setHeight(float height) {
-		_height = height;
-	}
-	
-	/**
-	 * @return current width of the Sprite
-	 */
-	public float getWidth() {
-		return _width;
-	}
-	
-	/**
-	 * @return current height of the Sprite
-	 */
-	public float getHeight() {
-		return _height;
-	}
-	
-	/**
-	 * @return current width of the Sprite, rounded to the nearest Integer
-	 */
-	public int getScreenWidth() {
-		return (int)_width;
-	}
-	
-	/**
-	 * @return current height of the Sprite, rounded to the nearest Integer
-	 */
-	public int getScreenHeight() {
-		return (int)_height;
-	}
 
 	/**
 	 * Draws the Sprite to the OpenGL object, should be no need to call this
@@ -708,22 +413,21 @@ public class Sprite {
 		}
 		
 		gl.glLoadIdentity();
-		gl.glVertexPointer(2, GL11.GL_FLOAT, 0, _vertexBuffer);
+		gl.glVertexPointer(2, GL11.GL_FLOAT, 0, getVertexBuffer());
 		
 		for(i = 0; i < MAX_MODIFIERS; i++)
 			if(_modifierArr[i] != null)
 				_modifierArr[i].onDraw(this, gl);
 
-		
-		if(_rotation != 0) {
-			if (_rotationPivotRelative) {
-				gl.glTranslatef(_x + (_scaleX * _rotationPivotX), _y + (_scaleY * _rotationPivotY), 0);
-				gl.glRotatef(_rotation, 0, 0, 1);
-				gl.glTranslatef(-1 * (_x + (_scaleX * _rotationPivotX)), -1 * (_y + (_scaleY * _rotationPivotY)), 0);
+		if(getRotation() != 0) {
+			if (getRotationPivotRelative()) {
+				gl.glTranslatef(getX() + (getScaleX() * getRotationPivotX()), getY() + (getScaleY() * getRotationPivotY()), 0);
+				gl.glRotatef(getRotation(), 0, 0, 1);
+				gl.glTranslatef(-1 * (getX() + (getScaleX() * getRotationPivotX())), -1 * (getY() + (getScaleY() * getRotationPivotY())), 0);
 			} else {
-				gl.glTranslatef(_rotationPivotX, _rotationPivotY, 0);
-				gl.glRotatef(_rotation, 0, 0, 1);
-				gl.glTranslatef(-1 * _rotationPivotX, -1 * _rotationPivotY, 0);
+				gl.glTranslatef(getRotationPivotX(), getRotationPivotY(), 0);
+				gl.glRotatef(getRotation(), 0, 0, 1);
+				gl.glTranslatef(-1 * getRotationPivotX(), -1 * getRotationPivotY(), 0);
 			}
 		}
 
@@ -786,46 +490,12 @@ public class Sprite {
 	private boolean didUpdate;
 	public void updateMovement() {
 		//	if this is the first update, forget about it
-		if(_lastUpdate == 0) {
-			_lastUpdate = Rokon.getTime();
+		if(getLastUpdate() == 0) {
+			setLastUpdate();
 			return;
 		}
 		
-		didUpdate = false;
-		
-		//	save ourselves some processing time if there's nothing worth doing
-		if(_accelerationX != 0 || _accelerationY != 0 || _velocityX != 0 || _velocityY != 0) {
-			timeDiff = Rokon.getTime() - _lastUpdate;
-			timeDiffModifier = (float)timeDiff / 1000f;
-			if(_accelerationX != 0 || _accelerationY != 0) {
-				_velocityX += _accelerationX * timeDiffModifier;
-				_velocityY += _accelerationY * timeDiffModifier;
-				if(_stopAtTerminalVelocity) {
-					if(!_triggeredReachTerminalVelocityX) {
-						if(_velocityX >= _terminalVelocityX) {
-							if(_dynamicsHandler != null)
-								_dynamicsHandler.reachedTerminalVelocityX();
-							_accelerationX = 0;
-							_velocityX = _terminalVelocityX;
-							_triggeredReachTerminalVelocityX = true;
-						}
-					}
-					if(!_triggeredReachTerminalVelocityY) {
-						if(_velocityY >= _terminalVelocityY) {
-							if(_dynamicsHandler != null)
-								_dynamicsHandler.reachedTerminalVelocityY();
-							_accelerationY = 0;
-							_velocityY = _terminalVelocityY;
-							_triggeredReachTerminalVelocityY = true;
-						}
-					}
-				}
-			}
-			_x += _velocityX * timeDiffModifier;
-			_y += _velocityY * timeDiffModifier;
-			didUpdate = true;
-		}
-		_lastUpdate = Rokon.getTime();
+		super.updateMovement();
 		
 		//	update animation
 		if(_animating) {
@@ -867,166 +537,6 @@ public class Sprite {
 				if(_modifierArr[r].isExpired())
 					_modifierArr[r] = null;
 			}
-		
-		if(didUpdate)
-			_updateVertexBuffer();
-	}
-	
-	/**
-	 * @param dynamicsHandler sets a handler for the dynamics, this can track acceleration
-	 */
-	public void setDynamicsHandler(DynamicsHandler dynamicsHandler) {
-		_dynamicsHandler = dynamicsHandler;
-	}
-	
-	/**
-	 * Removes the DynamicsHandler from the Sprite
-	 */
-	public void resetDynamicsHandler() {
-		_dynamicsHandler = null;
-	}
-	
-	/**
-	 * Stops the Sprite, setting acceleration and velocities to zero
-	 */
-	public void stop() {
-		resetDynamics();
-	}
-	
-	public void resetDynamics() {
-		_terminalVelocityX = 0;
-		_terminalVelocityY = 0;
-		_stopAtTerminalVelocity = false;
-		_velocityX = 0;
-		_velocityY = 0;
-		_accelerationX = 0;
-		_accelerationY = 0;
-	}
-	
-	/**
-	 * Accelerates a Sprite, note that this is relative to current Acceleration.
-	 * @param accelerationX acceleration in X direction, pixels per second
-	 * @param accelerationY acceleration in Y direction, pixels per second
-	 * @param terminalVelocityX specifies a highest possible velocity in X direction, this will trigger reachedTerminalVelocityX
-	 * @param terminalVelocityY specifies a highest possible velocity in Y direction, this will trigger reachedTerminalVelocityY
-	 */
-	public void accelerate(float accelerationX, float accelerationY, float terminalVelocityX, float terminalVelocityY) {
-		_stopAtTerminalVelocity = true;
-		_terminalVelocityX = terminalVelocityX;
-		_terminalVelocityY = terminalVelocityY;
-		_accelerationX += accelerationX;
-		_accelerationY += accelerationY;
-		_triggeredReachTerminalVelocityX = false;
-		_triggeredReachTerminalVelocityY = false;
-		_lastUpdate = 0;
-	}
-	
-	/**
-	 * Accelerates a Sprite, note that this is relative to current Acceleration. Terminal velocity restrictions are removed.
-	 * @param accelerationX acceleration in X direction, pixels per second
-	 * @param accelerationY acceleration in Y direction, pixels per second
-	 */
-	public void accelerate(float accelerationX, float accelerationY) {
-		_stopAtTerminalVelocity = false;
-		_accelerationX += accelerationX;
-		_accelerationY += accelerationY;
-		_lastUpdate = 0;
-	}
-	
-	/**
-	 * @return current acceleration in X direction, pixels per second
-	 */
-	public float getAccelerationX() {
-		return _accelerationX;
-	}
-	/**
-	 * @return current acceleration in Y direction, pixels per second
-	 */
-	public float getAccelerationY() {
-		return _accelerationY;
-	}
-	
-	/**
-	 * @return current velocity in X direction, pixels per second
-	 */
-	public float getVelocityX() {
-		return _velocityX;
-	}
-	
-	/**
-	 * @return current velocity in Y direction, pixels per second
-	 */
-	public float getVelocityY() {
-		return _velocityY;
-	}
-	
-	/**
-	 * @param velocityX instantly sets the velocity of the Sprite in X direction, pixels per second
-	 */
-	public void setVelocityX(float velocityX) {
-		_velocityX = velocityX;
-	}
-	
-	/**
-	 * @param velocityY instantly sets the velocity of the Sprite in Y direction, pixels per second
-	 */
-	public void setVelocityY(float velocityY) {
-		_velocityY = velocityY;
-	}
-	
-	/**
-	 * Instantly sets the velocity of te Sprite in X and Y directions, pixels per second
-	 * @param velocityX
-	 * @param velocityY
-	 */
-	public void setVelocity(float velocityX, float velocityY) {
-		_velocityX = velocityX;
-		_velocityY = velocityY;
-	}
-	
-	/**
-	 * @return the current terminal velocity cap in X direction
-	 */
-	public float getTerminalVelocityX() {
-		return _terminalVelocityX;
-	}
-	
-	/**
-	 * @return the current terminal velocity cap in Y direction
-	 */
-	public float getTerminalVelocityY() {
-		return _terminalVelocityY;
-	}
-	
-	/**
-	 * @param stopAtTerminalVelocity TRUE if Sprite should stop at the terminal velocity, FALSE if it should continue accelerating
-	 */
-	public void setStopAtTerminalVelocity(boolean stopAtTerminalVelocity) {
-		_stopAtTerminalVelocity = stopAtTerminalVelocity;
-	}
-	
-	/**
-	 * @return TRUE if the Sprite is going to stop when it reaches terminal velocity, FALSE if it will continue indefinately
-	 */
-	public boolean isStopAtTerminalVelocity() {
-		return _stopAtTerminalVelocity;
-	}
-	
-	/**
-	 * Sets a terminal velocity at which the Sprite will stop accelerating, this will trigger reachedTerminalVelocityX and reachedTerminalVelocityY in your DynamicsHandler if set
-	 * @param terminalVelocityX
-	 * @param terminalVelocityY
-	 */
-	public void setTerminalVelocity(float terminalVelocityX, float terminalVelocityY) {
-		_stopAtTerminalVelocity = true;
-	}
-	
-	public void setTerminalVelocityX(float terminalVelocityX) {
-		_terminalVelocityX = terminalVelocityX;
-	}
-	
-	public void setTerminalVelocityY(float terminalVelocityY) {
-		_terminalVelocityY = terminalVelocityY;
 	}
 	
 	/**
@@ -1092,8 +602,8 @@ public class Sprite {
 
 		for(i = 0; i < MAX_COLLIDERS; i++) {
 			if(_collidersArr[i] != null)
-				if((_x >= _collidersArr[i].getX() && _x <= _collidersArr[i].getX() + _collidersArr[i].getWidth()) || (_x <= _collidersArr[i].getX() && _x + _width >= _collidersArr[i].getX()))
-					if((_y >= _collidersArr[i].getY() && _y <= _collidersArr[i].getY() + _collidersArr[i].getHeight()) || (_y <= _collidersArr[i].getY() && _y + _height >= _collidersArr[i].getY()))
+				if((getX() >= _collidersArr[i].getX() && getX() <= _collidersArr[i].getX() + _collidersArr[i].getWidth()) || (getX() <= _collidersArr[i].getX() && getX() + getWidth() >= _collidersArr[i].getX()))
+					if((getY() >= _collidersArr[i].getY() && getY() <= _collidersArr[i].getY() + _collidersArr[i].getHeight()) || (getY() <= _collidersArr[i].getY() && getY() + getHeight() >= _collidersArr[i].getY()))
 						_collisionHandler.collision(this, _collidersArr[i]);
 		}
 	}
@@ -1172,16 +682,6 @@ public class Sprite {
 	}
 	
 	/**
-	 * Increases the current velocity by a given value
-	 * @param velocityX
-	 * @param velocityY
-	 */
-	public void setVelocityRelative(float velocityX, float velocityY) {
-		_velocityX += velocityX;
-		_velocityY += velocityY;
-	}
-	
-	/**
 	 * Resets the sprite to the initial conditions
 	 */
 	public void reset() {
@@ -1193,26 +693,10 @@ public class Sprite {
 	 * @param resetTexture TRUE if the texture is to be reset to the first tile
 	 */
 	public void reset(boolean resetTexture) {
+		super.reset();
 		stop();
 		stopAnimation();
 		if(resetTexture)
 			setTileIndex(1);
-		_x = _startX;
-		_y = _startY;
-		_width = _startWidth;
-		_height = _startHeight;
-	}
-	
-	/**
-	 * @return TRUE if the Sprite does not appear to be on-screen
-	 */
-	public boolean notOnScreen() {
-		if(Rokon.getRokon().isForceOffscreenRender())
-			return false;
-		if(_x + _width < 0 || _x > Rokon.getRokon().getWidth())
-			return true;
-		if(_y + _height < 0 || _y > Rokon.getRokon().getHeight())
-			return true;
-		return false;
 	}
 }
