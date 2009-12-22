@@ -40,6 +40,8 @@ public class Sprite extends DynamicObject {
 	private boolean _animateReturnToStart;
 	private long _animateLastUpdate;
 	private boolean _animateRandom;
+	private int [] _customTile;
+	private int _currentTile;
 
 	/*private boolean _triggeredReachTerminalVelocityX;
 	private boolean _triggeredReachTerminalVelocityY;
@@ -501,7 +503,11 @@ public class Sprite extends DynamicObject {
 		if(_animating) {
 			timeDiff = Rokon.getTime() - _animateLastUpdate;
 			if(timeDiff >= _animateTime) {
-				nextTile = getTileIndex() + 1;
+				if (_customTile == null) {
+					nextTile = getTileIndex() + 1;
+				} else {
+					nextTile = _currentTile + 1;
+				}
 				if(nextTile > _animateEndTile) {
 					if(_animateRemainingLoops > -1)
 						if(_animateRemainingLoops <= 1) {
@@ -522,11 +528,20 @@ public class Sprite extends DynamicObject {
 							_animationHandler.endOfLoop(_animateRemainingLoops);
 					}
 				}
-				if(_animateRemainingLoops > 1 || _animateRemainingLoops == -1)
-					if(_animateRandom)
-						setTileIndex((int)(Math.random() * (_animateEndTile - _animateStartTile)) + _animateStartTile);
-					else
-						setTileIndex(nextTile);
+				if (_customTile == null){
+					if(_animateRemainingLoops > 1 || _animateRemainingLoops == -1)
+						if(_animateRandom)
+							setTileIndex((int)(Math.random() * (_animateEndTile - _animateStartTile)) + _animateStartTile);
+						else
+							setTileIndex(nextTile);
+				} else {
+					_currentTile = nextTile;
+					if(_animateRemainingLoops > 1 || _animateRemainingLoops == -1)
+						if(_animateRandom)
+							setTileIndex(_customTile[(int)(Math.random() * (_animateEndTile - _animateStartTile)) + _animateStartTile]);
+						else
+							setTileIndex(_customTile[nextTile]);
+				}
 				_animateLastUpdate = Rokon.getTime();
 			}
 		}
@@ -655,7 +670,43 @@ public class Sprite extends DynamicObject {
 		_animateRandom = true;
 		setTileIndex((int)(Math.random() * (endTile - startTile)) + startTile);
 	}
+
+	// Add Custom Tile Animation
+	/**
+	 * Animates a Sprite by using custom tiles from its Texture. This will loop indefinately.
+	 * @param tileCustom is an array containing the tiles indexes of the animation
+	 * @param time the time in milliseconds between each frame
+	 */
+	public void animateCustom(int [] tileCustom, float time) {
+		_animating = true;
+		_animateStartTile = 0;
+		_animateEndTile = tileCustom.length-1;
+		_customTile = tileCustom;
+		_animateTime = time;
+		_animateRemainingLoops = -1;
+		_animateLastUpdate = Rokon.getTime();
+		setTileIndex(tileCustom[0]);
+	}
 	
+	/**
+	 * Animates a Sprite by using custom tiles from its Texture
+	 * @param tileCustom is an array containing the tiles indexes of the animation
+	 * @param time the time in milliseconds between each frame
+	 * @param loops the number of loops to go through the animation
+	 * @param returnToStart TRUE if the Sprite should return to startTile when complete, FALSE if the Sprite should stay at endTile when complete
+	 */
+	public void animateCustom(int [] tileCustom, float time, int loops, boolean returnToStart) {
+		_animating = true;
+		_animateStartTile = tileCustom[0];
+		_animateEndTile = tileCustom[tileCustom.length-1];
+		_animateTime = time;
+		_animateRemainingLoops = loops;
+		_animateReturnToStart = returnToStart;
+		_animateLastUpdate = Rokon.getTime();
+		setTileIndex(tileCustom[0]);
+	}
+	// End Add
+
 	/**
 	 * Stops the animation, and leaving the Sprite at its current frame 
 	 */

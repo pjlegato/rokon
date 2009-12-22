@@ -27,7 +27,8 @@ public class Launcher extends ListActivity {
 			"Pausing / Freezing",
 			"Basic Menu",
 			"Advanced Menu System",
-			"Accelerometer"
+			"Accelerometer",
+			"Custom Sprite Animation"
 		};
 		setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, examples));
 	}
@@ -95,6 +96,10 @@ public class Launcher extends ListActivity {
 				break;
 			case 14: // Accelerometer
 				intent = new Intent(this, Example15.class);
+				startActivity(intent);
+				break;
+			case 15: // Custom Sprite Animation
+				intent = new Intent(this, Example16.class);
 				startActivity(intent);
 				break;
 		}
