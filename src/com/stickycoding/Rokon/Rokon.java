@@ -340,6 +340,7 @@ public class Rokon {
 		_rokon.setLoading(true);
 		_rokon.setIsLoadingScreen(true);
 		_rokon.setLoadPath(path);
+		
 		return _rokon;
 	}
 
@@ -355,6 +356,8 @@ public class Rokon {
 		_frameRate = 0;
 		_frameCount = 0;
 		_frameTimer = 0;
+		TextureAtlas.hardReset();
+		time = System.currentTimeMillis();
 	}
 	
 	/**
@@ -738,8 +741,25 @@ public class Rokon {
 	 * @param text
 	 * @param layer
 	 */
-	public void addtext(Text text, int layer) {
+	public void addText(Text text, int layer) {
 		getLayer(layer).addText(text);
+	}
+	
+	/**
+	 * Adds Emitter to layer zero
+	 * @param emitter
+	 */
+	public void addEmitter(Emitter emitter) {
+		getLayer(0).addEmitter(emitter);
+	}
+	
+	/**
+	 * Adds Emitter to a Layer
+	 * @param emitter
+	 * @param layer
+	 */
+	public void addEmitter(Emitter emitter, int layer) {
+		getLayer(layer).addEmitter(emitter);
 	}
 	
 	/**

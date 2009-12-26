@@ -19,24 +19,53 @@ public class Emitter extends DynamicObject {
 	private boolean _dead = false;
 	private float _rate;
 	private Texture _texture;
-	private int i, j, k, w;
+	private int i, j, k, w, x;
 	private TextureBuffer _texBuffer;
 	
 	private ParticleModifier[] _particleModifier;
 
 	/**
+	 * Create's a point-emitter
 	 * @param x
 	 * @param y
 	 * @param rate number of particles created per second
 	 * @param texture texture of each particle
 	 */
 	public Emitter(float x, float y, float rate, Texture texture) {
-		super(x, y, 0, 0);
+		this(x, x, y, y, rate, texture);
+	}
+	
+	/**
+	 * Creates an emitter as a rectangle
+	 * @param x1 Top left of spawn rect
+	 * @param x2 Bottom right of spawn rect
+	 * @param y1 Top left of spawn rect
+	 * @param y2 Bottom right of spawn rect
+	 * @param rate number of particles created per second
+	 * @param texture texture of each particle
+	 */
+	public Emitter(float x1, float x2, float y1, float y2, float rate, Texture texture) {
+		super(x1, y1, x2 - x1, y2 - y1);
 		_rate = (1 / rate) * 1000;
 		_texture = texture;
 		_texBuffer = new TextureBuffer(texture);
 		_particleModifier = new ParticleModifier[MAX_PARTICLE_MODIFIERS];
 		setLastUpdate();
+	}
+	
+	/**
+	 * @return the number of particles emitted per second
+	 */
+	public float getRate() {
+		return _rate;
+	}
+	
+	/**
+	 * Sets the rate at which Particle's are spawned from this Emitter
+	 * @param rate Particle's per second
+	 */
+	public void setRate(float rate) {
+		_rate = rate;
 	}
 	
 	/**
@@ -55,7 +84,7 @@ public class Emitter extends DynamicObject {
 	}
 	
 	private void _spawn() {
-
+		spawnParticle(new Particle(this, getX() + ((float)Math.random() * getWidth()), getY() + ((float)Math.random() * getHeight()), 0, 0));
 	}
 	
 	/**
@@ -71,15 +100,17 @@ public class Emitter extends DynamicObject {
 			return;
 		}
 		particleArr[j] = particle;
+		for(w = 0; w < _particleModifier.length; w++)
+			_particleModifier[w].onCreate(particle);
 	}
 	
-	private long _now, _timeDiff;
+	private long _timeDiff;
 	private int _count;
 	private void _updateSpawns() {
-		_now = Rokon.getTime();
-		_timeDiff = _now - getLastUpdate();
+		_timeDiff = Rokon.time - getLastUpdate();
 		_count = Math.round(_timeDiff / _rate);
 		if(_count > 0) {
+			Debug.print("Spawning " + _count + " after " + _timeDiff);
 			for(i = 0; i < _count; i++)
 				_spawn();
 			setLastUpdate();
@@ -101,8 +132,8 @@ public class Emitter extends DynamicObject {
 		
 		for(i = 0; i < MAX_PARTICLES; i++) {
 			if(particleArr[i] != null) {
-				particleArr[i].updateMovement();
 				updateParticle(particleArr[i]);
+				particleArr[i].updateMovement();
 				if(particleArr[i].dead)
 					particleArr[i] = null;
 				else {
@@ -126,6 +157,18 @@ public class Emitter extends DynamicObject {
 		}
 		
 		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+	}
+	
+	/**
+	 * Removes a particle from this Emitter and the memory
+	 * @param particle
+	 */
+	public void removeParticle(Particle particle) {
+		for(x = 0; x < particleArr.length; x++)
+			if(particleArr[x] == particle) {
+				particleArr[x] = null;
+				return;
+			}
 	}
 	
 	/**

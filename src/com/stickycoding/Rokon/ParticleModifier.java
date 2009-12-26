@@ -6,8 +6,8 @@ package com.stickycoding.Rokon;
  */
 public class ParticleModifier {
 
-	public void onUpdate(Particle particle) {
-		
-	}
+	public void onCreate(Particle particle) { }
+	
+	public void onUpdate(Particle particle) { }
 	
 }

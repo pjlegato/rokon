@@ -476,4 +476,29 @@ public class TextureAtlas {
 			reloadTextureIndices.add(index);
 		_bmp[index] = bitmap;
 	}
+	
+
+	/**
+	 * Resets the TextureAtlas to its original state.
+	 * @author Anton Hesselbom
+	 */
+	public static void hardReset() {
+		ready = false;
+		readyToLoad = false;
+		_textureSets = new HashMap<Integer, HashMap<Integer, Texture>>();
+		_texture = new HashMap<Integer, Texture>();
+		_textureCount = 0;
+		_textureSetCount = 0;
+		_bmp = new Bitmap[MAX_TEXTURES];
+		texId = new int[MAX_TEXTURES];
+		_greatestWidth = 0;
+		_width = 0;
+		_height = new int[MAX_TEXTURES];
+		currentAtlas = 0;
+		idString = "";
+		paint = new Paint();
+		reloadTextures = false;
+		reloadTextureIndices = new HashSet<Integer>();
+		System.gc();
+	}
 }

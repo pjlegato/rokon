@@ -12,6 +12,7 @@
 		* Sprite, Particle, Emitter all now extend the superclass DynamicObject - in an attempt to the dynamics' functions
 	
 	Bug Fixes
+		* Texture loading error, 'width and height > 0' has been fixed - it was due to variables not being reset properly when the engine is created
 
 1.0.2 - 19/12/2009
 	Overview
