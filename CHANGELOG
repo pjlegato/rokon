@@ -5,6 +5,7 @@
 		* Basic and Advanced Menu examples added
 		* Handling the accelerometer can be done through RokonActivity, see Example15
 		* New, far more advanced particle engine
+		* Custom Tile Animation method for Sprite
 		
 	Changes
 		* Removed Emitter package, functionality replaced by ParticleModifier's
