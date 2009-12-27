@@ -3,9 +3,9 @@ package com.stickycoding.Rokon;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- * Text is an object which can be added to Layer's that will draw text using TTF fonts loaded into the Font class.
+ * Text is an object which can be added to Layers that will draw text using TTF fonts loaded into the Font class.
  * Essentially, each letter is drawn as its own Sprite, and textured independantly. For this reason, Text should
- * be used for frequently changing text (such as game score's)
+ * be used for frequently changing text (such as game scores)
  * 
  * Another library is planned which will be optimized for longer or non-changing text, using fixed textures.
  * 

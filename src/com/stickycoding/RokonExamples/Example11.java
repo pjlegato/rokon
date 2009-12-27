@@ -6,7 +6,7 @@ import com.stickycoding.Rokon.Texture;
 
 /**
  * @author Richard
- * More advanced texture use, explaining how and when to use textureSplit to seperate your textures into different atlas's
+ * More advanced texture use, explaining how and when to use textureSplit to seperate your textures into different atlases
  */
 public class Example11 extends RokonActivity {
 	
@@ -21,12 +21,12 @@ public class Example11 extends RokonActivity {
 
 	@Override
 	public void onLoad() {
-		// Texture's on the hardware are limited to 1024x1024 pixels.
-		// The number of textures you can have is limited by the devices hardware, usually 16mb
-		// In order to draw from two texture atlas's at once, the engine has to switch between them each frame.
+		// Textures on the hardware are limited to 1024x1024 pixels.
+		// The number of textures you can have is limited by the device's hardware, usually 16mb
+		// In order to draw from two texture atlases at once, the engine has to switch between them each frame.
 		// This severely limits your FPS, often bringing it below 20fps.
 		// It makes sense therefore, to seperate out your texture atlases sensibly, in order to keep high FPS.
-		// Having one atlas for your menu's, and seperate levels is a good idea.
+		// Having one atlas for your menus, and seperate levels is a good idea.
 		// By default, Rokon will split up into a new atlas when it is full.
 		// You can specify points where you want it to split, as shown below.
 

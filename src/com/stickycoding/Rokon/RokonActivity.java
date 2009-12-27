@@ -49,12 +49,12 @@ public class RokonActivity extends Activity {
 	public void onCreate() { }
 	
 	/**
-	 * Called when the engine is ready for Texture's to be loaded
+	 * Called when the engine is ready for Textures to be loaded
 	 */
 	public void onLoad() { }
 	
 	/**
-	 * Called when the engine has loaded all Texture's, and the loading screen has been removed
+	 * Called when the engine has loaded all Textures, and the loading screen has been removed
 	 */
 	public void onLoadComplete() { }
 	

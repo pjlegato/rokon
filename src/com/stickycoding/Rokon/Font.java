@@ -47,7 +47,7 @@ public class Font {
 	}
 
 	/**
-	 * Creates a Font, it's respective texture, and adds it to the atlas.
+	 * Creates a Font, its respective texture, and adds it to the atlas.
 	 * Note, this must be called before the TextureAtlas is prepared.
 	 * @param filename as it is found in the assets folder of your APK
 	 */

@@ -6,7 +6,7 @@ import com.stickycoding.Rokon.SpriteModifier;
 import com.stickycoding.Rokon.Handlers.BasicHandler;
 
 /**
- * FadeTo allows Sprite's to visibility fade in and out to a given value over a given timeframe
+ * FadeTo allows Sprites to visibility fade in and out to a given value over a given timeframe
 */
 public class FadeTo extends SpriteModifier {
 	

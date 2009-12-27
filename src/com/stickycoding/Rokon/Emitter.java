@@ -25,7 +25,7 @@ public class Emitter extends DynamicObject {
 	private ParticleModifier[] _particleModifier;
 
 	/**
-	 * Create's a point-emitter
+	 * Creates a point-emitter
 	 * @param x
 	 * @param y
 	 * @param rate number of particles created per second
@@ -61,8 +61,8 @@ public class Emitter extends DynamicObject {
 	}
 	
 	/**
-	 * Sets the rate at which Particle's are spawned from this Emitter
-	 * @param rate Particle's per second
+	 * Sets the rate at which Particles are spawned from this Emitter
+	 * @param rate Particles per second
 	 */
 	public void setRate(float rate) {
 		_rate = rate;
@@ -172,7 +172,7 @@ public class Emitter extends DynamicObject {
 	}
 	
 	/**
-	 * @return the current count of Particle's in the Emitter
+	 * @return the current count of Particles in the Emitter
 	 */
 	public int particleCount() {
 		k = 0;
@@ -193,7 +193,7 @@ public class Emitter extends DynamicObject {
 	}
 	
 	/**
-	 * Updates a specific particle by applying all current ParticleModifier's
+	 * Updates a specific particle by applying all current ParticleModifiers
 	 * @param particle
 	 */
 	public void updateParticle(Particle particle) {
@@ -202,7 +202,7 @@ public class Emitter extends DynamicObject {
 	}
 	
 	/**
-	 * Add's a ParticleModifer to the current collection
+	 * Adds a ParticleModifer to the current collection
 	 * @param particleModifier
 	 */
 	public void addParticleModifier(ParticleModifier particleModifier) {
@@ -226,7 +226,7 @@ public class Emitter extends DynamicObject {
 	}
 	
 	/**
-	 * Sets the ParticleModifier's for the Emitter, can be used with any length of array
+	 * Sets the ParticleModifiers for the Emitter, can be used with any length of array
 	 * @param particleModifier
 	 */
 	public void setParticleModifiers(ParticleModifier[] particleModifier) {

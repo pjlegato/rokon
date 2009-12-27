@@ -8,7 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 
 /**
- * Texture's are very important, and can be applied to Sprite's.
+ * Textures are very important, and can be applied to Sprites.
  * A Texture class contains a reference to a particular image loaded by createTextureXXX functions in Rokon
  * The actual image is held on the hardware, accessed through TextureAtlas
  * 
@@ -63,7 +63,7 @@ public class Texture {
 
 	/**
 	 * DEPRECATED
-	 * All Texture's must now be assets
+	 * All Textures must now be assets
 	 * @param bmp
 	 */
 	public Texture(Bitmap bmp) {

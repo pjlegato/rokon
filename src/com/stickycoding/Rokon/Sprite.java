@@ -722,7 +722,7 @@ public class Sprite extends DynamicObject {
 	}
 	
 	/**
-	 * Removes all SpriteModifier's from the Sprite
+	 * Removes all SpriteModifiers from the Sprite
 	 */
 	public void resetModifiers() {
 			for(k = 0; k < MAX_MODIFIERS; k++) {

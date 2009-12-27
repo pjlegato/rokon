@@ -1,7 +1,7 @@
 package com.stickycoding.Rokon.Menu;
 
 /**
- * Stores the default layers for MenuObject's
+ * Stores the default layers for MenuObjects
  * @author Richard
  */
 public class MenuLayers {

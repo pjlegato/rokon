@@ -282,7 +282,7 @@ public class Rokon {
 	}
 	
 	/**
-	 * Pass through your InputHandler to manage screen touches and Hotspot's
+	 * Pass through your InputHandler to manage screen touches and Hotspots
 	 * @param inputHandler 
 	 */
 	public void setInputHandler(InputHandler inputHandler) {
@@ -311,8 +311,8 @@ public class Rokon {
 	/**
 	 * Creates the engine instance
 	 * @param activity the current activity
-	 * @param fWidth the width to calibrate the engine's coordinates to
-	 * @param fHeight the height to calibrate the engine's coordinates to
+	 * @param fWidth the width to calibrate the engines coordinates to
+	 * @param fHeight the height to calibrate the engines coordinates to
 	 * @return the engine reference
 	 */
 	public static Rokon createEngine(Activity activity, int fWidth, int fHeight) {
@@ -328,8 +328,8 @@ public class Rokon {
 	 * Creates the engine instance
 	 * @param activity the current activity
 	 * @param path the path of the loading screen
-	 * @param fWidth the width to calibrate the engine's coordinates to
-	 * @param fHeight the height to calibrate the engine's coordinates to
+	 * @param fWidth the width to calibrate the engines coordinates to
+	 * @param fHeight the height to calibrate the engines coordinates to
 	 * @return the engine reference
 	 */
 	public static Rokon createEngine(Activity activity, String path, int fWidth, int fHeight) {
@@ -395,7 +395,7 @@ public class Rokon {
 	}
 	
 	/**
-	 * @return a HashSet of all active Hotspot's
+	 * @return a HashSet of all active Hotspots
 	 */
 	public Hotspot[] getHotspots() {
 		return hotspotArr;
@@ -815,14 +815,14 @@ public class Rokon {
 	}
 	
 	/**
-	 * Packs all the loaded Texture's into one large Bitmap, ready to be set into the hardware. This must be called after all Texture's are created.
+	 * Packs all the loaded Textures into one large Bitmap, ready to be set into the hardware. This must be called after all Textures are created.
 	 */
 	public void prepareTextureAtlas() {
 		TextureAtlas.compute();
 	}
 	
 	/**
-	 * Packs all the loaded Texture's into one large Bitmap, ready to be set into the hardware. This must be called after all Texture's are created.
+	 * Packs all the loaded Textures into one large Bitmap, ready to be set into the hardware. This must be called after all Textures are created.
 	 * @param width the width to set each atlas to
 	 */
 	public void prepareTextureAtlas(int width) {
@@ -963,14 +963,14 @@ public class Rokon {
 	}
 	
 	/**
-	 * Freeze's rendering, but does not pause the game time
+	 * Freezes rendering, but does not pause the game time
 	 */
 	public void freeze() {
 		_frozen = true;
 	}
 	
 	/**
-	 * Unfreeze's rendering 
+	 * Unfreezes rendering 
 	 */
 	public void unfreeze() {
 		_frozen = false;
@@ -1000,7 +1000,7 @@ public class Rokon {
 	}
 	
 	/**
-	 * Texture's loaded after a textureSplit will be placed on a seperate atlas to the previous
+	 * Textures loaded after a textureSplit will be placed on a seperate atlas to the previous
 	 */
 	public void textureSplit() {
 		TextureAtlas.textureSplit();

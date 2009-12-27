@@ -75,7 +75,7 @@ public class Example4 extends RokonActivity {
 	}
 	
     /**
-     * You can handle key events just as you would in a normal Activity, but be aware you should call the superclass method's, they are handled in RokonActivity for passing on to any active Menu's
+     * You can handle key events just as you would in a normal Activity, but be aware you should call the superclass methods, they are handled in RokonActivity for passing on to any active Menus
      */
     public boolean onKeyDown(int keyCode, KeyEvent event) {
     	super.onKeyDown(keyCode, event);

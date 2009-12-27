@@ -8,7 +8,7 @@
 		* Custom Tile Animation method for Sprite
 		
 	Changes
-		* Removed Emitter package, functionality replaced by ParticleModifier's
+		* Removed Emitter package, functionality replaced by ParticleModifiers
 		* Documentation added to previous examples
 		* Sprite, Particle, Emitter all now extend the superclass DynamicObject - in an attempt to the dynamics' functions
 	
@@ -43,7 +43,7 @@
 		* Rokon.forceTextureRefresh() will force the engine to use a new atlas configuration each time, this should be on when building, and removed for your published version
  		* Texture.replace(Bitmap/String) copies an image onto the texture, and replaces it on the hardware. The replacement bitmap must have the same dimensions as the original.
  		* Rokon.freezeUntilTexturesReloaded() will freeze the screen until new textures (Texture.replace) have been loaded onto the engine
- 		* Hotspot's can now be set IDs for easier recognition, setId() getId() and a new constructors - Hotspot(x, y, width, height, id) and Hotspot(sprite, id)
+ 		* Hotspots can now be set IDs for easier recognition, setId() getId() and a new constructors - Hotspot(x, y, width, height, id) and Hotspot(sprite, id)
  		* InputHandler.onHotspotTouched(Hotspot, MotionEvent) will now be called after onHotspotTouched(Hotspot), it passes on touch coordinates. Both will be called, you should only handle one or the other.
  		* READ_PHONE_STATE was added to AndroidManifest.xml
  		

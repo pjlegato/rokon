@@ -26,7 +26,7 @@ import android.graphics.Paint;
  * 
  * TextureAtlas provides OpenGL with a power-of-two sized texture (2,4,8,16,32 etc.) as
  * this is needed for the hardware to work efficiently. It is possible for you however
- * to load Texture's of any dimenion into the atlas, and Rokon will clip it for you.
+ * to load Textures of any dimenion into the atlas, and Rokon will clip it for you.
  * 
  * @author Richard
  */
@@ -153,17 +153,17 @@ public class TextureAtlas {
 	}
 	
 	/**
-	 * Calculates a TextureAtlas from all the loaded Texture's
+	 * Calculates a TextureAtlas from all the loaded Textures
 	 */
 	public static void compute() {
 		compute(1024);
 	}
 	
 	/**
-	 * Calculates a TextureAtlas from all the loaded Texture's
-	 * The Texture's are sorted into largest-first order, and a bin packing algorithm is used to squeeze 
+	 * Calculates a TextureAtlas from all the loaded Textures
+	 * The Textures are sorted into largest-first order, and a bin packing algorithm is used to squeeze 
 	 * into the atlas. There is a maximum total atlas size of 1024x1024 pixels, imposed by OpenGL.
-	 * If your Texture's and Font's do not fit into this space, an exception will be raised.
+	 * If your Textures and Fonts do not fit into this space, an exception will be raised.
 	 * 
 	 * An improvement - to allow more atlases simulatenously, is being worked on.
 	 * @param initwidth the minimum width of the atlas

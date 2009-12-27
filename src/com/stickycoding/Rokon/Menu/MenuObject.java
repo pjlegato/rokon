@@ -9,7 +9,7 @@ import com.stickycoding.Rokon.SpriteModifiers.FadeTo;
 import com.stickycoding.Rokon.SpriteModifiers.SlideIn;
 
 /**
- * The extendable class for which all objects added to Menu's are made from. Has a Sprite, Texture and Hotspot, the rest is done by extensions.
+ * The extendable class from which all objects added to Menus are made. Has a Sprite, Texture and Hotspot, the rest is done by extensions.
  * @author Richard
  */
 public class MenuObject {
