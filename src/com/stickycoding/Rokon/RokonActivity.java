@@ -10,8 +10,6 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnKeyListener;
 
 import com.stickycoding.Rokon.Handlers.AccelerometerHandler;
 import com.stickycoding.Rokon.Handlers.InputHandler;

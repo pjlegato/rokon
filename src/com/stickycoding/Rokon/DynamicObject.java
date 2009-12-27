@@ -14,7 +14,7 @@ import com.stickycoding.Rokon.Handlers.DynamicsHandler;
 public class DynamicObject {
 
 	private float _startX, _startY, _startWidth, _startHeight;
-	private float _x, _y, _z, _offsetX, _offsetY;
+	private float _x, _y, _offsetX, _offsetY;
 	private float _rotation, _rotationPivotX, _rotationPivotY;
 	private boolean _rotationPivotRelative = true;
 	private float _width, _height, _scaleX, _scaleY;

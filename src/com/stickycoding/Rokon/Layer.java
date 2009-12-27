@@ -15,7 +15,7 @@ public class Layer {
 	private Sprite[] spriteArr = new Sprite[MAX_SPRITES];
 	private Emitter[] emitterArr = new Emitter[MAX_EMITTERS];
 	private Text[] textArr = new Text[MAX_TEXTS];
-	private int i, j, k, l, m, n, o, p, q, r, s, t;
+	private int i, j, k, l, m, n, o, p, q;
 	
 	public Layer() {
 

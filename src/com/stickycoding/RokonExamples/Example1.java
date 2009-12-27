@@ -1,14 +1,6 @@
 package com.stickycoding.RokonExamples;
 
-import com.stickycoding.Rokon.Debug;
 import com.stickycoding.Rokon.RokonActivity;
-import com.stickycoding.Rokon.Texture;
-import com.stickycoding.Rokon.Backgrounds.FixedBackground;
-import com.stickycoding.Rokon.Menu.Menu;
-import com.stickycoding.Rokon.Menu.MenuObject;
-import com.stickycoding.Rokon.Menu.Objects.MenuButton;
-import com.stickycoding.Rokon.Menu.Objects.MenuImage;
-import com.stickycoding.Rokon.Menu.Transitions.MenuFade;
 
 /**
  * @author Richard

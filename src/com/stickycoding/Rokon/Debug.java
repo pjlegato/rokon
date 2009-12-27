@@ -53,7 +53,7 @@ public class Debug {
 	}
 	
 	/**
-	 * Debugs te timer, outputting time difference from the last interval (startTimer() if none have been called before)
+	 * Debugs the timer, outputting time difference from the last interval (startTimer() if none have been called before)
 	 * @param message prefix message for LogCat
 	 */
 	public static void debugInterval(String message) {
@@ -65,7 +65,7 @@ public class Debug {
 	}
 	
 	/**
-	 * Debugs te timer, outputting time difference from the last interval (startTimer() if none have been called before)
+	 * Debugs the timer, outputting time difference from the last interval (startTimer() if none have been called before)
 	 */
 	public static void debugInterval() {
 		if(DEBUG_MODE) {
@@ -73,6 +73,15 @@ public class Debug {
 			Debug.print("Interval took " + diff + "ms");
 			lastInterval = System.currentTimeMillis();
 		}
+	}
+	
+	/**
+	 * Prints a warning to LogCat, regardless of being in debug mode or not
+	 * @param warning message to be passed on to LogCat
+	 */
+	public static void warning(String warning) {
+		Log.e("Rokon", "ROKON WARNING : " + warning);
+		(new Exception("ROKON WARNING : " + warning)).printStackTrace();
 	}
 
 }

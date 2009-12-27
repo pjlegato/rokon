@@ -7,7 +7,7 @@ import java.nio.ByteOrder;
  * An easier way of managing a ByteBuffer for vertices
  * @author Richard
  */
-public class BufferObject {
+public class VertexBuffer {
 
 	public ByteBuffer buffer;
 
@@ -18,7 +18,7 @@ public class BufferObject {
 	 * @param x2 Bottom Right X
 	 * @param y2 Bottom Right Y
 	 */
-	public BufferObject(int x1, int y1, int x2, int y2) {
+	public VertexBuffer(int x1, int y1, int x2, int y2) {
 		buffer = ByteBuffer.allocate(8*4);
 		buffer.order(ByteOrder.nativeOrder());
 		update(x1, y1, x2, y2);

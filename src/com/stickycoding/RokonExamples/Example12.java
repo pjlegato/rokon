@@ -4,6 +4,8 @@ import com.stickycoding.Rokon.Debug;
 import com.stickycoding.Rokon.RokonActivity;
 import com.stickycoding.Rokon.Sprite;
 import com.stickycoding.Rokon.Texture;
+import com.stickycoding.Rokon.TextureAtlas;
+import com.stickycoding.Rokon.TextureManager;
 import com.stickycoding.Rokon.SpriteModifiers.Resonate;
 
 /**
@@ -12,6 +14,7 @@ import com.stickycoding.Rokon.SpriteModifiers.Resonate;
  */
 public class Example12 extends RokonActivity {
 	
+	public TextureAtlas atlas;
 	public Texture carTexture;
 	public Sprite carSprite;
 	
@@ -23,8 +26,9 @@ public class Example12 extends RokonActivity {
 
 	@Override
 	public void onLoad() {
-		carTexture = rokon.createTexture("graphics/sprites/car.png");
-		rokon.prepareTextureAtlas();
+		atlas = new TextureAtlas(512, 512);
+		atlas.insert(carTexture = new Texture("graphics/sprites/car.png"));
+		TextureManager.load(atlas);
 		carSprite = new Sprite(50, 100, carTexture.getWidth() * 3, carTexture.getHeight() * 3, carTexture);
 		carSprite.addModifier(new Resonate(3000, 0.4f, 2f));
 	}

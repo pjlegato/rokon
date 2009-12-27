@@ -117,18 +117,13 @@ public class Emitter extends DynamicObject {
 		}
 	}
 	
-	private int _texToBe;
 	public void drawFrame(GL10 gl) {
 		_updateSpawns();
 		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_DST_ALPHA);
-		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, _texBuffer.buffer);
+		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, _texBuffer.getBuffer());
 		gl.glVertexPointer(2, GL11.GL_FLOAT, 0, RokonRenderer.vertexBuffer);
 
-		_texToBe = TextureAtlas.texId[_texture.atlasIndex];
-		if(Rokon.getRokon().currentTexture != _texToBe) {
-			gl.glBindTexture(GL10.GL_TEXTURE_2D, _texToBe);
-			Rokon.getRokon().currentTexture = _texToBe;
-		}
+		_texture.select(gl);
 		
 		for(i = 0; i < MAX_PARTICLES; i++) {
 			if(particleArr[i] != null) {

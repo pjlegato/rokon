@@ -6,9 +6,6 @@ import javax.microedition.khronos.opengles.GL11;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.opengl.GLUtils;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -86,7 +83,7 @@ public class Rokon {
 	private boolean _landscape = false;
 	private boolean _isLoadingScreen = false;
 	private boolean _letterBoxMode = false;
-	public BufferObject letterBoxBuffer1, letterBoxBuffer2;
+	public VertexBuffer letterBoxBuffer1, letterBoxBuffer2;
 	
 	private boolean _forceTextureRefresh = false;
 	private boolean _freezeUntilTexturesReloaded = false;
@@ -168,8 +165,8 @@ public class Rokon {
 	 */
 	public void forceLetterBox() {
 		_letterBoxMode = true;
-		letterBoxBuffer1 = new BufferObject(getWidth(), 0, getWidth() + 200, getHeight() + 200);
-		letterBoxBuffer2 = new BufferObject(0, getHeight(), getWidth() + 200, getHeight() + 200);
+		letterBoxBuffer1 = new VertexBuffer(getWidth(), 0, getWidth() + 200, getHeight() + 200);
+		letterBoxBuffer2 = new VertexBuffer(0, getHeight(), getWidth() + 200, getHeight() + 200);
 	}
 	
 	/**
@@ -356,7 +353,7 @@ public class Rokon {
 		_frameRate = 0;
 		_frameCount = 0;
 		_frameTimer = 0;
-		TextureAtlas.hardReset();
+		TextureManager.prepare();
 		time = System.currentTimeMillis();
 	}
 	
@@ -510,7 +507,7 @@ public class Rokon {
 		try {
 			while(_frozen);
 			
-			if(_freezeUntilTexturesReloaded && TextureAtlas.reloadTextures)
+			if(_freezeUntilTexturesReloaded)
 				return;
 			
 			if(!_paused)
@@ -578,121 +575,7 @@ public class Rokon {
 		} catch (Exception e) { 
 			e.printStackTrace();
 		}
-	}
-	
-	/**
-	 * TextureAtlas holds all the bitmaps until it is ready to be loaded into
-	 * OpenGL. Once this is done, the bitmaps are freed from the memory.
-	 * There is no need to call this.
-	 * @param gl
-	 */
-	private int[] tmp_tex;
-	public int tex;
-	private Bitmap bmp;
-	public void loadTextures(GL10 gl) {
-		if(TextureAtlas.readyToLoad) {
-			for(int j = 0; j < TextureAtlas.currentAtlas; j++) {
-				bmp = TextureAtlas.getBitmap(j);
-				tmp_tex = new int[1];
-				gl.glGenTextures(1, tmp_tex, 0);
-				tex = tmp_tex[0];
-				gl.glBindTexture(GL10.GL_TEXTURE_2D, tex);
-	            gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
-	            gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_NEAREST);
-	            gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
-	            gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
-	            gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_MODULATE);
-	            Bitmap bmp = Bitmap.createBitmap(TextureAtlas._width, TextureAtlas._height[j], Bitmap.Config.ARGB_8888);
-				GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bmp, 0);
-	            bmp.recycle();
-	            bmp = null;
-	            for(int f = 0; f < TextureAtlas._textureSets.size(); f++)
-	    			for(int h = 0; h < TextureAtlas._textureSets.get(f).size(); h++) {
-	    				Texture texture = TextureAtlas._textureSets.get(f).get(h);
-	    					if(texture.atlasIndex == j) {
-	    						try {
-	    							bmp = BitmapFactory.decodeStream(getActivity().getAssets().open(texture.assetPath));
-		    						GLUtils.texSubImage2D(GL10.GL_TEXTURE_2D, 0, texture.atlasX, texture.atlasY, bmp);
-		    						bmp.recycle();
-		    						bmp = null;
-	    						} catch (Exception e) { e.printStackTrace(); Debug.print("CANNOT FIND ASSET"); }
-	    					}
-	    				}
-				TextureAtlas.readyToLoad = false;
-				TextureAtlas.ready = true;
-				TextureAtlas.texId[j] = tex;
-				currentTexture = tex;
-			}
-		}
-		if(TextureAtlas.reloadTextures) {
-			//Debug.debugInterval("Reached Loading Texture");
-			while(TextureAtlas.reloadTextureIndices.iterator().hasNext()) {
-				int index = TextureAtlas.reloadTextureIndices.iterator().next();
-				if(currentTexture != index) {
-					gl.glBindTexture(GL10.GL_TEXTURE_2D, TextureAtlas.texId[index]);
-					currentTexture = index;
-				}
-				//Debug.print("Updating " + index);
-				Bitmap bmp = Bitmap.createBitmap(TextureAtlas._width, TextureAtlas._height[j], Bitmap.Config.ARGB_8888);
-				GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bmp, 0);
-	            bmp.recycle();
-	            bmp = null;
-	            for(int f = 0; f < TextureAtlas._textureSets.size(); f++)
-	    			for(int h = 0; h < TextureAtlas._textureSets.get(f).size(); h++) {
-	    				Texture texture = TextureAtlas._textureSets.get(f).get(h);
-	    					if(texture.atlasIndex == j) {
-	    						try {
-	    							bmp = BitmapFactory.decodeStream(getActivity().getAssets().open(texture.assetPath));
-		    						GLUtils.texSubImage2D(GL10.GL_TEXTURE_2D, 0, texture.atlasX, texture.atlasY, bmp);
-		    						bmp.recycle();
-		    						bmp = null;
-	    						} catch (Exception e) { e.printStackTrace(); Debug.print("CANNOT FIND ASSET"); }
-	    					}
-	    				}
-				TextureAtlas.reloadTextureIndices.remove(index);
-			}
-			TextureAtlas.reloadTextures = false;
-			//Debug.debugInterval("Loading onto hardware");
-			//Debug.debugTimer("Switching textures");
-		}
-		/*if(TextureAtlas.readyToLoad) {
-			for(int j = 0; j < TextureAtlas.currentAtlas; j++) {
-				//Debug.print("Loading atlas " + j);
-				bmp = TextureAtlas.getBitmap(j);
-				tmp_tex = new int[1];
-				gl.glGenTextures(1, tmp_tex, 0);
-				tex = tmp_tex[0];
-				gl.glBindTexture(GL10.GL_TEXTURE_2D, tex);
-	            gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
-	            gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_NEAREST);
-	            gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
-	            gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
-	            gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_MODULATE);
-				GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bmp, 0);
-				//Debug.print("Texture created tex=" + tex + " w=" + bmp.getWidth() + " h=" + bmp.getHeight());
-				TextureAtlas.readyToLoad = false;
-				TextureAtlas.ready = true;
-				TextureAtlas.texId[j] = tex;
-				currentTexture = tex;
-			}
-		}
-		if(TextureAtlas.reloadTextures) {
-			//Debug.debugInterval("Reached Loading Texture");
-			while(TextureAtlas.reloadTextureIndices.iterator().hasNext()) {
-				int index = TextureAtlas.reloadTextureIndices.iterator().next();
-				if(currentTexture != index) {
-					gl.glBindTexture(GL10.GL_TEXTURE_2D, TextureAtlas.texId[index]);
-					currentTexture = index;
-				}
-				//Debug.print("Updating " + index);
-				GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, TextureAtlas.getBitmap(index), 0);
-				TextureAtlas.reloadTextureIndices.remove(index);
-			}
-			TextureAtlas.reloadTextures = false;
-			//Debug.debugInterval("Loading onto hardware");
-			//Debug.debugTimer("Switching textures");
-		}*/
-	}
+	}	
 	
 	/**
 	 * Adds a sprite to the bottom Layer (zero)
@@ -780,55 +663,13 @@ public class Rokon {
 	}
 
 	/**
-	 * Adds a texture to the TextureAtlas from the assets folder
-	 * @param path Path to the file in /assets/
-	 * @return Texture pointer
-	 */
-	public Texture createTexture(String path) {
-		return TextureAtlas.createTexture(path);
-	}
-	
-	/**
-	 * Adds a bitmap to your TextureAtlas
-	 * @param bmp Bitmap object which is to be added
-	 * @return Texture object to be applied to sprites
-	 */
-	public Texture createTextureFromBitmap(Bitmap bmp) {
-		return TextureAtlas.createTextureFromBitmap(bmp);
-	}
-	
-	/**
-	 * Adds a drawable resource to your TextureAtlas
-	 * @param id Resource ID which is to be added
-	 * @return Texture object to be applied to sprites
-	 */
-	public Texture createTextureFromResource(int id) {
-		return TextureAtlas.createTextureFromResource(id);
-	}
-	
-	/**
 	 * @param filename TrueType Font filename, as it is in the APK /assets/ folder
 	 * @return
 	 */
 	public Font createFont(String filename) {
 		return new Font(filename);
 	}
-	
-	/**
-	 * Packs all the loaded Texture's into one large Bitmap, ready to be set into the hardware. This must be called after all Texture's are created.
-	 */
-	public void prepareTextureAtlas() {
-		TextureAtlas.compute();
-	}
-	
-	/**
-	 * Packs all the loaded Texture's into one large Bitmap, ready to be set into the hardware. This must be called after all Texture's are created.
-	 * @param width the width to set each atlas to
-	 */
-	public void prepareTextureAtlas(int width) {
-		TextureAtlas.compute(width);
-	}
-	
+		
 	/**
 	 * Sets the current background. Currently inactive.
 	 * @param background
@@ -996,14 +837,7 @@ public class Rokon {
 	 */
 	public void onResume() {
 		_rokonSurfaceView.onResume();
-		TextureAtlas.readyToLoad = true;
-	}
-	
-	/**
-	 * Texture's loaded after a textureSplit will be placed on a seperate atlas to the previous
-	 */
-	public void textureSplit() {
-		TextureAtlas.textureSplit();
+		_freezeUntilTexturesReloaded = true;
 	}
 	
 	/**
@@ -1020,6 +854,13 @@ public class Rokon {
 	 */
 	public void freezeUntilTexturesReloaded() {
 		_freezeUntilTexturesReloaded = true;
+	}
+	
+	/**
+	 * Informs the engine that all textures have been loaded, so unfreeze
+	 */
+	public void textureLoadComplete() { 
+		_freezeUntilTexturesReloaded = false;
 	}
 	
 	/**

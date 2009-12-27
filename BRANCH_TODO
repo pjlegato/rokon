@@ -1,4 +1,5 @@
-The objective of this major update is to change the way texture's are handled.
+* Change the way texture's are handled.
+* Upgrade to build from 1.6 SDK
 
 Classes:
 	Texture - representative of each individual small image, is not affected by map or hardware

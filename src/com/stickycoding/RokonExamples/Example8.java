@@ -9,7 +9,8 @@ import com.stickycoding.Rokon.Backgrounds.FixedBackground;
 /**
  * @author Richard
  * Renders TTF fonts
- * (currently broken?)
+ * 
+ * (currently broken)
  */
 public class Example8 extends RokonActivity {
 	
@@ -24,9 +25,9 @@ public class Example8 extends RokonActivity {
 
 	@Override
 	public void onLoad() {
-		backgroundTexture = rokon.createTexture("graphics/backgrounds/beach.png");
+		backgroundTexture = new Texture("graphics/backgrounds/beach.png");
 		font = rokon.createFont("fonts/256BYTES.TTF");
-		rokon.prepareTextureAtlas(1024);
+
 		background = new FixedBackground(backgroundTexture);
 		
 	}

@@ -18,6 +18,7 @@ import android.opengl.GLUtils;
 
 import com.stickycoding.Rokon.Debug;
 import com.stickycoding.Rokon.Rokon;
+import com.stickycoding.Rokon.TextureManager;
 
 public class RokonRenderer implements GLSurfaceView.Renderer {
 	
@@ -167,7 +168,7 @@ public class RokonRenderer implements GLSurfaceView.Renderer {
     		}
 			System.gc();
     	} else {
-        	Rokon.getRokon().loadTextures(gl);
+        	TextureManager.updateTextures(gl);
 	    	gl.glClear(GL10.GL_COLOR_BUFFER_BIT);    	
 	    	gl.glMatrixMode(GL10.GL_MODELVIEW);
 	    	Rokon.getRokon().drawFrame(gl);

@@ -6,7 +6,6 @@ import javax.microedition.khronos.opengles.GL11;
 import com.stickycoding.Rokon.Background;
 import com.stickycoding.Rokon.Rokon;
 import com.stickycoding.Rokon.Texture;
-import com.stickycoding.Rokon.TextureAtlas;
 import com.stickycoding.Rokon.TextureBuffer;
 import com.stickycoding.Rokon.OpenGL.RokonRenderer;
 /**
@@ -39,7 +38,6 @@ public class ScrollingBackground extends Background {
 	private float _startX;
 	private float _startY;
 	private int rows, cols;
-	private int texToBe;
 	private float x;
 	private float y;
 	public void drawFrame(GL10 gl) {
@@ -66,15 +64,11 @@ public class ScrollingBackground extends Background {
 			cols++;
 		}
 
-		texToBe = TextureAtlas.texId[_buffer.texture.atlasIndex];
-		if(Rokon.getRokon().currentTexture != texToBe) {
-			gl.glBindTexture(GL10.GL_TEXTURE_2D, texToBe);
-			Rokon.getRokon().currentTexture = texToBe;
-		}
+		_buffer.getTexture().select(gl);
 		
 		gl.glColor4f(1, 1, 1, 1);
 		gl.glVertexPointer(2, GL11.GL_FLOAT, 0, RokonRenderer.vertexBuffer);
-		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, _buffer.buffer);
+		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, _buffer.getBuffer());
 		
 		for(int i = 0; i < rows; i++) {
 			for(int j = 0; j < cols; j++) {

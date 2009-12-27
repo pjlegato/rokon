@@ -89,8 +89,8 @@ public class Font {
 			canvas.drawText(character, x, y, paint);
 		}
 		canvas.save();
-		_texture = Rokon.getRokon().createTextureFromBitmap(bmp);
-		_texture.setTileSize(32, 32);
+		_texture = new Texture(bmp);
+		_texture.setTileCount(1, 1);
 	}
 
 	/**
