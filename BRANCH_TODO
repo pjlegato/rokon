@@ -1,0 +1,7 @@
+The objective of this major update is to change the way texture's are handled.
+
+Classes:
+	Texture - representative of each individual small image, is not affected by map or hardware
+	TextureAlas - a collection of Texture's, mapped onto a larger atlas. This may be predefined by the 'atlas.exe' tool
+	HardwareTexture - interfaces between a TextureAtlas and the hardware, loads, removes, sets texture options
+	TextureManager - contains all the texture objects, this will hold queue's for loading/removes/changing as needed
