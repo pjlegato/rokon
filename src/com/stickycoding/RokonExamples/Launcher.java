@@ -29,7 +29,8 @@ public class Launcher extends ListActivity {
 			"Advanced Menu System",
 			"Accelerometer",
 			"Basic Particle System",
-			"Custom Sprite Animation"
+			"Custom Sprite Animation",
+			"Post Processing"
 		};
 		setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, examples));
 	}
@@ -105,6 +106,10 @@ public class Launcher extends ListActivity {
 				break;
 			case 16: // Custom Sprite Animation
 				intent = new Intent(this, Example17.class);
+				startActivity(intent);
+				break;
+			case 17: // Post Processing
+				intent = new Intent(this, Example18.class);
 				startActivity(intent);
 				break;
 		}

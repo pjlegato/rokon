@@ -1,5 +1,6 @@
 1.0.3
 	Overview
+		* An overhaul of the way textures are handled, see the Texture tutorial for help on updating your code http://stickycoding.com/rokon/rokon-tutorials/managing-textures
 	
 	New Features
 		* Basic and Advanced Menu examples added

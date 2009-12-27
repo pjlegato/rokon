@@ -1,6 +1,7 @@
 package com.stickycoding.Rokon;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -20,6 +21,7 @@ public class Texture {
 	private float _tileWidth, _tileHeight;
 	private int _atlasX, _atlasY;
 	private TextureAtlas _textureAtlas;
+	private boolean _flipped;
 	
 	/**
 	 * @return the pixel width of one tile
@@ -168,6 +170,7 @@ public class Texture {
 		_textureBuffer = new TextureBuffer(this);
 		_tileCols = 1;
 		_tileRows = 1;
+		_flipped = false;
 	}
 	
 	/**
@@ -181,6 +184,7 @@ public class Texture {
 		_textureBuffer = new TextureBuffer(this);
 		_tileCols = 1;
 		_tileRows = 1;
+		_flipped = false;
 	}
 	
 	/**
@@ -197,6 +201,31 @@ public class Texture {
 		_textureBuffer = new TextureBuffer(this);
 		_tileCols = 1;
 		_tileRows = 1;
+		_flipped = false;
+	}
+	
+	/**
+	 * Creates a Texture from a ByteBuffer and given dimensions
+	 * @param byteBuffer allocated ByteBuffer object containing RGBA pixel information
+	 * @param width pixel width of Texture
+	 * @param height pixel height of Texture
+	 * @param flipped TRUE if the ByteBuffer needs to be flipped when rendered
+	 */
+	public Texture(ByteBuffer byteBuffer, int width, int height, boolean flipped) {
+		_textureType = new TextureType(byteBuffer);
+		_width = width;
+		_height = height;
+		_textureBuffer = new TextureBuffer(this);
+		_tileCols = 1;
+		_tileRows = 1;
+		_flipped = flipped;
+	}
+	
+	/**
+	 * @return TRUE if the texture must be flipped on render, FALSE if normal
+	 */
+	public boolean isFlipped() {
+		return _flipped;
 	}
 	
 	/**

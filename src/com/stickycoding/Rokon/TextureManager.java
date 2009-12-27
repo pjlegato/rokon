@@ -1,5 +1,7 @@
 package com.stickycoding.Rokon;
 
+import java.nio.ByteBuffer;
+
 import javax.microedition.khronos.opengles.GL10;
 
 import android.graphics.Bitmap;
@@ -14,7 +16,7 @@ public class TextureManager {
 	private static TextureAtlas[] _loadQueue, _changeQueue, _removeQueue, _active;	
 	private static boolean _hasLoadQueue, _hasChangeQueue, _hasRemoveQueue;	
 	private static int _currentTexture;
-	private static int i;
+	private static int i, j;
 	
 	/**
 	 * Prepares the variables for being used, may be needed to clear memory from a previous launch - called each time the engine is created
@@ -140,9 +142,9 @@ public class TextureManager {
 	 * @param textureAtlas
 	 */
 	public static void setActive(TextureAtlas textureAtlas) {
-		for(i = 0; i < _active.length; i++)
-			if(_active[i] == null) {
-				_active[i] = textureAtlas;
+		for(j = 0; j < _active.length; j++)
+			if(_active[j] == null) {
+				_active[j] = textureAtlas;
 				return;
 			}
 		Debug.warning("TextureAtlas limit reached max=" + Constants.MAX_TEXTURE_ATLAS_COUNT);
@@ -178,8 +180,9 @@ public class TextureManager {
 			if(_loadQueue[i] != null) {
 				int[] textures = new int[1];
 				gl.glGenTextures(1, textures, 0);
+				Debug.print("Allocating new texture " + textures[0]);
 				gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[0]);
-				setCurrentTexture(textures[0]); 
+				setCurrentTexture(textures[0]);
 				Bitmap bmp = Bitmap.createBitmap(_loadQueue[i].getWidth(), _loadQueue[i].getHeight(), Bitmap.Config.ARGB_8888);
 				GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bmp, 0);
 				bmp.recycle();
@@ -191,18 +194,26 @@ public class TextureManager {
 		        gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, _loadQueue[i].getOptions().texEnv);
 		        for(int j = 0; j < _loadQueue[i].getTextureArray().length; j++) {
 		        	if(_loadQueue[i].getTextureArray()[j] != null) {
-		        		bmp = _loadQueue[i].getTextureArray()[j].getBitmap();
-		        		GLUtils.texSubImage2D(GL10.GL_TEXTURE_2D, 0, _loadQueue[i].getTextureArray()[j].getAtlasX(), _loadQueue[i].getTextureArray()[j].getAtlasY(), bmp);
-		        		bmp.recycle();
-		        		bmp = null;
+		        		if(_loadQueue[i].getTextureArray()[j].getType().getType() == TextureType.BYTEBUFFER) {
+		        			Debug.print("Copying in raw ByteArray texture");
+		        			gl.glTexSubImage2D(GL10.GL_TEXTURE_2D, 0, _loadQueue[i].getTextureArray()[j].getAtlasX(), _loadQueue[i].getTextureArray()[j].getAtlasY(), _loadQueue[i].getTextureArray()[j].getWidth(), _loadQueue[i].getTextureArray()[j].getHeight(), GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, _loadQueue[i].getTextureArray()[j].getType().getBuffer());
+		        		} else {
+			        		bmp = _loadQueue[i].getTextureArray()[j].getBitmap();
+			        		GLUtils.texSubImage2D(GL10.GL_TEXTURE_2D, 0, _loadQueue[i].getTextureArray()[j].getAtlasX(), _loadQueue[i].getTextureArray()[j].getAtlasY(), bmp);
+			        		bmp.recycle();
+			        		bmp = null;
+		        		}
 		        	}
 		        }
+		        Debug.print("Copying Complete");
 		        setActive(_loadQueue[i]);
+		        _loadQueue[i].setOnHardware(true);
 				_loadQueue[i].setTextureIndex(textures[0]);
 				_loadQueue[i] = null;
 				textures = null;	
 			}
 		}
+		Debug.print("Texture Loading Complete");
 		_hasLoadQueue = false;
 		System.gc();
 		Rokon.getRokon().textureLoadComplete();
@@ -234,11 +245,23 @@ public class TextureManager {
 			if(_removeQueue[i] != null) {
 				int[] textures = new int[] { _removeQueue[i].getTextureIndex() };
 				gl.glDeleteTextures(1, textures, 0);
+				_removeQueue[i].setOnHardware(false);
 				removeFromActive(_removeQueue[i]);
 				_removeQueue[i] = null;
 			}
 		}
 		_hasRemoveQueue = false;
+	}
+	
+	/**
+	 * Moves all active TextureAtlas classes to the load queue (used in onResume)
+	 */
+	public static void reload() {
+		for(i = 0; i < _active.length; i++)
+			if(_active[i] != null) {
+				load(_active[i]);
+				_active[i] = null;
+			}
 	}
 
 }

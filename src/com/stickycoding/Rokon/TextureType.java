@@ -1,5 +1,7 @@
 package com.stickycoding.Rokon;
 
+import java.nio.ByteBuffer;
+
 import android.graphics.Bitmap;
 
 /**
@@ -8,10 +10,11 @@ import android.graphics.Bitmap;
  */
 public class TextureType {
 	
-	public static final int ASSET = 0, BITMAP = 1, RESOURCE = 2;
+	public static final int ASSET = 0, BITMAP = 1, RESOURCE = 2, BYTEBUFFER = 3;
 	private int _type;
 	private String _assetPath;
 	private Bitmap _bitmap;
+	private ByteBuffer _byteBuffer;
 	private int _resourceId;
 	
 	/**
@@ -22,7 +25,8 @@ public class TextureType {
 	}
 	
 	/**
-	 * @return the path to the asset, null if not set
+	 * Returns the path to the texture file in assets
+	 * @return NULL if not set
 	 */
 	public String getAssetPath() {
 		if(_type == ASSET)
@@ -31,11 +35,22 @@ public class TextureType {
 	}
 	
 	/**
-	 * @return the Bitmap of the texture, null if not set
+	 * Returns the Bitmap of the texture
+	 * @return NULL if not set
 	 */
 	public Bitmap getBitmap() {
 		if(_type == BITMAP)
 			return _bitmap;
+		return null;
+	}
+	
+	/**
+	 * Returns the ByteBuffer object of the texture
+	 * @return NULL if not set
+	 */
+	public ByteBuffer getBuffer() {
+		if(_type == BYTEBUFFER)
+			return _byteBuffer;
 		return null;
 	}
 	
@@ -73,6 +88,15 @@ public class TextureType {
 	public TextureType(int resourceId) {
 		_type = RESOURCE;
 		_resourceId = resourceId;
+	}
+	
+	/**
+	 * Creates a TextureType object based on a ByteBuffer. This will be kept in memory for loading, useful for transitions
+	 * @param byteBuffer
+	 */
+	public TextureType(ByteBuffer byteBuffer) {
+		_type = BYTEBUFFER;
+		_byteBuffer = byteBuffer;
 	}
 
 }

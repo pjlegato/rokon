@@ -838,6 +838,7 @@ public class Rokon {
 	public void onResume() {
 		_rokonSurfaceView.onResume();
 		_freezeUntilTexturesReloaded = true;
+		TextureManager.reload();
 	}
 	
 	/**

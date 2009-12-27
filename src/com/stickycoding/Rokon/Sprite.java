@@ -206,12 +206,21 @@ public class Sprite extends DynamicObject {
 		fy1 = y1 / (float)_texture.getTextureAtlas().getHeight();
 		fy2 = y2 / (float)_texture.getTextureAtlas().getHeight();
 		
-		_texBuffer.position(0);		
-		_texBuffer.putFloat(fx1); _texBuffer.putFloat(fy1);
-		_texBuffer.putFloat(fx2); _texBuffer.putFloat(fy1);
-		_texBuffer.putFloat(fx1); _texBuffer.putFloat(fy2);
-		_texBuffer.putFloat(fx2); _texBuffer.putFloat(fy2);		
-		_texBuffer.position(0);
+		if(!_texture.isFlipped()) {
+			_texBuffer.position(0);		
+			_texBuffer.putFloat(fx1); _texBuffer.putFloat(fy1);
+			_texBuffer.putFloat(fx2); _texBuffer.putFloat(fy1);
+			_texBuffer.putFloat(fx1); _texBuffer.putFloat(fy2);
+			_texBuffer.putFloat(fx2); _texBuffer.putFloat(fy2);		
+			_texBuffer.position(0);
+		} else {
+			_texBuffer.position(0);		
+			_texBuffer.putFloat(fx1); _texBuffer.putFloat(fy2);
+			_texBuffer.putFloat(fx2); _texBuffer.putFloat(fy2);	
+			_texBuffer.putFloat(fx1); _texBuffer.putFloat(fy1);
+			_texBuffer.putFloat(fx2); _texBuffer.putFloat(fy1);	
+			_texBuffer.position(0);
+		}
 	}
 	
 	/**
