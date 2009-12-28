@@ -19,7 +19,7 @@ public class VertexBuffer {
 	 * @param y2 Bottom Right Y
 	 */
 	public VertexBuffer(int x1, int y1, int x2, int y2) {
-		buffer = ByteBuffer.allocate(8*4);
+		buffer = ByteBuffer.allocateDirect(8*4);
 		buffer.order(ByteOrder.nativeOrder());
 		update(x1, y1, x2, y2);
 	}

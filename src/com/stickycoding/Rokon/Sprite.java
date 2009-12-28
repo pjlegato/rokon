@@ -68,7 +68,7 @@ public class Sprite extends DynamicObject {
 		_visible = true;
 		_killMe = false;
 		
-		_texBuffer = ByteBuffer.allocate(8*4);
+		_texBuffer = ByteBuffer.allocateDirect(8*4);
 		_texBuffer.order(ByteOrder.nativeOrder());
 		
 		if(texture != null)

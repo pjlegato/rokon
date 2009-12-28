@@ -270,17 +270,15 @@ public class RokonActivity extends Activity {
 	};
     
     private InputHandler touchHandler = new InputHandler() {
-    	public void onTouchEvent(MotionEvent event, boolean hotspot) {
+    	public void onTouchEvent(int x, int y, boolean hotspot) {
     		_lastTouchTime = Rokon.realTime;
-    		_touchX = (int)event.getX();
-    		_touchY = (int)event.getY();
     		if(!hotspot) {
 	    		if(!_touchDown) {
 	    			_touchDown = true;
-	        		onTouchDown((int)event.getX(), (int)event.getY(), hotspot);
+	        		onTouchDown(x, y, hotspot);
 	    		}
     		}
-    		onTouch((int)event.getX(), (int)event.getY(), hotspot);
+    		onTouch(x, y, hotspot);
     	}
     	
     	private int i;

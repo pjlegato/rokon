@@ -9,10 +9,10 @@ import com.stickycoding.Rokon.Hotspot;
  */
 public class InputHandler {
 	
-	public void onTouchEvent(MotionEvent event, boolean hotspot) { }
+	public void onTouchEvent(int x, int y, boolean hotspot) { }
 
 	public void onHotspotTouched(Hotspot hotspot) { }
 	
-	public void onHotspotTouched(Hotspot hotspot, MotionEvent event) { }
+	public void onHotspotTouched(Hotspot hotspot, int x, int y) { }
 
 }

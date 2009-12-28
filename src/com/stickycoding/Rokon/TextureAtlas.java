@@ -158,6 +158,7 @@ public class TextureAtlas {
 								_texture[i] = texture;
 								_texture[i].setAtlasX(j);
 								_texture[i].setAtlasY(k);
+								Debug.warning("Inserted to " + j + " " + k + " - " + texture.getWidth() + "x" + texture.getHeight());
 								_texture[i].setTextureAtlas(this);
 								return;
 							}

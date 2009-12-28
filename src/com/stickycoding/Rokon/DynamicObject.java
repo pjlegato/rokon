@@ -47,7 +47,7 @@ public class DynamicObject {
 		_offsetY = 0;
 		_rotationPivotX = (_width / 2);
 		_rotationPivotY = (_height / 2);		
-		_vertexBuffer = ByteBuffer.allocate(8*4);
+		_vertexBuffer = ByteBuffer.allocateDirect(8*4);
 		_vertexBuffer.order(ByteOrder.nativeOrder());
 	}
 	

@@ -15,7 +15,7 @@ public class TextureBuffer {
 	 
 	public TextureBuffer(Texture texture) {
 		_texture = texture;
-		_buffer = ByteBuffer.allocate(8*4);
+		_buffer = ByteBuffer.allocateDirect(8*4);
 		_buffer.order(ByteOrder.nativeOrder());
 		update();
 	}
@@ -43,8 +43,8 @@ public class TextureBuffer {
 		
 		_x1 = _texture.getAtlasX() + _clipLeft;
 		_y1 = _texture.getAtlasY() + _clipTop;
-		_x2 = _texture.getAtlasX() + _x1 + _texture.getWidth() - _clipRight;
-		_y2 = _texture.getAtlasY() + _y1 + _texture.getHeight() - _clipBottom;
+		_x2 = _texture.getAtlasX() + _texture.getWidth() - _clipRight;
+		_y2 = _texture.getAtlasY() + _texture.getHeight() - _clipBottom;
 
 		_x1 = _x1 / _texture.getTextureAtlas().getWidth();
 		_y1 = _y1 / _texture.getTextureAtlas().getHeight();

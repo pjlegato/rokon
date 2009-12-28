@@ -411,9 +411,10 @@ public class Rokon {
 		_width = fixedWidth;
 		_height = fixedHeight;
 		
+		_fixedAspect = (float)screenWidth / (float)screenHeight;
+		_realAspect = (float)fixedWidth / (float)fixedHeight;
 		
-		_fixedAspect = screenWidth / screenHeight;
-		_realAspect = fixedWidth / fixedHeight;
+		Debug.print("FA=" + _fixedAspect + " RA=" + _realAspect);
 		
 		if(_fixedAspect != _realAspect)
 			forceLetterBox();
@@ -868,43 +869,48 @@ public class Rokon {
 	 * Triggered from GLSurfaceView each time a touch is recongized
 	 * @param event
 	 */
+	private int _newTouchX, _newTouchY;
+	private boolean hit;
 	public void onTouchEvent(MotionEvent event) {
 		 if(getInputHandler() != null) {
-             boolean hit = false;
+             hit = false;
              hotspotArr = getHotspots();
+
+             _newTouchX = (int)((event.getX() / screenWidth) * fixedWidth);
+             _newTouchY = (int)((event.getY() / screenHeight) * fixedHeight);
              
              if(_menu != null) {
                  for(i = 0; i < Rokon.MAX_HOTSPOTS; i++) {
     		         if(hotspotArr[i] != null)
     	                 if(hotspotArr[i].sprite != null) {
-    	                	 if(event.getX() >= hotspotArr[i].sprite.getX() && event.getX() <= hotspotArr[i].sprite.getX() + hotspotArr[i].sprite.getWidth() && event.getY() >= hotspotArr[i].sprite.getY() && event.getY() <= hotspotArr[i].sprite.getY() + hotspotArr[i].sprite.getHeight()) {
+    	                	 if(_newTouchX >= hotspotArr[i].sprite.getX() && _newTouchX <= hotspotArr[i].sprite.getX() + hotspotArr[i].sprite.getWidth() && _newTouchY >= hotspotArr[i].sprite.getY() && _newTouchY <= hotspotArr[i].sprite.getY() + hotspotArr[i].sprite.getHeight()) {
 	    	                     _menu.onHotspot(hotspotArr[i]);
 	    	                	 hit = true;
 	    	                	 break;
                              }
     	                 }
                  }
-                 getInputHandler().onTouchEvent(event, hit);
+                 getInputHandler().onTouchEvent(_newTouchX, _newTouchY, hit);
                  return;
              }
              
              for(i = 0; i < Rokon.MAX_HOTSPOTS; i++) {
 		         if(hotspotArr[i] != null)
 	                 if(hotspotArr[i].sprite != null) {
-	                	 if(event.getX() >= hotspotArr[i].sprite.getX() && event.getX() <= hotspotArr[i].sprite.getX() + hotspotArr[i].sprite.getWidth() && event.getY() >= hotspotArr[i].sprite.getY() && event.getY() <= hotspotArr[i].sprite.getY() + hotspotArr[i].sprite.getHeight()) {
+	                	 if(_newTouchX >= hotspotArr[i].sprite.getX() && _newTouchX <= hotspotArr[i].sprite.getX() + hotspotArr[i].sprite.getWidth() && _newTouchY >= hotspotArr[i].sprite.getY() && _newTouchY <= hotspotArr[i].sprite.getY() + hotspotArr[i].sprite.getHeight()) {
 	                         Rokon.getRokon().getInputHandler().onHotspotTouched(hotspotArr[i]);
-	                         Rokon.getRokon().getInputHandler().onHotspotTouched(hotspotArr[i], event);
+	                         Rokon.getRokon().getInputHandler().onHotspotTouched(hotspotArr[i], _newTouchX, _newTouchY);
 	                         hit = true;
 		                     break;
                          } 
-	                 } else if(event.getX() >= hotspotArr[i].x && event.getX() <= hotspotArr[i].x + hotspotArr[i].width && event.getY() >= hotspotArr[i].y && event.getY() <= hotspotArr[i].y + hotspotArr[i].height) {
+	                 } else if(_newTouchX >= hotspotArr[i].x && _newTouchX <= hotspotArr[i].x + hotspotArr[i].width && _newTouchY >= hotspotArr[i].y && _newTouchY <= hotspotArr[i].y + hotspotArr[i].height) {
 	                	 Rokon.getRokon().getInputHandler().onHotspotTouched(hotspotArr[i]);
-	                     Rokon.getRokon().getInputHandler().onHotspotTouched(hotspotArr[i], event);
+	                     Rokon.getRokon().getInputHandler().onHotspotTouched(hotspotArr[i], _newTouchX, _newTouchY);
 	                     hit = true;
 	                     break;
 	                 }
              }
-             getInputHandler().onTouchEvent(event, hit);
+             getInputHandler().onTouchEvent(_newTouchX, _newTouchY, hit);
 		 }
 	}
 	

@@ -1,6 +1,7 @@
 1.0.3
 	Overview
 		* An overhaul of the way textures are handled, see the Texture tutorial for help on updating your code http://stickycoding.com/rokon/rokon-tutorials/managing-textures
+		* Now targets 1.6 SDK, uses direct buffers
 	
 	New Features
 		* Basic and Advanced Menu examples added
@@ -12,9 +13,12 @@
 		* Removed Emitter package, functionality replaced by ParticleModifier's
 		* Documentation added to previous examples
 		* Sprite, Particle, Emitter all now extend the superclass DynamicObject - in an attempt to the dynamics' functions
+		* InputHandler works with XY coordinates directly, instead of the MotionEvent object
 	
 	Bug Fixes
 		* Texture loading error, 'width and height > 0' has been fixed - it was due to variables not being reset properly when the engine is created
+		* Width/Height of screen is returned properly, so runs correctly on Droid
+		* Touches are now recognised correctly at higher screen resolutions
 
 1.0.2 - 19/12/2009
 	Overview
