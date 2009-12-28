@@ -10,7 +10,7 @@ import android.graphics.Bitmap;
  */
 public class TextureType {
 	
-	public static final int ASSET = 0, BITMAP = 1, RESOURCE = 2, BYTEBUFFER = 3;
+	public static final int UNSET = -1, ASSET = 0, BITMAP = 1, RESOURCE = 2, BYTEBUFFER = 3;
 	private int _type;
 	private String _assetPath;
 	private Bitmap _bitmap;

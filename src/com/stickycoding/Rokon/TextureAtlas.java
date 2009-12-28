@@ -151,14 +151,13 @@ public class TextureAtlas {
 	public void insert(Texture texture) {
 		for(i = 0; i < _texture.length; i++) {
 			if(_texture[i] == null) {
-				for(j = 0; j < _width - texture.getWidth(); j++)
-					for(k = 0; k < _height - texture.getHeight(); k++) {
+				for(j = 0; j <= _width - texture.getWidth(); j++)
+					for(k = 0; k <= _height - texture.getHeight(); k++) {
 						if((_tempTexture = textureAt(j, k)) == null)
 							if(j + texture.getWidth() <= _width && k + texture.getHeight() <= _height) {
 								_texture[i] = texture;
 								_texture[i].setAtlasX(j);
 								_texture[i].setAtlasY(k);
-								Debug.warning("Inserted to " + j + " " + k + " - " + texture.getWidth() + "x" + texture.getHeight());
 								_texture[i].setTextureAtlas(this);
 								return;
 							}

@@ -662,14 +662,6 @@ public class Rokon {
 	public void removeText(Text text, int layer) {
 		getLayer(layer).removeText(text);
 	}
-
-	/**
-	 * @param filename TrueType Font filename, as it is in the APK /assets/ folder
-	 * @return
-	 */
-	public Font createFont(String filename) {
-		return new Font(filename);
-	}
 		
 	/**
 	 * Sets the current background. Currently inactive.

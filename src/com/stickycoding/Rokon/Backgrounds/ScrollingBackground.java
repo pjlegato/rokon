@@ -25,6 +25,13 @@ public class ScrollingBackground extends Background {
 	private float _width;
 	private float _height;
 	
+	private int _yOffset = 0;
+	
+	public  ScrollingBackground(Texture texture, int yOffset) {
+		this(texture);
+		_yOffset = yOffset;
+	}
+	
 	public ScrollingBackground(Texture texture) {
 		_buffer = new TextureBuffer(texture);
 		_scrollX = 0;
@@ -75,7 +82,7 @@ public class ScrollingBackground extends Background {
                 x = _startX + (_width * i);
                 y = _startY + (_height * j);
 				gl.glLoadIdentity();
-				gl.glTranslatef(x, y, 0);
+				gl.glTranslatef(x, y + _yOffset, 0);
 				gl.glScalef(_width, _height, 0);
 				gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
 			}

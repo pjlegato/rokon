@@ -10,7 +10,6 @@ This is a very simple roadmap, I have laid out the features I would like the eng
  
 Below are some features that are not necessarily features of the engine in the state it's at now, but things that I want to get done.
  * Complete examples for all important features of the engine
- * Documentation on all code, detailed java-docs
  * Tutorials for important features
  * Regularly updated and comprehensive wiki
  * Extended game frameworks/templates (rather than a graphics engine) for various genres

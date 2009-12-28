@@ -30,6 +30,7 @@
         <activity android:name=".Example16" android:screenOrientation="landscape"/>
         <activity android:name=".Example17" android:screenOrientation="landscape"/>
         <activity android:name=".Example18" android:screenOrientation="landscape"/>
+        <activity android:name=".Example19" android:screenOrientation="landscape"/>
 
     <activity android:screenOrientation="landscape" android:name=".Example16"></activity>
 </application>

@@ -222,6 +222,27 @@ public class Texture {
 	}
 	
 	/**
+	 * Creates a Texture with no set image or dimensions
+	 */
+	public Texture() {
+		
+	}
+	
+	/**
+	 * Resets a Texture's properties to a given Bitmap object
+	 * @param bitmap
+	 */
+	public void createFromBitmap(Bitmap bitmap) {
+		_textureType = new TextureType(bitmap);
+		_width = bitmap.getWidth();
+		_height = bitmap.getHeight();
+		_textureBuffer = new TextureBuffer(this);
+		_tileCols = 1;
+		_tileRows = 1;
+		_flipped = false;
+	}
+	
+	/**
 	 * @return TRUE if the texture must be flipped on render, FALSE if normal
 	 */
 	public boolean isFlipped() {
