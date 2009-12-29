@@ -382,7 +382,8 @@ public class DynamicObject {
 				_velocityY += _accelerationY * _timeDiffModifier;
 				if(_stopAtTerminalVelocity) {
 					if(!_triggeredReachTerminalVelocityX) {
-						if(_velocityX >= _terminalVelocityX) {
+						if((_accelerationX > 0.0f && _velocityX >= _terminalVelocityX)
+						|| (_accelerationX < 0.0f && _velocityX <= _terminalVelocityX)) {
 							if(_dynamicsHandler != null)
 								_dynamicsHandler.reachedTerminalVelocityX();
 							_accelerationX = 0;
@@ -391,7 +392,8 @@ public class DynamicObject {
 						}
 					}
 					if(!_triggeredReachTerminalVelocityY) {
-						if(_velocityY >= _terminalVelocityY) {
+						if((_accelerationY > 0.0f && _velocityY >= _terminalVelocityY)
+						|| (_accelerationY < 0.0f && _velocityY <= _terminalVelocityY)) {
 							if(_dynamicsHandler != null)
 								_dynamicsHandler.reachedTerminalVelocityY();
 							_accelerationY = 0;
