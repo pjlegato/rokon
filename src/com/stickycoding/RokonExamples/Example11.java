@@ -3,6 +3,8 @@ package com.stickycoding.RokonExamples;
 import com.stickycoding.Rokon.RokonActivity;
 import com.stickycoding.Rokon.Sprite;
 import com.stickycoding.Rokon.Texture;
+import com.stickycoding.Rokon.TextureAtlas;
+import com.stickycoding.Rokon.TextureManager;
 
 /**
  * @author Richard
@@ -10,6 +12,7 @@ import com.stickycoding.Rokon.Texture;
  */
 public class Example11 extends RokonActivity {
 	
+	public TextureAtlas atlas, atlas2;
 	public Texture carTexture1, carTexture2;
 	public Sprite carSprite1, carSprite2;
 	
@@ -33,10 +36,14 @@ public class Example11 extends RokonActivity {
 		// It's unlikely you will see much difference in FPS in this example - the textures are very small and only 2 sprites.
 		// You will just have to believe that it makes a difference when your game is much bigger ;)
 	
-		carTexture1 = rokon.createTexture("graphics/sprites/car.png");
-		rokon.textureSplit();
-		carTexture2 = rokon.createTexture("graphics/sprites/car.png");
-		rokon.prepareTextureAtlas();
+		atlas = new TextureAtlas(512, 512);
+		atlas.insert(carTexture1 = new Texture("graphics/sprites/car.png"));
+
+		atlas2 = new TextureAtlas(512, 512);
+		atlas2.insert(carTexture2 = new Texture("graphics/sprites/car.png"));
+		
+		TextureManager.load(atlas);
+		TextureManager.load(atlas2);
 		
 		carSprite1 = new Sprite(50, 100, carTexture1);
 		carSprite2 = new Sprite(250, 100, carTexture2);
@@ -72,6 +79,12 @@ public class Example11 extends RokonActivity {
 			carSprite1.setVisible(true);
 			carSprite2.setVisible(false);
 		}
+	}
+	
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		rokon.unpause();
 	}
 	
 }

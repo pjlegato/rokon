@@ -3,6 +3,8 @@ package com.stickycoding.RokonExamples;
 import com.stickycoding.Rokon.RokonActivity;
 import com.stickycoding.Rokon.Sprite;
 import com.stickycoding.Rokon.Texture;
+import com.stickycoding.Rokon.TextureAtlas;
+import com.stickycoding.Rokon.TextureManager;
 import com.stickycoding.Rokon.Backgrounds.FixedBackground;
 import com.stickycoding.Rokon.Handlers.AnimationHandler;
 
@@ -12,10 +14,11 @@ import com.stickycoding.Rokon.Handlers.AnimationHandler;
  */
 public class Example7 extends RokonActivity {
 	
+	public TextureAtlas atlas;
 	public Texture backgroundTexture;
-	public FixedBackground background;
-	
 	public Texture explosionTexture;
+	
+	public FixedBackground background;	
 	
     public void onCreate() {
         createEngine(480, 320, true);
@@ -23,10 +26,12 @@ public class Example7 extends RokonActivity {
 
 	@Override
 	public void onLoad() {
-		backgroundTexture = rokon.createTexture("graphics/backgrounds/beach.png");
-		explosionTexture = rokon.createTexture("graphics/sprites/explosion.png");
+		atlas = new TextureAtlas(512, 1024);
+		atlas.insert(backgroundTexture = new Texture("graphics/backgrounds/beach.png"));
+		atlas.insert(explosionTexture = new Texture("graphics/sprites/explosion.png"));
 		explosionTexture.setTileCount(5, 5);
-		rokon.prepareTextureAtlas(1024);
+		TextureManager.load(atlas);
+		
 		background = new FixedBackground(backgroundTexture);
 	}
 
@@ -51,5 +56,11 @@ public class Example7 extends RokonActivity {
 		});
 		rokon.addSprite(explosionSprite);		
 		explosionSprite.animate(1, 25, 35, 1, false);
+	}
+	
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		rokon.unpause();
 	}
 }

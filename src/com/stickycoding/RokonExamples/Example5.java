@@ -1,9 +1,12 @@
 package com.stickycoding.RokonExamples;
 
+import com.stickycoding.Rokon.Debug;
 import com.stickycoding.Rokon.Hotspot;
 import com.stickycoding.Rokon.RokonActivity;
 import com.stickycoding.Rokon.Sprite;
 import com.stickycoding.Rokon.Texture;
+import com.stickycoding.Rokon.TextureAtlas;
+import com.stickycoding.Rokon.TextureManager;
 import com.stickycoding.Rokon.Backgrounds.FixedBackground;
 
 /**
@@ -12,26 +15,33 @@ import com.stickycoding.Rokon.Backgrounds.FixedBackground;
  */
 public class Example5 extends RokonActivity {
 	
+	public TextureAtlas atlas;
 	public Texture backgroundTexture;
-	public FixedBackground background;
-	
 	public Texture carTexture;
-	public Sprite carSprite;
-	
 	public Texture goTexture;
+	
+	public FixedBackground background;	
+	
+	public Sprite carSprite;	
 	public Sprite goSprite;
 	public Hotspot goHotspot;
 	
     public void onCreate() {
+    	Debug.warning("CREATED START AGAIN");
         createEngine(480, 320, true);
     }
 
 	@Override
 	public void onLoad() {
-		backgroundTexture = rokon.createTexture("graphics/backgrounds/beach.png");
-		carTexture = rokon.createTexture("graphics/sprites/car.png");
-		goTexture = rokon.createTexture("graphics/sprites/go.png");
-		rokon.prepareTextureAtlas(512);
+		atlas = new TextureAtlas(512, 512);
+		backgroundTexture = new Texture("graphics/backgrounds/beach.png");
+		carTexture = new Texture("graphics/sprites/car.png");
+		goTexture = new Texture("graphics/sprites/go.png");
+		atlas.insert(backgroundTexture);
+		atlas.insert(carTexture);
+		atlas.insert(goTexture);
+		TextureManager.load(atlas);
+		
 		background = new FixedBackground(backgroundTexture);
 		carSprite = new Sprite(80, 180, carTexture);
 		goSprite = new Sprite(20, 20, goTexture);
@@ -58,5 +68,11 @@ public class Example5 extends RokonActivity {
 			carSprite.setXY(80, 180);
 			carSprite.accelerate(5, 0);
 		}
+	}
+	
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		rokon.unpause();
 	}
 }

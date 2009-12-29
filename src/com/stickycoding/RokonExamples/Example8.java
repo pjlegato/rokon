@@ -4,15 +4,19 @@ import com.stickycoding.Rokon.Font;
 import com.stickycoding.Rokon.RokonActivity;
 import com.stickycoding.Rokon.Text;
 import com.stickycoding.Rokon.Texture;
+import com.stickycoding.Rokon.TextureAtlas;
+import com.stickycoding.Rokon.TextureManager;
 import com.stickycoding.Rokon.Backgrounds.FixedBackground;
 
 /**
  * @author Richard
  * Renders TTF fonts
- * (currently broken?)
+ * 
+ * (currently broken)
  */
 public class Example8 extends RokonActivity {
 	
+	public TextureAtlas atlas;
 	public Texture backgroundTexture;
 	public FixedBackground background;
 	
@@ -24,16 +28,18 @@ public class Example8 extends RokonActivity {
 
 	@Override
 	public void onLoad() {
-		backgroundTexture = rokon.createTexture("graphics/backgrounds/beach.png");
-		font = rokon.createFont("fonts/256BYTES.TTF");
-		rokon.prepareTextureAtlas(1024);
+		atlas = new TextureAtlas(512, 512);
+		atlas.insert(backgroundTexture = new Texture("graphics/backgrounds/beach.png"));
+		atlas.insert(font = new Font("fonts/256BYTES.TTF"));
+		TextureManager.load(atlas);
 		background = new FixedBackground(backgroundTexture);
-		
 	}
 
 	@Override
 	public void onLoadComplete() {
 		rokon.setBackground(background);
+		Text text = new Text("Hello world!", font, 50, 50, 32);
+		rokon.addText(text);
 	}
 
 	@Override
@@ -42,8 +48,8 @@ public class Example8 extends RokonActivity {
 	}
 	
 	@Override
-	public void onTouchUp(int x, int y, boolean hotspot) {
-		Text text = new Text("" + (char)((int)(Math.random() * 26) + 65), font, x, y, (int)(Math.random() * 20) + 5);
-		rokon.addText(text);
+	public void onRestart() {
+		super.onRestart();
+		rokon.unpause();
 	}
 }

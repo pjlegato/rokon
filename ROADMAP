@@ -4,14 +4,12 @@ This is a very simple roadmap, I have laid out the features I would like the eng
  * An advanced menu system, for in and out-of-game menus - including many View-like objects (lists, option boxes)
  * Tiled game engine
  * Advanced Particle Engine
- * Better texture handling, ability to update/load/change while playing
  * Polygon-based collision detection
  * Post processing & z-order effects
  * Integrated physics, potentially through NDK
  
 Below are some features that are not necessarily features of the engine in the state it's at now, but things that I want to get done.
  * Complete examples for all important features of the engine
- * Documentation on all code, detailed java-docs
  * Tutorials for important features
  * Regularly updated and comprehensive wiki
  * Extended game frameworks/templates (rather than a graphics engine) for various genres

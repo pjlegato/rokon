@@ -3,6 +3,8 @@ package com.stickycoding.RokonExamples;
 import com.stickycoding.Rokon.RokonActivity;
 import com.stickycoding.Rokon.Sprite;
 import com.stickycoding.Rokon.Texture;
+import com.stickycoding.Rokon.TextureAtlas;
+import com.stickycoding.Rokon.TextureManager;
 import com.stickycoding.Rokon.Backgrounds.FixedBackground;
 import com.stickycoding.Rokon.SpriteModifiers.Resonate;
 
@@ -12,6 +14,7 @@ import com.stickycoding.Rokon.SpriteModifiers.Resonate;
  */
 public class Example6 extends RokonActivity {
 	
+	public TextureAtlas atlas;
 	public Texture backgroundTexture;
 	public FixedBackground background;
 	
@@ -24,9 +27,11 @@ public class Example6 extends RokonActivity {
 
 	@Override
 	public void onLoad() {
-		backgroundTexture = rokon.createTexture("graphics/backgrounds/beach.png");
-		carTexture = rokon.createTexture("graphics/sprites/car.png");
-		rokon.prepareTextureAtlas(512);
+		atlas = new TextureAtlas(512, 512);
+		atlas.insert(backgroundTexture = new Texture("graphics/backgrounds/beach.png"));
+		atlas.insert(carTexture = new Texture("graphics/sprites/car.png"));
+		TextureManager.load(atlas);
+		
 		background = new FixedBackground(backgroundTexture);
 		carSprite = new Sprite(80, 180, carTexture);
 		carSprite.addModifier(new Resonate(2000, 2f, 3f));
@@ -41,5 +46,11 @@ public class Example6 extends RokonActivity {
 	@Override
 	public void onGameLoop() {
 
+	}
+	
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		rokon.unpause();
 	}
 }

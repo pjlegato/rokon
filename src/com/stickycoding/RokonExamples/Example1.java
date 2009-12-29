@@ -1,14 +1,6 @@
 package com.stickycoding.RokonExamples;
 
-import com.stickycoding.Rokon.Debug;
 import com.stickycoding.Rokon.RokonActivity;
-import com.stickycoding.Rokon.Texture;
-import com.stickycoding.Rokon.Backgrounds.FixedBackground;
-import com.stickycoding.Rokon.Menu.Menu;
-import com.stickycoding.Rokon.Menu.MenuObject;
-import com.stickycoding.Rokon.Menu.Objects.MenuButton;
-import com.stickycoding.Rokon.Menu.Objects.MenuImage;
-import com.stickycoding.Rokon.Menu.Transitions.MenuFade;
 
 /**
  * @author Richard
@@ -21,4 +13,12 @@ public class Example1 extends RokonActivity {
     	createEngine("graphics/loading.png", 480, 320, true);
     	rokon.setBackgroundColor(1, 0, 0);
     }
+	
+	@Override
+	public void onRestart() {
+		//The engine will automatically pause time when it is hidden, so if you aren't handling this yourself you need to automatically unpause
+		//It seems that some(?) devices are restarting the examples from the beginning, because the OpenGL activities aren't the main Activity 
+		super.onRestart();
+		rokon.unpause();
+	}
 }

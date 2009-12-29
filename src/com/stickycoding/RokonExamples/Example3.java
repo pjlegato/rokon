@@ -3,6 +3,8 @@ package com.stickycoding.RokonExamples;
 import com.stickycoding.Rokon.RokonActivity;
 import com.stickycoding.Rokon.Sprite;
 import com.stickycoding.Rokon.Texture;
+import com.stickycoding.Rokon.TextureAtlas;
+import com.stickycoding.Rokon.TextureManager;
 import com.stickycoding.Rokon.Backgrounds.FixedBackground;
 
 /**
@@ -10,11 +12,13 @@ import com.stickycoding.Rokon.Backgrounds.FixedBackground;
  * Applying a Texture to a Sprite
  */
 public class Example3 extends RokonActivity {
-	
-	public Texture backgroundTexture;
+
 	public FixedBackground background;
 	
+	public TextureAtlas atlas;
+	public Texture backgroundTexture;	
 	public Texture carTexture;
+	
 	public Sprite carSprite;
 	
     public void onCreate() {
@@ -23,9 +27,11 @@ public class Example3 extends RokonActivity {
 
 	@Override
 	public void onLoad() {
-		backgroundTexture = rokon.createTexture("graphics/backgrounds/beach.png");
-		carTexture = rokon.createTexture("graphics/sprites/car.png");
-		rokon.prepareTextureAtlas(512);
+		atlas = new TextureAtlas(512, 1024);
+		atlas.insert(backgroundTexture = new Texture("graphics/backgrounds/beach.png"));
+		atlas.insert(carTexture = new Texture("graphics/sprites/car.png"));
+		TextureManager.load(atlas);
+		
 		background = new FixedBackground(backgroundTexture);
 		carSprite = new Sprite(80, 180, carTexture);
 	}
@@ -40,4 +46,10 @@ public class Example3 extends RokonActivity {
 	public void onGameLoop() {
 
 	} 
+	
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		rokon.unpause();
+	}
 }

@@ -2,6 +2,8 @@ package com.stickycoding.RokonExamples;
 
 import com.stickycoding.Rokon.RokonActivity;
 import com.stickycoding.Rokon.Texture;
+import com.stickycoding.Rokon.TextureAtlas;
+import com.stickycoding.Rokon.TextureManager;
 import com.stickycoding.Rokon.Backgrounds.FixedBackground;
 
 /**
@@ -11,6 +13,8 @@ import com.stickycoding.Rokon.Backgrounds.FixedBackground;
 public class Example2 extends RokonActivity {
 	
 	public Texture backgroundTexture;
+	public TextureAtlas atlas;
+	
 	public FixedBackground background;
 	
     public void onCreate() {
@@ -19,9 +23,11 @@ public class Example2 extends RokonActivity {
 
 	@Override
 	public void onLoad() {
-		backgroundTexture = rokon.createTexture("graphics/backgrounds/beach.png");
+		backgroundTexture = new Texture("graphics/backgrounds/beach.png");
+		atlas = new TextureAtlas(512, 512);
+		atlas.insert(backgroundTexture);
+		TextureManager.load(atlas);
 		background = new FixedBackground(backgroundTexture);
-		rokon.prepareTextureAtlas(512);
 	}
 
 	@Override
@@ -33,4 +39,10 @@ public class Example2 extends RokonActivity {
 	public void onGameLoop() {
 
 	} 
+	
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		rokon.unpause();
+	}
 }

@@ -5,6 +5,8 @@ import android.view.KeyEvent;
 import com.stickycoding.Rokon.Debug;
 import com.stickycoding.Rokon.RokonActivity;
 import com.stickycoding.Rokon.Texture;
+import com.stickycoding.Rokon.TextureAtlas;
+import com.stickycoding.Rokon.TextureManager;
 import com.stickycoding.Rokon.Backgrounds.FixedBackground;
 import com.stickycoding.Rokon.Menu.Menu;
 import com.stickycoding.Rokon.Menu.MenuObject;
@@ -17,6 +19,7 @@ import com.stickycoding.Rokon.Menu.Transitions.MenuFade;
  */
 public class Example13 extends RokonActivity {
 
+	public TextureAtlas atlas;
 	public Texture backgroundTexture;
 	public FixedBackground background;
 	public MyMenu myMenu;
@@ -30,10 +33,11 @@ public class Example13 extends RokonActivity {
 
 	@Override
 	public void onLoad() {
-		backgroundTexture = rokon.createTexture("graphics/backgrounds/beach.png");
-		carTexture = rokon.createTexture("graphics/sprites/car.png");
-		car2Texture = rokon.createTexture("graphics/sprites/car2.png");
-		rokon.prepareTextureAtlas();
+		atlas = new TextureAtlas(512, 512);
+		atlas.insert(backgroundTexture = new Texture("graphics/backgrounds/beach.png"));
+		atlas.insert(carTexture = new Texture("graphics/sprites/car.png"));
+		atlas.insert(car2Texture = new Texture("graphics/sprites/car2.png"));
+		TextureManager.load(atlas);
 		background = new FixedBackground(backgroundTexture);
 		myMenu = new MyMenu();
 	}
@@ -77,5 +81,11 @@ public class Example13 extends RokonActivity {
 				finish();
 		}
 		
+	}
+	
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		rokon.unpause();
 	}
 }

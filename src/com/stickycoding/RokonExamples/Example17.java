@@ -4,10 +4,13 @@ package com.stickycoding.RokonExamples;
 import com.stickycoding.Rokon.RokonActivity;
 import com.stickycoding.Rokon.Sprite;
 import com.stickycoding.Rokon.Texture;
+import com.stickycoding.Rokon.TextureAtlas;
+import com.stickycoding.Rokon.TextureManager;
 import com.stickycoding.Rokon.Backgrounds.FixedBackground;
 
 public class Example17 extends RokonActivity {
 	
+	public TextureAtlas atlas;
 	public FixedBackground background;
 	
 	public Texture [] narutoTexture = new Texture[2];
@@ -19,10 +22,11 @@ public class Example17 extends RokonActivity {
 
 	@Override
 	public void onLoad() {
-		narutoTexture[0] = rokon.createTexture("graphics/sprites/naruto.png");
-		narutoTexture[1] = rokon.createTexture("graphics/backgrounds/beach.png");
+		atlas = new TextureAtlas(512, 1024);
+		atlas.insert(narutoTexture[0] = new Texture("graphics/sprites/naruto.png"));
+		atlas.insert(narutoTexture[1] = new Texture("graphics/backgrounds/beach.png"));
 		narutoTexture[0].setTileSize(40, 40);
-		rokon.prepareTextureAtlas(1024);
+		TextureManager.load(atlas);
 
 		narutoSprite[0] = new Sprite(100, 100, 40, 40, narutoTexture[0]);
     	narutoSprite[1] = new Sprite(140, 100, 40, 40, narutoTexture[0]);
@@ -55,5 +59,11 @@ public class Example17 extends RokonActivity {
 	@Override
 	public void onGameLoop() {
 
+	}
+	
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		rokon.unpause();
 	}
 }

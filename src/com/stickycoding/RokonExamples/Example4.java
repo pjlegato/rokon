@@ -7,6 +7,8 @@ import com.stickycoding.Rokon.Hotspot;
 import com.stickycoding.Rokon.RokonActivity;
 import com.stickycoding.Rokon.Sprite;
 import com.stickycoding.Rokon.Texture;
+import com.stickycoding.Rokon.TextureAtlas;
+import com.stickycoding.Rokon.TextureManager;
 import com.stickycoding.Rokon.Backgrounds.FixedBackground;
 
 /**
@@ -15,10 +17,12 @@ import com.stickycoding.Rokon.Backgrounds.FixedBackground;
  */
 public class Example4 extends RokonActivity {
 	
+	public TextureAtlas atlas;
 	public Texture backgroundTexture;
+	public Texture carTexture;
+	
 	public FixedBackground background;
 	
-	public Texture carTexture;
 	public Sprite carSprite;
 	public Hotspot carHotspot;
 	
@@ -28,9 +32,11 @@ public class Example4 extends RokonActivity {
 
 	@Override
 	public void onLoad() {
-		backgroundTexture = rokon.createTexture("graphics/backgrounds/beach.png");
-		carTexture = rokon.createTexture("graphics/sprites/car.png");
-		rokon.prepareTextureAtlas(1024);
+		atlas = new TextureAtlas(512, 512);
+		atlas.insert(backgroundTexture = new Texture("graphics/backgrounds/beach.png"));
+		atlas.insert(carTexture = new Texture("graphics/sprites/car.png"));
+		TextureManager.load(atlas);
+		
 		background = new FixedBackground(backgroundTexture);
 		carSprite = new Sprite(80, 180, carTexture);
 		carHotspot = new Hotspot(carSprite);
@@ -81,5 +87,11 @@ public class Example4 extends RokonActivity {
     	super.onKeyDown(keyCode, event);
     	Debug.print("KEYBOARD DOWN - " + keyCode);
     	return true;
+	}
+	
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		rokon.unpause();
 	}
 }
