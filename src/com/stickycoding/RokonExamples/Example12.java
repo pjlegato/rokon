@@ -57,4 +57,10 @@ public class Example12 extends RokonActivity {
 		// This is useful if you have seperate threads handling game logic to the drawing, and helps synchronize.
 	}
 	
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		rokon.unpause();
+	}
+	
 }

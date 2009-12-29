@@ -58,4 +58,10 @@ public class Example19 extends RokonActivity {
 			lastUpdate = Rokon.time;
 		}
 	}
+	
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		rokon.unpause();
+	}
 }

@@ -42,4 +42,10 @@ public class Example9 extends RokonActivity {
 		audioStream.setRate((float)(Math.random() * 1.5f) + 0.5f);
 	}
 	
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		rokon.unpause();
+	}
+	
 }

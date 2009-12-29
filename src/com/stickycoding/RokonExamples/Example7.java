@@ -57,4 +57,10 @@ public class Example7 extends RokonActivity {
 		rokon.addSprite(explosionSprite);		
 		explosionSprite.animate(1, 25, 35, 1, false);
 	}
+	
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		rokon.unpause();
+	}
 }

@@ -4,10 +4,11 @@
 		* Now targets 1.6 SDK, uses direct buffers
 	
 	New Features
-		* Basic and Advanced Menu examples added
+		* Basic and Advanced Menu examples added, see Example13 and Example14
 		* Handling the accelerometer can be done through RokonActivity, see Example15
-		* New, far more advanced particle engine
-		* Custom Tile Animation method for Sprite
+		* New, far more advanced particle engine, see Example16
+		* Custom Tile Animation method for Sprite, see Example17
+		* Added a very primitive post-processing demonstration, see Example18
 		* ParallaxBackground is capable of horizontal parallax scrolling, see Example19
 		
 	Changes

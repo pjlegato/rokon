@@ -51,4 +51,10 @@ public class Example16 extends RokonActivity {
 	public void onGameLoop() {
 
 	} 
+	
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		rokon.unpause();
+	}
 }

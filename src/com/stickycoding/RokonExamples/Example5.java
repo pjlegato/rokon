@@ -1,5 +1,6 @@
 package com.stickycoding.RokonExamples;
 
+import com.stickycoding.Rokon.Debug;
 import com.stickycoding.Rokon.Hotspot;
 import com.stickycoding.Rokon.RokonActivity;
 import com.stickycoding.Rokon.Sprite;
@@ -26,6 +27,7 @@ public class Example5 extends RokonActivity {
 	public Hotspot goHotspot;
 	
     public void onCreate() {
+    	Debug.warning("CREATED START AGAIN");
         createEngine(480, 320, true);
     }
 
@@ -66,5 +68,11 @@ public class Example5 extends RokonActivity {
 			carSprite.setXY(80, 180);
 			carSprite.accelerate(5, 0);
 		}
+	}
+	
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		rokon.unpause();
 	}
 }

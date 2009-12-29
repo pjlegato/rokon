@@ -32,4 +32,10 @@ public class Example10 extends RokonActivity {
 		rokon.vibrate(50);
 	}
 	
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		rokon.unpause();
+	}
+	
 }

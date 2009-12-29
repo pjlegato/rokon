@@ -32,4 +32,10 @@ public class Example15 extends RokonActivity {
 	public void onAccelerometerChanged(float x, float y, float z) {
 		Debug.print("X=" + x + " Y=" + y + " Z=" + z);
 	}
+	
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		rokon.unpause();
+	}
 }

@@ -88,4 +88,10 @@ public class Example4 extends RokonActivity {
     	Debug.print("KEYBOARD DOWN - " + keyCode);
     	return true;
 	}
+	
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		rokon.unpause();
+	}
 }

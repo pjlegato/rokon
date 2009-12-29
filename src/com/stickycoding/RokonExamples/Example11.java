@@ -81,4 +81,10 @@ public class Example11 extends RokonActivity {
 		}
 	}
 	
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		rokon.unpause();
+	}
+	
 }

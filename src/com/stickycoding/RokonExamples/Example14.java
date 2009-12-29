@@ -110,4 +110,10 @@ public class Example14 extends RokonActivity {
 				goBack();
 		}
 	}
+	
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		rokon.unpause();
+	}
 }
