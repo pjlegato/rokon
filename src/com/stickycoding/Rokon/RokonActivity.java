@@ -10,8 +10,6 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnKeyListener;
 
 import com.stickycoding.Rokon.Handlers.AccelerometerHandler;
 import com.stickycoding.Rokon.Handlers.InputHandler;
@@ -49,12 +47,12 @@ public class RokonActivity extends Activity {
 	public void onCreate() { }
 	
 	/**
-	 * Called when the engine is ready for Textures to be loaded
+	 * Called when the engine is ready for Texture's to be loaded
 	 */
 	public void onLoad() { }
 	
 	/**
-	 * Called when the engine has loaded all Textures, and the loading screen has been removed
+	 * Called when the engine has loaded all Texture's, and the loading screen has been removed
 	 */
 	public void onLoadComplete() { }
 	
@@ -272,17 +270,15 @@ public class RokonActivity extends Activity {
 	};
     
     private InputHandler touchHandler = new InputHandler() {
-    	public void onTouchEvent(MotionEvent event, boolean hotspot) {
+    	public void onTouchEvent(int x, int y, boolean hotspot) {
     		_lastTouchTime = Rokon.realTime;
-    		_touchX = (int)event.getX();
-    		_touchY = (int)event.getY();
     		if(!hotspot) {
 	    		if(!_touchDown) {
 	    			_touchDown = true;
-	        		onTouchDown((int)event.getX(), (int)event.getY(), hotspot);
+	        		onTouchDown(x, y, hotspot);
 	    		}
     		}
-    		onTouch((int)event.getX(), (int)event.getY(), hotspot);
+    		onTouch(x, y, hotspot);
     	}
     	
     	private int i;

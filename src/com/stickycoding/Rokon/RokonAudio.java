@@ -57,7 +57,7 @@ public class RokonAudio {
 	}
 	
 	/**
-	 * @return a HashSet of all current SoundFiles 
+	 * @return a HashSet of all current SoundFile's 
 	 */
 	public SoundFile[] getSounds() {
 		return soundArr;
@@ -109,7 +109,7 @@ public class RokonAudio {
 	}
 	
 	/**
-	 * Removes all SoundFiles from the memory
+	 * Removes all SoundFile's from the memory
 	 */
 	public void removeAllSoundFiles() {
 		for(i = 0; i < MAX_SOUNDS; i++)
@@ -118,14 +118,14 @@ public class RokonAudio {
 	}
 	
 	/**
-	 * @param masterVolume the volume at which all future AudioStreams will play
+	 * @param masterVolume the volume at which all future AudioStream's will play
 	 */
 	public void setMasterVolume(float masterVolume) {
 		_masterVolume = masterVolume;
 	}
 	
 	/**
-	 * @return the current volume at which AudioStreams will play at
+	 * @return the current volume at which AudioStream's will play at
 	 */
 	public float getMasterVolume() {
 		return _masterVolume;

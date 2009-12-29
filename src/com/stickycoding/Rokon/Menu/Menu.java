@@ -112,7 +112,7 @@ public class Menu {
 	}
 	
 	/**
-	 * Clears the scene, adds all MenuObjects, and begins the start transition if needed
+	 * Clears the scene, adds all MenuObject's, and begins the start transition if needed
 	 */
 	public void show() {
 		_rokon = Rokon.getRokon();
@@ -189,7 +189,7 @@ public class Menu {
 	}
 	
 	/**
-	 * @return the number of MenuObjects on this Menu
+	 * @return the number of MenuObject's on this Menu
 	 */
 	public int getMenuObjectCount() {
 		int j = 0;
@@ -207,7 +207,7 @@ public class Menu {
 	}
 	
 	/**
-	 * Adds a MenuObject to this Menu
+	 * Add's a MenuObject to this Menu
 	 * @param menuObject
 	 */
 	public void addMenuObject(MenuObject menuObject) {
@@ -219,7 +219,7 @@ public class Menu {
 	}
 	
 	/**
-	 * Removes a MenuObject from this Menu
+	 * Remove's a MenuObject from this Menu
 	 * @param menuObject
 	 */
 	public void removeMenuObject(MenuObject menuObject) {

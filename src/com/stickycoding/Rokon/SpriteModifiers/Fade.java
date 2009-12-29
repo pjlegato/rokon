@@ -6,7 +6,7 @@ import com.stickycoding.Rokon.SpriteModifier;
 import com.stickycoding.Rokon.Handlers.BasicHandler;
 
 /**
- * Fade allows Sprites to visibly fade in and out, and has the option to remove the
+ * Fade allows Sprite's to visibly fade in and out, and has the option to remove the
  * sprite from the layer once the fade is completed.
  * 
  * Fade will start by fading to 0.0 alpha, unless the Sprite is already at 0.0 alpha.

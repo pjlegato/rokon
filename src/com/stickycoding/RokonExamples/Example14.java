@@ -13,7 +13,7 @@ import com.stickycoding.Rokon.Menu.Objects.MenuButton;
 
 /**
  * @author Richard
- * A more advanced Menu example, has two Menus that flow smoothly
+ * A more advanced Menu example, has two Menu's that flow smoothly
  */
 public class Example14 extends RokonActivity {
 

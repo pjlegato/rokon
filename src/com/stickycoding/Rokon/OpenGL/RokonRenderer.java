@@ -18,6 +18,7 @@ import android.opengl.GLUtils;
 
 import com.stickycoding.Rokon.Debug;
 import com.stickycoding.Rokon.Rokon;
+import com.stickycoding.Rokon.TextureManager;
 
 public class RokonRenderer implements GLSurfaceView.Renderer {
 	
@@ -39,7 +40,7 @@ public class RokonRenderer implements GLSurfaceView.Renderer {
 		GLU.gluOrtho2D(gl, 0, Rokon.getRokon().getWidth(), Rokon.getRokon().getHeight(), 0);
 		
 		if(Rokon.getRokon().isLandscape()) {
-			backgroundVertex = ByteBuffer.allocate(8*4);
+			backgroundVertex = ByteBuffer.allocateDirect(8*4);
 			backgroundVertex.order(ByteOrder.nativeOrder());
 			backgroundVertex.position(0);
 			backgroundVertex.putInt(0); backgroundVertex.putInt(0);
@@ -48,7 +49,7 @@ public class RokonRenderer implements GLSurfaceView.Renderer {
 			backgroundVertex.putInt(Rokon.getRokon().getWidth()); backgroundVertex.putInt(Rokon.getRokon().getHeight());
 			backgroundVertex.position(0);
 		} else {
-			backgroundVertex = ByteBuffer.allocate(8*4);
+			backgroundVertex = ByteBuffer.allocateDirect(8*4);
 			backgroundVertex.order(ByteOrder.nativeOrder());
 			backgroundVertex.position(0);
 			backgroundVertex.putInt(0); backgroundVertex.putInt(0);
@@ -58,7 +59,7 @@ public class RokonRenderer implements GLSurfaceView.Renderer {
 			backgroundVertex.position(0);
 		}
 
-		vertexBuffer = ByteBuffer.allocate(8*4);
+		vertexBuffer = ByteBuffer.allocateDirect(8*4);
 		vertexBuffer.order(ByteOrder.nativeOrder());
 		vertexBuffer.position(0);
 		vertexBuffer.putFloat(0); vertexBuffer.putFloat(0);
@@ -120,7 +121,7 @@ public class RokonRenderer implements GLSurfaceView.Renderer {
 			gl.glClearColor(0.6f, 0.6f, 1, 1);
 			gl.glVertexPointer(2, GL11.GL_FLOAT, 0, vertexBuffer);
 
-			ByteBuffer texBuffer = ByteBuffer.allocate(8*4);
+			ByteBuffer texBuffer = ByteBuffer.allocateDirect(8*4);
 			texBuffer.order(ByteOrder.nativeOrder());
 			
 			texBuffer.position(0);
@@ -167,7 +168,7 @@ public class RokonRenderer implements GLSurfaceView.Renderer {
     		}
 			System.gc();
     	} else {
-        	Rokon.getRokon().loadTextures(gl);
+        	TextureManager.updateTextures(gl);
 	    	gl.glClear(GL10.GL_COLOR_BUFFER_BIT);    	
 	    	gl.glMatrixMode(GL10.GL_MODELVIEW);
 	    	Rokon.getRokon().drawFrame(gl);

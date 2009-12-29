@@ -5,7 +5,7 @@ import com.stickycoding.Rokon.ParticleModifier;
 
 /**
  * @author Richard
- * Sets a particles dimensions on creation
+ * Set's a particles dimensions on creation
  * Can be either fixed or random sizes
  */
 public class ParticleDimensions extends ParticleModifier {

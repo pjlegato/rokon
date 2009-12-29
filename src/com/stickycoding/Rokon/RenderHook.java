@@ -3,7 +3,7 @@ package com.stickycoding.Rokon;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- * RenderHooks give you the ability to access, and modify OpenGL directly.
+ * RenderHook's give you the ability to access, and modify OpenGL directly.
  * Currently this is not active
  */
 public abstract class RenderHook {

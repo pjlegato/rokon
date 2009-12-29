@@ -4,7 +4,6 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
 
-import com.stickycoding.Rokon.Debug;
 import com.stickycoding.Rokon.Rokon;
 
 public class RokonSurfaceView extends GLSurfaceView {

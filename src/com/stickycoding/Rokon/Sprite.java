@@ -8,7 +8,6 @@ import javax.microedition.khronos.opengles.GL11;
 
 import com.stickycoding.Rokon.Handlers.AnimationHandler;
 import com.stickycoding.Rokon.Handlers.CollisionHandler;
-import com.stickycoding.Rokon.Handlers.DynamicsHandler;
 
 
 /**
@@ -29,7 +28,6 @@ public class Sprite extends DynamicObject {
 	
 	private AnimationHandler _animationHandler;
 	private CollisionHandler _collisionHandler;
-	//private DynamicsHandler _dynamicsHandler;
 
 	private boolean _killMe;
 	private boolean _animating;
@@ -43,34 +41,7 @@ public class Sprite extends DynamicObject {
 	private int [] _customTile;
 	private int _currentTile;
 
-	/*private boolean _triggeredReachTerminalVelocityX;
-	private boolean _triggeredReachTerminalVelocityY;
-	private boolean _stopAtTerminalVelocity;
-	private float _terminalVelocityX;
-	private float _terminalVelocityY;
-	private float _velocityX;
-	private float _velocityY;
-	private float _accelerationX;
-	private float _accelerationY;
-	private long _lastUpdate;*/
-
 	private boolean _visible;
-	/*private float _x;
-	private float _y;
-	private float _rotation;
-	private float _rotationPivotX;
-	private float _rotationPivotY;
-	private boolean _rotationPivotRelative = true;
-	private float _offsetX;
-	private float _offsetY;
-	
-	private float _width;
-	private float _height;
-	
-	private float _scaleX;
-	private float _scaleY;
-	
-	private float _startX, _startY, _startWidth, _startHeight;*/
 	
 	private float _red;
 	private float _green;
@@ -97,7 +68,7 @@ public class Sprite extends DynamicObject {
 		_visible = true;
 		_killMe = false;
 		
-		_texBuffer = ByteBuffer.allocate(8*4);
+		_texBuffer = ByteBuffer.allocateDirect(8*4);
 		_texBuffer.order(ByteOrder.nativeOrder());
 		
 		if(texture != null)
@@ -108,15 +79,15 @@ public class Sprite extends DynamicObject {
 	
 	public Sprite(float x, float y, Texture texture) {
 		this(x, y, 0, 0, texture);
-		setWidth(texture.getWidth() / texture.getTileCols(), true);
-		setHeight(texture.getHeight() / texture.getTileRows(), true);
+		setWidth(texture.getWidth() / texture.getTileColumnCount(), true);
+		setHeight(texture.getHeight() / texture.getTileRowCount(), true);
 		updateVertexBuffer();
 	}
 	
 	public Sprite(Texture texture) {
 		this(0, 0, 0, 0, texture);
-		setWidth(texture.getWidth() / texture.getTileCols(), true);
-		setHeight(texture.getHeight() / texture.getTileRows(), true);
+		setWidth(texture.getWidth() / texture.getTileColumnCount(), true);
+		setHeight(texture.getHeight() / texture.getTileRowCount(), true);
 		updateVertexBuffer();
 	}
 	
@@ -174,8 +145,8 @@ public class Sprite extends DynamicObject {
 			return;			
 		}
 		tileIndex -= 1;
-		_tileX = (tileIndex % _texture.getTileCols()) + 1;
-		_tileY = ((tileIndex - (_tileX - 1)) / _texture.getTileCols()) + 1;
+		_tileX = (tileIndex % _texture.getTileColumnCount()) + 1;
+		_tileY = ((tileIndex - (_tileX - 1)) / _texture.getTileColumnCount()) + 1;
 		tileIndex += 1;
 		//Debug.print("Updating tile index idx=" + tileIndex + " x=" + _tileX + " y=" + _tileY);
 		_updateTextureBuffer();
@@ -187,7 +158,7 @@ public class Sprite extends DynamicObject {
 	public int getTileIndex() {
 		int tileIndex = 0;
 		tileIndex += _tileX;
-		tileIndex += (_tileY - 1) * _texture.getTileCols();
+		tileIndex += (_tileY - 1) * _texture.getTileColumnCount();
 		return tileIndex;
 	}	
 	
@@ -210,44 +181,46 @@ public class Sprite extends DynamicObject {
 	}
 	
 	private float x1, y1, x2, y2, xs, ys, fx1, fx2, fy1, fy2;
-	private void _updateTextureBuffer() {
-		
+	private void _updateTextureBuffer() {		
 		if(_texture == null)
 			return;
 		
-		x1 = _texture.atlasX ;
-		y1 = _texture.atlasY;
-		x2 = _texture.atlasX + _texture.getWidth();
-		y2 = _texture.atlasY + _texture.getHeight();
-
-		xs = (x2 - x1) / _texture.getTileCols();
-		ys = (y2 - y1) / _texture.getTileRows();
-
-		x1 = _texture.atlasX + (xs * (_tileX - 1));
-		x2 = _texture.atlasX + (xs * (_tileX - 1)) + xs; 
-		y1 = _texture.atlasY + (ys * (_tileY - 1));
-		y2 = _texture.atlasY + (ys * (_tileY - 1)) + ys; 
+		if(_texture.getTextureAtlas() == null)
+			return;
 		
-		fx1 = x1 / (float)TextureAtlas.getWidth();
-		fx2 = x2 / (float)TextureAtlas.getWidth();
-		fy1 = y1 / (float)TextureAtlas.getHeight(_texture.atlasIndex);
-		fy2 = y2 / (float)TextureAtlas.getHeight(_texture.atlasIndex);
-		
-		_texBuffer.position(0);
-		
-		_texBuffer.putFloat(fx1);
-		_texBuffer.putFloat(fy1);
+		x1 = _texture.getAtlasX();
+		y1 = _texture.getAtlasY();
+		x2 = _texture.getAtlasX() + _texture.getWidth();
+		y2 = _texture.getAtlasY() + _texture.getHeight();
 
-		_texBuffer.putFloat(fx2);
-		_texBuffer.putFloat(fy1);
+		xs = (x2 - x1) / _texture.getTileColumnCount();
+		ys = (y2 - y1) / _texture.getTileRowCount();
 
-		_texBuffer.putFloat(fx1);
-		_texBuffer.putFloat(fy2);
-
-		_texBuffer.putFloat(fx2);
-		_texBuffer.putFloat(fy2);
+		x1 = _texture.getAtlasX() + (xs * (_tileX - 1));
+		x2 = _texture.getAtlasX() + (xs * (_tileX - 1)) + xs; 
+		y1 = _texture.getAtlasY() + (ys * (_tileY - 1));
+		y2 = _texture.getAtlasY() + (ys * (_tileY - 1)) + ys; 
 		
-		_texBuffer.position(0);
+		fx1 = x1 / (float)_texture.getTextureAtlas().getWidth();
+		fx2 = x2 / (float)_texture.getTextureAtlas().getWidth();
+		fy1 = y1 / (float)_texture.getTextureAtlas().getHeight();
+		fy2 = y2 / (float)_texture.getTextureAtlas().getHeight();
+		
+		if(!_texture.isFlipped()) {
+			_texBuffer.position(0);		
+			_texBuffer.putFloat(fx1); _texBuffer.putFloat(fy1);
+			_texBuffer.putFloat(fx2); _texBuffer.putFloat(fy1);
+			_texBuffer.putFloat(fx1); _texBuffer.putFloat(fy2);
+			_texBuffer.putFloat(fx2); _texBuffer.putFloat(fy2);		
+			_texBuffer.position(0);
+		} else {
+			_texBuffer.position(0);		
+			_texBuffer.putFloat(fx1); _texBuffer.putFloat(fy2);
+			_texBuffer.putFloat(fx2); _texBuffer.putFloat(fy2);	
+			_texBuffer.putFloat(fx1); _texBuffer.putFloat(fy1);
+			_texBuffer.putFloat(fx2); _texBuffer.putFloat(fy1);	
+			_texBuffer.position(0);
+		}
 	}
 	
 	/**
@@ -387,7 +360,6 @@ public class Sprite extends DynamicObject {
 	 * Draws the Sprite to the OpenGL object, should be no need to call this
 	 * @param gl
 	 */
-	private int texToBe;
 	private boolean hasTexture;
 	public void drawFrame(GL10 gl) {
 		_detectCollisions();
@@ -407,11 +379,7 @@ public class Sprite extends DynamicObject {
 			gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 			gl.glDisable(GL10.GL_TEXTURE_2D);
 		} else {
-			texToBe = TextureAtlas.texId[_texture.atlasIndex];
-			if(Rokon.getRokon().currentTexture != texToBe) {
-				gl.glBindTexture(GL10.GL_TEXTURE_2D, texToBe);
-				Rokon.getRokon().currentTexture = texToBe;
-			}
+			_texture.select(gl);
 		}
 		
 		gl.glLoadIdentity();
@@ -487,9 +455,7 @@ public class Sprite extends DynamicObject {
 	 * Updates the movement, animation and modifiers. This is called automatically, no need to use this.
 	 */
 	private long timeDiff;
-	private float timeDiffModifier;
 	private int nextTile;
-	private boolean didUpdate;
 	public void updateMovement() {
 		//	if this is the first update, forget about it
 		if(getLastUpdate() == 0) {
@@ -722,7 +688,7 @@ public class Sprite extends DynamicObject {
 	}
 	
 	/**
-	 * Removes all SpriteModifiers from the Sprite
+	 * Removes all SpriteModifier's from the Sprite
 	 */
 	public void resetModifiers() {
 			for(k = 0; k < MAX_MODIFIERS; k++) {

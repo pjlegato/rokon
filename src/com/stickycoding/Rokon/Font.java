@@ -8,15 +8,14 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 
 /**
+ * @author Richard
  * TrueType Fonts can be loaded using Font. The TTF file is loaded, drawn
  * as tiles onto a texture and then loaded into the TextureAtlas.
- * @author Richard
  */
-public class Font {
+public class Font extends Texture {
 	
 	private static final String _pattern = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklnopqrstuvwxyz0123456789¬!\"£$%^&*()_+-=[]{};'#:@~,./<>?\\|` ";
 	private int[] _characterWidth;
-	private Texture _texture;
 	
 	/**
 	 * @param character a single character 
@@ -47,11 +46,12 @@ public class Font {
 	}
 
 	/**
-	 * Creates a Font, its respective texture, and adds it to the atlas.
+	 * Creates a Font, it's respective texture, and adds it to the atlas.
 	 * Note, this must be called before the TextureAtlas is prepared.
 	 * @param filename as it is found in the assets folder of your APK
 	 */
 	public Font(String filename) {
+		super();
 		int fontSize = 20;
 		Typeface typeface = Typeface.createFromAsset(Rokon.getRokon().getActivity().getAssets(), filename);
 		Bitmap bmp = Bitmap.createBitmap(512, 256, Bitmap.Config.ARGB_8888);
@@ -62,6 +62,7 @@ public class Font {
 		paint.setARGB(255, 255, 255, 255);
 		
 		_characterWidth = new int[_pattern.length()];
+		int y = 0;
 		int biggestHeight = 0;
 		for(int i = 0; i < _pattern.length(); i++) {
 			String character = _pattern.substring(i, i + 1);
@@ -73,7 +74,7 @@ public class Font {
 			int x = (i % 16) * 32;
 			x += 16;
 			x -= (int)(_characterWidth[i] / 2);
-			int y = 0;
+			y = 0;
 			if(i >= 16)
 				y += 32;
 			if(i >= 32)
@@ -88,24 +89,10 @@ public class Font {
 			y -= 8;
 			canvas.drawText(character, x, y, paint);
 		}
+		Debug.print("i=" + _pattern.length() + " y=" + y);
 		canvas.save();
-		_texture = Rokon.getRokon().createTextureFromBitmap(bmp);
-		_texture.setTileSize(32, 32);
-	}
-
-	/**
-	 * @return the raw Texture used by the font
-	 */
-	public Texture getTexture() {
-		return _texture;
-	}
-	
-	/**
-	 * Replaces the font texture, there should be no use for this
-	 * @param texture
-	 */
-	public void setTexture(Texture texture) {
-		_texture = texture;
+		createFromBitmap(bmp);
+		setTileCount(16, 8);
 	}
 
 }

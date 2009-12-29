@@ -25,7 +25,7 @@ public class Emitter extends DynamicObject {
 	private ParticleModifier[] _particleModifier;
 
 	/**
-	 * Creates a point-emitter
+	 * Create's a point-emitter
 	 * @param x
 	 * @param y
 	 * @param rate number of particles created per second
@@ -61,8 +61,8 @@ public class Emitter extends DynamicObject {
 	}
 	
 	/**
-	 * Sets the rate at which Particles are spawned from this Emitter
-	 * @param rate Particles per second
+	 * Sets the rate at which Particle's are spawned from this Emitter
+	 * @param rate Particle's per second
 	 */
 	public void setRate(float rate) {
 		_rate = rate;
@@ -117,18 +117,13 @@ public class Emitter extends DynamicObject {
 		}
 	}
 	
-	private int _texToBe;
 	public void drawFrame(GL10 gl) {
 		_updateSpawns();
 		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_DST_ALPHA);
-		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, _texBuffer.buffer);
+		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, _texBuffer.getBuffer());
 		gl.glVertexPointer(2, GL11.GL_FLOAT, 0, RokonRenderer.vertexBuffer);
 
-		_texToBe = TextureAtlas.texId[_texture.atlasIndex];
-		if(Rokon.getRokon().currentTexture != _texToBe) {
-			gl.glBindTexture(GL10.GL_TEXTURE_2D, _texToBe);
-			Rokon.getRokon().currentTexture = _texToBe;
-		}
+		_texture.select(gl);
 		
 		for(i = 0; i < MAX_PARTICLES; i++) {
 			if(particleArr[i] != null) {
@@ -172,7 +167,7 @@ public class Emitter extends DynamicObject {
 	}
 	
 	/**
-	 * @return the current count of Particles in the Emitter
+	 * @return the current count of Particle's in the Emitter
 	 */
 	public int particleCount() {
 		k = 0;
@@ -193,7 +188,7 @@ public class Emitter extends DynamicObject {
 	}
 	
 	/**
-	 * Updates a specific particle by applying all current ParticleModifiers
+	 * Updates a specific particle by applying all current ParticleModifier's
 	 * @param particle
 	 */
 	public void updateParticle(Particle particle) {
@@ -202,7 +197,7 @@ public class Emitter extends DynamicObject {
 	}
 	
 	/**
-	 * Adds a ParticleModifer to the current collection
+	 * Add's a ParticleModifer to the current collection
 	 * @param particleModifier
 	 */
 	public void addParticleModifier(ParticleModifier particleModifier) {
@@ -226,7 +221,7 @@ public class Emitter extends DynamicObject {
 	}
 	
 	/**
-	 * Sets the ParticleModifiers for the Emitter, can be used with any length of array
+	 * Sets the ParticleModifier's for the Emitter, can be used with any length of array
 	 * @param particleModifier
 	 */
 	public void setParticleModifiers(ParticleModifier[] particleModifier) {

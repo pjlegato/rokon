@@ -1,19 +1,28 @@
-1.0.3
+1.1.0
 	Overview
+		* An overhaul of the way textures are handled, see the Texture tutorial for help on updating your code http://stickycoding.com/rokon/rokon-tutorials/managing-textures
+		* Now targets 1.6 SDK, uses direct buffers
 	
 	New Features
-		* Basic and Advanced Menu examples added
+		* Basic and Advanced Menu examples added, see Example13 and Example14
 		* Handling the accelerometer can be done through RokonActivity, see Example15
-		* New, far more advanced particle engine
-		* Custom Tile Animation method for Sprite
+		* New, far more advanced particle engine, see Example16
+		* Custom Tile Animation method for Sprite, see Example17
+		* Added a very primitive post-processing demonstration, see Example18
+		* ParallaxBackground is capable of horizontal parallax scrolling, see Example19
 		
 	Changes
-		* Removed Emitter package, functionality replaced by ParticleModifiers
+		* Removed Emitter package, functionality replaced by ParticleModifier's
 		* Documentation added to previous examples
 		* Sprite, Particle, Emitter all now extend the superclass DynamicObject - in an attempt to the dynamics' functions
+		* InputHandler works with XY coordinates directly, instead of the MotionEvent object
+		* Font is now an extension of Texture, and must be applied to the atlas in the same way to be visible
 	
 	Bug Fixes
 		* Texture loading error, 'width and height > 0' has been fixed - it was due to variables not being reset properly when the engine is created
+		* Width/Height of screen is returned properly, so runs correctly on Droid
+		* Touches are now recognised correctly at higher screen resolutions
+		* TTF Font integration works, Example8 has been modified
 
 1.0.2 - 19/12/2009
 	Overview
@@ -43,7 +52,7 @@
 		* Rokon.forceTextureRefresh() will force the engine to use a new atlas configuration each time, this should be on when building, and removed for your published version
  		* Texture.replace(Bitmap/String) copies an image onto the texture, and replaces it on the hardware. The replacement bitmap must have the same dimensions as the original.
  		* Rokon.freezeUntilTexturesReloaded() will freeze the screen until new textures (Texture.replace) have been loaded onto the engine
- 		* Hotspots can now be set IDs for easier recognition, setId() getId() and a new constructors - Hotspot(x, y, width, height, id) and Hotspot(sprite, id)
+ 		* Hotspot's can now be set IDs for easier recognition, setId() getId() and a new constructors - Hotspot(x, y, width, height, id) and Hotspot(sprite, id)
  		* InputHandler.onHotspotTouched(Hotspot, MotionEvent) will now be called after onHotspotTouched(Hotspot), it passes on touch coordinates. Both will be called, you should only handle one or the other.
  		* READ_PHONE_STATE was added to AndroidManifest.xml
  		

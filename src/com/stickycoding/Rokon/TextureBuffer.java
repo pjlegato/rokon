@@ -5,61 +5,58 @@ import java.nio.ByteOrder;
 
 /**
  * A holder for the a Texture buffer, easier way of handling the ByteBuffer
- * 
  * @author Richard
  */
 public class TextureBuffer {
 	
-	public ByteBuffer buffer;
-	public Texture texture;
-	
-	private int clipLeft = 0, clipRight = 0, clipTop = 0, clipBottom = 0;
-	
+	private ByteBuffer _buffer;
+	private Texture _texture;
+	private int _clipLeft = 0, _clipRight = 0, _clipTop = 0, _clipBottom = 0;
+	 
 	public TextureBuffer(Texture texture) {
-		this.texture = texture;
-		buffer = ByteBuffer.allocate(8*4);
-		buffer.order(ByteOrder.nativeOrder());
+		_texture = texture;
+		_buffer = ByteBuffer.allocateDirect(8*4);
+		_buffer.order(ByteOrder.nativeOrder());
 		update();
+	}
+	
+	public ByteBuffer getBuffer() {
+		return _buffer;
 	}
 	
 	public void clip(int left, int top, int right, int bottom) {
-		clipLeft = left;
-		clipTop = top;
-		clipRight = right;
-		clipBottom = bottom;
-		update();
-	}
+        _clipLeft = left;
+        _clipTop = top;
+        _clipRight = right;
+        _clipBottom = bottom;
+        update();
+}
 	
 	public Texture getTexture() {
-		return texture;
+		return _texture;
 	}
 	
+	private float _x1, _y1, _x2, _y2;
 	public void update() {
-		float x1 = texture.atlasX + clipLeft;
-		float y1 = texture.atlasY + clipTop;
-		float x2 = texture.atlasX + texture.getWidth() - clipRight;
-		float y2 = texture.atlasY + texture.getHeight() - clipBottom;
+		if(_texture.getTextureAtlas() == null)
+			return;
 		
-		float fx1 = x1 / (float)TextureAtlas.getWidth();
-		float fx2 = x2 / (float)TextureAtlas.getWidth();
-		float fy1 = y1 / (float)TextureAtlas.getHeight(texture.atlasIndex);
-		float fy2 = y2 / (float)TextureAtlas.getHeight(texture.atlasIndex);
+		_x1 = _texture.getAtlasX() + _clipLeft;
+		_y1 = _texture.getAtlasY() + _clipTop;
+		_x2 = _texture.getAtlasX() + _texture.getWidth() - _clipRight;
+		_y2 = _texture.getAtlasY() + _texture.getHeight() - _clipBottom;
 
-		buffer.position(0);
-		
-		buffer.putFloat(fx1);
-		buffer.putFloat(fy1);
+		_x1 = _x1 / _texture.getTextureAtlas().getWidth();
+		_y1 = _y1 / _texture.getTextureAtlas().getHeight();
+		_x2 = _x2 / _texture.getTextureAtlas().getWidth();
+		_y2 = _y2 / _texture.getTextureAtlas().getHeight();
 
-		buffer.putFloat(fx2);
-		buffer.putFloat(fy1);
-
-		buffer.putFloat(fx1);
-		buffer.putFloat(fy2);
-
-		buffer.putFloat(fx2);
-		buffer.putFloat(fy2);
-		
-		buffer.position(0);
+		_buffer.position(0);		
+		_buffer.putFloat(_x1); _buffer.putFloat(_y1);
+		_buffer.putFloat(_x2); _buffer.putFloat(_y1);
+		_buffer.putFloat(_x1); _buffer.putFloat(_y2);
+		_buffer.putFloat(_x2); _buffer.putFloat(_y2);		
+		_buffer.position(0);
 	}
 
 }

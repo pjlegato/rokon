@@ -3,9 +3,9 @@ package com.stickycoding.Rokon;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- * Text is an object which can be added to Layers that will draw text using TTF fonts loaded into the Font class.
+ * Text is an object which can be added to Layer's that will draw text using TTF fonts loaded into the Font class.
  * Essentially, each letter is drawn as its own Sprite, and textured independantly. For this reason, Text should
- * be used for frequently changing text (such as game scores)
+ * be used for frequently changing text (such as game score's)
  * 
  * Another library is planned which will be optimized for longer or non-changing text, using fixed textures.
  * 
@@ -28,7 +28,6 @@ public class Text {
 	private float _alpha;
 	
 	public Text(String text, Font font, int x, int y, int scale) {
-		Debug.print("Creating Text = " + text);
 		_text = text;
 		_x = x;
 		_y = y;
@@ -36,6 +35,10 @@ public class Text {
 		_font = font;
 		_scale = scale;
 		_killMe = false;
+		_red = 1;
+		_green = 1;
+		_blue = 1;
+		_alpha = 1;
 		_updateSprites();
 	}
 	
@@ -168,9 +171,10 @@ public class Text {
 			character = _text.substring(i, i + 1);
 			characterIndex = Font.getCharacterPosition(character);
 			width = (float)_font.getCharacterWidth(characterIndex) / 32f * (float)_scale;
-			newSprites[i] = new Sprite(x, _y, _scale, _scale);
-			//newSprites[i].setTexture(_font.getTexture());
-			//newSprites[i].setTileIndex(characterIndex + 1);
+			newSprites[i] = new Sprite(x, _y, _scale, _scale, _font);
+			Debug.print("Drawing " + character + " at " + x + " " + _y);
+			newSprites[i].setTexture(_font);
+			newSprites[i].setTileIndex(characterIndex + 1);
 			newSprites[i].setRed(_red);
 			newSprites[i].setGreen(_green);
 			newSprites[i].setBlue(_blue);

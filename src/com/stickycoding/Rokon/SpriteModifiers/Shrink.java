@@ -10,8 +10,6 @@ import com.stickycoding.Rokon.Handlers.BasicHandler;
  */
 public class Shrink extends SpriteModifier {
 	
-	private int _originalWidth;
-	private int _originalHeight;
 	private long _startTime;
 	private int _time;
 	private BasicHandler _handler;

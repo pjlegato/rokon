@@ -14,7 +14,7 @@ import com.stickycoding.Rokon.Handlers.DynamicsHandler;
 public class DynamicObject {
 
 	private float _startX, _startY, _startWidth, _startHeight;
-	private float _x, _y, _z, _offsetX, _offsetY;
+	private float _x, _y, _offsetX, _offsetY;
 	private float _rotation, _rotationPivotX, _rotationPivotY;
 	private boolean _rotationPivotRelative = true;
 	private float _width, _height, _scaleX, _scaleY;
@@ -47,7 +47,7 @@ public class DynamicObject {
 		_offsetY = 0;
 		_rotationPivotX = (_width / 2);
 		_rotationPivotY = (_height / 2);		
-		_vertexBuffer = ByteBuffer.allocate(8*4);
+		_vertexBuffer = ByteBuffer.allocateDirect(8*4);
 		_vertexBuffer.order(ByteOrder.nativeOrder());
 	}
 	
@@ -382,7 +382,8 @@ public class DynamicObject {
 				_velocityY += _accelerationY * _timeDiffModifier;
 				if(_stopAtTerminalVelocity) {
 					if(!_triggeredReachTerminalVelocityX) {
-						if(_velocityX >= _terminalVelocityX) {
+						if((_accelerationX > 0.0f && _velocityX >= _terminalVelocityX)
+						|| (_accelerationX < 0.0f && _velocityX <= _terminalVelocityX)) {
 							if(_dynamicsHandler != null)
 								_dynamicsHandler.reachedTerminalVelocityX();
 							_accelerationX = 0;
@@ -391,7 +392,8 @@ public class DynamicObject {
 						}
 					}
 					if(!_triggeredReachTerminalVelocityY) {
-						if(_velocityY >= _terminalVelocityY) {
+						if((_accelerationY > 0.0f && _velocityY >= _terminalVelocityY)
+						|| (_accelerationY < 0.0f && _velocityY <= _terminalVelocityY)) {
 							if(_dynamicsHandler != null)
 								_dynamicsHandler.reachedTerminalVelocityY();
 							_accelerationY = 0;

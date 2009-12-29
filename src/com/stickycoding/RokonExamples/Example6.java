@@ -10,7 +10,7 @@ import com.stickycoding.Rokon.SpriteModifiers.Resonate;
 
 /**
  * @author Richard
- * Utilises some of the SpriteModifiers - these are great ways of organising any actions or changes to a large number of Sprites
+ * Utilises some of the SpriteModifiers - these are great ways of organising any actions or changes to a large number of Sprite's
  */
 public class Example6 extends RokonActivity {
 	

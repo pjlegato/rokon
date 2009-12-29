@@ -6,7 +6,6 @@ import javax.microedition.khronos.opengles.GL11;
 import com.stickycoding.Rokon.Background;
 import com.stickycoding.Rokon.Rokon;
 import com.stickycoding.Rokon.Texture;
-import com.stickycoding.Rokon.TextureAtlas;
 import com.stickycoding.Rokon.TextureBuffer;
 import com.stickycoding.Rokon.OpenGL.RokonRenderer;
 /**
@@ -26,6 +25,13 @@ public class ScrollingBackground extends Background {
 	private float _width;
 	private float _height;
 	
+	private int _yOffset = 0;
+	
+	public  ScrollingBackground(Texture texture, int yOffset) {
+		this(texture);
+		_yOffset = yOffset;
+	}
+	
 	public ScrollingBackground(Texture texture) {
 		_buffer = new TextureBuffer(texture);
 		_scrollX = 0;
@@ -39,7 +45,6 @@ public class ScrollingBackground extends Background {
 	private float _startX;
 	private float _startY;
 	private int rows, cols;
-	private int texToBe;
 	private float x;
 	private float y;
 	public void drawFrame(GL10 gl) {
@@ -66,22 +71,18 @@ public class ScrollingBackground extends Background {
 			cols++;
 		}
 
-		texToBe = TextureAtlas.texId[_buffer.texture.atlasIndex];
-		if(Rokon.getRokon().currentTexture != texToBe) {
-			gl.glBindTexture(GL10.GL_TEXTURE_2D, texToBe);
-			Rokon.getRokon().currentTexture = texToBe;
-		}
+		_buffer.getTexture().select(gl);
 		
 		gl.glColor4f(1, 1, 1, 1);
 		gl.glVertexPointer(2, GL11.GL_FLOAT, 0, RokonRenderer.vertexBuffer);
-		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, _buffer.buffer);
+		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, _buffer.getBuffer());
 		
 		for(int i = 0; i < rows; i++) {
 			for(int j = 0; j < cols; j++) {
                 x = _startX + (_width * i);
                 y = _startY + (_height * j);
 				gl.glLoadIdentity();
-				gl.glTranslatef(x, y, 0);
+				gl.glTranslatef(x, y + _yOffset, 0);
 				gl.glScalef(_width, _height, 0);
 				gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
 			}
