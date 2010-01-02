@@ -884,6 +884,7 @@ public class Rokon {
                  }
                  getInputHandler().onTouchEvent(_newTouchX, _newTouchY, hit);
                  getInputHandler().onTouchEvent(_newTouchX, _newTouchY, event.getAction(), hit);
+                 getInputHandler().onTouchEvent(_newTouchX, _newTouchY, event, hit);
                  return;
              }
              
@@ -894,6 +895,7 @@ public class Rokon {
 	                         Rokon.getRokon().getInputHandler().onHotspotTouched(hotspotArr[i]);
 	                         Rokon.getRokon().getInputHandler().onHotspotTouched(hotspotArr[i], _newTouchX, _newTouchY);
 		                     Rokon.getRokon().getInputHandler().onHotspotTouched(hotspotArr[i], _newTouchX, _newTouchY, event.getAction());
+		                     Rokon.getRokon().getInputHandler().onHotspotTouched(hotspotArr[i], _newTouchX, _newTouchY, event);
 	                         hit = true;
 		                     break;
                          } 
@@ -901,6 +903,7 @@ public class Rokon {
 	                	 Rokon.getRokon().getInputHandler().onHotspotTouched(hotspotArr[i]);
 	                     Rokon.getRokon().getInputHandler().onHotspotTouched(hotspotArr[i], _newTouchX, _newTouchY);
 	                     Rokon.getRokon().getInputHandler().onHotspotTouched(hotspotArr[i], _newTouchX, _newTouchY, event.getAction());
+	                     Rokon.getRokon().getInputHandler().onHotspotTouched(hotspotArr[i], _newTouchX, _newTouchY, event);
 	                     hit = true;
 	                     break;
 	                 }
