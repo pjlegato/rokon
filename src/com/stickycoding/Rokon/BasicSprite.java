@@ -34,8 +34,8 @@ public class BasicSprite extends DynamicObject {
 	public BasicSprite(float x, float y, float width, float height, Texture texture) {
 		super(x, y, width, height);
 		_killMe = false;
-
-		if(Build.VERSION.SDK_INT == 3)
+		
+		if(Build.VERSION.SDK == "3")
 			_texBuffer = ByteBuffer.allocate(8*4);
 		else
 			_texBuffer = ByteBuffer.allocateDirect(8*4);

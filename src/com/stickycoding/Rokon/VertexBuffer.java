@@ -21,7 +21,7 @@ public class VertexBuffer {
 	 * @param y2 Bottom Right Y
 	 */
 	public VertexBuffer(int x1, int y1, int x2, int y2) {
-		if(Build.VERSION.SDK_INT == 3)
+		if(Build.VERSION.SDK == "3")
 			buffer = ByteBuffer.allocate(8*4);
 		else
 			buffer = ByteBuffer.allocateDirect(8*4);

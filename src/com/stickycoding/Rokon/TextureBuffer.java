@@ -18,7 +18,7 @@ public class TextureBuffer {
 	 
 	public TextureBuffer(Texture texture) {
 		_texture = texture;
-		if(Build.VERSION.SDK_INT == 3)
+		if(Build.VERSION.SDK == "3")
 			_buffer = ByteBuffer.allocate(8*4);
 		else
 			_buffer = ByteBuffer.allocateDirect(8*4);
@@ -30,7 +30,7 @@ public class TextureBuffer {
 	
 	public TextureBuffer(Texture texture, int tileIndex) {
 		_texture = texture;
-		if(Build.VERSION.SDK_INT == 3)
+		if(Build.VERSION.SDK == "3")
 			_buffer = ByteBuffer.allocate(8*4);
 		else
 			_buffer = ByteBuffer.allocateDirect(8*4);

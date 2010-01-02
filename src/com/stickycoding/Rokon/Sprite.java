@@ -70,7 +70,7 @@ public class Sprite extends DynamicObject {
 		_visible = true;
 		_killMe = false;
 
-		if(Build.VERSION.SDK_INT == 3)
+		if(Build.VERSION.SDK == "3")
 			_texBuffer = ByteBuffer.allocate(8*4);
 		else
 			_texBuffer = ByteBuffer.allocateDirect(8*4);

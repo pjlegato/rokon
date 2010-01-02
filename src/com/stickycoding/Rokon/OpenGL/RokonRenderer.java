@@ -42,7 +42,7 @@ public class RokonRenderer implements GLSurfaceView.Renderer {
 		GLU.gluOrtho2D(gl, 0, Rokon.getRokon().getWidth(), Rokon.getRokon().getHeight(), 0);
 		
 		if(Rokon.getRokon().isLandscape()) {
-			if(Build.VERSION.SDK_INT == 3)
+			if(Build.VERSION.SDK == "3")
 				backgroundVertex = ByteBuffer.allocate(8*4);
 			else
 				backgroundVertex = ByteBuffer.allocateDirect(8*4);
@@ -54,7 +54,7 @@ public class RokonRenderer implements GLSurfaceView.Renderer {
 			backgroundVertex.putInt(Rokon.getRokon().getWidth()); backgroundVertex.putInt(Rokon.getRokon().getHeight());
 			backgroundVertex.position(0);
 		} else {
-			if(Build.VERSION.SDK_INT == 3)
+			if(Build.VERSION.SDK == "3")
 				backgroundVertex = ByteBuffer.allocate(8*4);
 			else
 				backgroundVertex = ByteBuffer.allocateDirect(8*4);
@@ -67,7 +67,7 @@ public class RokonRenderer implements GLSurfaceView.Renderer {
 			backgroundVertex.position(0);
 		}
 
-		if(Build.VERSION.SDK_INT == 3)
+		if(Build.VERSION.SDK == "3")
 			backgroundVertex = ByteBuffer.allocate(8*4);
 		else
 			vertexBuffer = ByteBuffer.allocateDirect(8*4);
@@ -144,7 +144,7 @@ public class RokonRenderer implements GLSurfaceView.Renderer {
 			gl.glVertexPointer(2, GL11.GL_FLOAT, 0, vertexBuffer);
 
 			ByteBuffer texBuffer;
-			if(Build.VERSION.SDK_INT == 3)
+			if(Build.VERSION.SDK == "3")
 				texBuffer = ByteBuffer.allocate(8*4);
 			else
 				texBuffer = ByteBuffer.allocateDirect(8*4);
