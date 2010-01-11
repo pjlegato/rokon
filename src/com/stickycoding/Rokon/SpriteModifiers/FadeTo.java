@@ -44,6 +44,7 @@ public class FadeTo extends SpriteModifier {
 	
 	private long now, timeDiff;
 	private float modifier, alpha;
+	@Override
 	public void onUpdate(DynamicObject sprite) {
 		now = Rokon.time;
 		alpha = sprite.getAlpha();

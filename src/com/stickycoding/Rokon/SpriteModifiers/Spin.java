@@ -24,6 +24,7 @@ public class Spin extends SpriteModifier {
 		_lastUpdate = Rokon.time;
 	}
 	
+	@Override
 	public void onDraw(DynamicObject sprite, GL10 gl) {
 		//timeDiff = Rokon.getTime() - _lastUpdate;
 		//_angle += (float)((float)(_frequency * 360f) / 1000f * (float)timeDiff);
@@ -33,6 +34,7 @@ public class Spin extends SpriteModifier {
 		//_lastUpdate = Rokon.getTime();
 	}
 	
+	@Override
 	public void onUpdate(DynamicObject sprite) {
 		timeDiff = Rokon.time - _lastUpdate;
 		_angle += (float)((float)(_frequency * 360f) / 1000f * (float)timeDiff);

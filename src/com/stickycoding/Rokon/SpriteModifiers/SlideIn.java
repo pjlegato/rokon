@@ -60,6 +60,7 @@ public class SlideIn extends SpriteModifier {
 		}
 	}
 
+	@Override
 	public void onUpdate(DynamicObject sprite) {
 		if(Rokon.time > startTime + time) {
 			sprite.setX(destinationX);

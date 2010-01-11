@@ -36,6 +36,7 @@ public class Shrink extends SpriteModifier {
 	
 	private long timeDiff;
 	private float scale, width, height, offsetX, offsetY;
+	@Override
 	public void onUpdate(DynamicObject sprite) {
 		timeDiff = Rokon.getTime() - _startTime;
 		scale = 1f - ((float)timeDiff / (float)_time);

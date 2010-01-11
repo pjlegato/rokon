@@ -23,6 +23,7 @@ public class Gravity extends SpriteModifier {
 		_lastUpdate = Rokon.getTime();
 	}
 	
+	@Override
 	public void onUpdate(DynamicObject sprite) {
 		long timeDiff = Rokon.getTime() - _lastUpdate;
 		sprite.setVelocityRelative(_gravityX * (float)(timeDiff / 1000), _gravityY * (float)(timeDiff / 1000));

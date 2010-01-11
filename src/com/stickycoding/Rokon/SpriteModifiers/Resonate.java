@@ -22,6 +22,7 @@ public class Resonate extends SpriteModifier {
 		startTime = Rokon.time;
 	}
 	
+	@Override
 	public void onUpdate(DynamicObject sprite) {
 		timeDiff = (Rokon.time - startTime) % interval;
 		modifier = (float)timeDiff / (float)interval;
