@@ -7,7 +7,7 @@ public class Sequence extends SpriteModifier {
 
 
 	
-	public Sequence(Sprite sprite) {
+	public Sequence(DynamicObject sprite) {
 
 	}
 

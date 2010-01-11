@@ -40,7 +40,7 @@ public class Colorize extends SpriteModifier {
 	
 	private long now, timeDiff;
 	private float modifier;
-	public void onUpdate(Sprite sprite) {
+	public void onUpdate(DynamicObject sprite) {
 		now = Rokon.getTime();
 		timeDiff = now - _lastUpdate;
 		modifier = _frequency / 1000 * timeDiff;

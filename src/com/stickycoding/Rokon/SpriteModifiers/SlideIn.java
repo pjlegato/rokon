@@ -60,7 +60,7 @@ public class SlideIn extends SpriteModifier {
 		}
 	}
 
-	public void onUpdate(Sprite sprite) {
+	public void onUpdate(DynamicObject sprite) {
 		if(Rokon.time > startTime + time) {
 			sprite.setX(destinationX);
 			setExpired(true);

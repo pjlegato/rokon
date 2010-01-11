@@ -47,7 +47,7 @@ public class Fade extends SpriteModifier {
 	
 	private long now, timeDiff;
 	private float modifier, alpha;
-	public void onUpdate(Sprite sprite) {
+	public void onUpdate(DynamicObject sprite) {
 		if(_loops == 0) {
 			if(_handler != null)
 				_handler.onFinished();

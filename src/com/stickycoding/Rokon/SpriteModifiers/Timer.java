@@ -17,7 +17,7 @@ public class Timer extends SpriteModifier {
 		timeout = 0;
 	}
 	
-	public void onUpdate(Sprite sprite) {
+	public void onUpdate(DynamicObject sprite) {
 		if(timeout == 0) {
 			timeout = Rokon.time + time;
 			return;

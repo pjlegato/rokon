@@ -37,7 +37,7 @@ public class Blink extends SpriteModifier {
 	}
 	
 	private long now;
-	public void onUpdate(Sprite sprite) {
+	public void onUpdate(DynamicObject sprite) {
 		now = Rokon.getTime();
 		if(_timeout > 0 && now > _timeout) {
 			if(_handler != null)
