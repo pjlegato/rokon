@@ -5,6 +5,7 @@ import javax.microedition.khronos.opengles.GL10;
 import com.stickycoding.Rokon.Debug;
 import com.stickycoding.Rokon.Rokon;
 import com.stickycoding.Rokon.Sprite;
+import com.stickycoding.Rokon.DynamicObject;
 import com.stickycoding.Rokon.SpriteModifier;
 
 
