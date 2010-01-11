@@ -2,7 +2,6 @@ package com.stickycoding.Rokon.SpriteModifiers;
 
 import com.stickycoding.Rokon.Rokon;
 import com.stickycoding.Rokon.Sprite;
-import com.stickycoding.Rokon.DynamicObject;
 import com.stickycoding.Rokon.SpriteModifier;
 import com.stickycoding.Rokon.Handlers.BasicHandler;
 
@@ -18,8 +17,7 @@ public class Timer extends SpriteModifier {
 		timeout = 0;
 	}
 	
-	@Override
-	public void onUpdate(DynamicObject sprite) {
+	public void onUpdate(Sprite sprite) {
 		if(timeout == 0) {
 			timeout = Rokon.time + time;
 			return;

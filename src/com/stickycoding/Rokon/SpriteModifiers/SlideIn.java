@@ -2,7 +2,6 @@ package com.stickycoding.Rokon.SpriteModifiers;
 
 import com.stickycoding.Rokon.Rokon;
 import com.stickycoding.Rokon.Sprite;
-import com.stickycoding.Rokon.DynamicObject;
 import com.stickycoding.Rokon.SpriteModifier;
 
 public class SlideIn extends SpriteModifier {
@@ -61,8 +60,7 @@ public class SlideIn extends SpriteModifier {
 		}
 	}
 
-	@Override
-	public void onUpdate(DynamicObject sprite) {
+	public void onUpdate(Sprite sprite) {
 		if(Rokon.time > startTime + time) {
 			sprite.setX(destinationX);
 			setExpired(true);

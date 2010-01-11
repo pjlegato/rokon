@@ -2,7 +2,6 @@ package com.stickycoding.Rokon.SpriteModifiers;
 
 import com.stickycoding.Rokon.Rokon;
 import com.stickycoding.Rokon.Sprite;
-import com.stickycoding.Rokon.DynamicObject;
 import com.stickycoding.Rokon.SpriteModifier;
 import com.stickycoding.Rokon.Handlers.BasicHandler;
 
@@ -37,8 +36,7 @@ public class Shrink extends SpriteModifier {
 	
 	private long timeDiff;
 	private float scale, width, height, offsetX, offsetY;
-	@Override
-	public void onUpdate(DynamicObject sprite) {
+	public void onUpdate(Sprite sprite) {
 		timeDiff = Rokon.getTime() - _startTime;
 		scale = 1f - ((float)timeDiff / (float)_time);
 		if(scale <= 0) {

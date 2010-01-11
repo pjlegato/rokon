@@ -2,7 +2,6 @@ package com.stickycoding.Rokon.SpriteModifiers;
 
 import com.stickycoding.Rokon.Rokon;
 import com.stickycoding.Rokon.Sprite;
-import com.stickycoding.Rokon.DynamicObject;
 import com.stickycoding.Rokon.SpriteModifier;
 
 public class Resonate extends SpriteModifier {
@@ -23,8 +22,7 @@ public class Resonate extends SpriteModifier {
 		startTime = Rokon.time;
 	}
 	
-	@Override
-	public void onUpdate(DynamicObject sprite) {
+	public void onUpdate(Sprite sprite) {
 		timeDiff = (Rokon.time - startTime) % interval;
 		modifier = (float)timeDiff / (float)interval;
 		pos = Math.cos(modifier * PI * 2 * maxSize);

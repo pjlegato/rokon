@@ -2,7 +2,6 @@ package com.stickycoding.Rokon.SpriteModifiers;
 
 import com.stickycoding.Rokon.Rokon;
 import com.stickycoding.Rokon.Sprite;
-import com.stickycoding.Rokon.DynamicObject;
 import com.stickycoding.Rokon.SpriteModifier;
 
 /**
@@ -24,8 +23,7 @@ public class Gravity extends SpriteModifier {
 		_lastUpdate = Rokon.getTime();
 	}
 	
-	@Override
-	public void onUpdate(DynamicObject sprite) {
+	public void onUpdate(Sprite sprite) {
 		long timeDiff = Rokon.getTime() - _lastUpdate;
 		sprite.setVelocityRelative(_gravityX * (float)(timeDiff / 1000), _gravityY * (float)(timeDiff / 1000));
 	}

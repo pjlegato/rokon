@@ -5,7 +5,6 @@ import javax.microedition.khronos.opengles.GL10;
 import com.stickycoding.Rokon.Debug;
 import com.stickycoding.Rokon.Rokon;
 import com.stickycoding.Rokon.Sprite;
-import com.stickycoding.Rokon.DynamicObject;
 import com.stickycoding.Rokon.SpriteModifier;
 
 
@@ -25,8 +24,7 @@ public class Spin extends SpriteModifier {
 		_lastUpdate = Rokon.time;
 	}
 	
-	@Override
-	public void onDraw(DynamicObject sprite, GL10 gl) {
+	public void onDraw(Sprite sprite, GL10 gl) {
 		//timeDiff = Rokon.getTime() - _lastUpdate;
 		//_angle += (float)((float)(_frequency * 360f) / 1000f * (float)timeDiff);
 		//gl.glTranslatef(sprite.getX() + (sprite.getWidth() / 2), sprite.getY() + (sprite.getHeight() / 2), 0);
@@ -35,8 +33,7 @@ public class Spin extends SpriteModifier {
 		//_lastUpdate = Rokon.getTime();
 	}
 	
-	@Override
-	public void onUpdate(DynamicObject sprite) {
+	public void onUpdate(Sprite sprite) {
 		timeDiff = Rokon.time - _lastUpdate;
 		_angle += (float)((float)(_frequency * 360f) / 1000f * (float)timeDiff);
 		Debug.print("td=" + timeDiff + " Rotating at " + _angle);
