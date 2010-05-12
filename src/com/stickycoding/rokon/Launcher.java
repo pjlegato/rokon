@@ -10,5 +10,6 @@ public class Launcher extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
+        
     }
 }
