@@ -17,23 +17,4 @@ public class DrawPriority {
 	
 	protected static int drawPriority = 0;
 
-	public static int getDrawPriority() {
-		return drawPriority;
-	}
-	
-	/**
-	 * Sets the draw priority to be used
-	 * If not set, or invalid parameters given, defaults to 0
-	 * 
-	 * @param drawPriority
-	 */
-	public static void setDrawPriority(int drawPriority) {
-		if(drawPriority >= 0 && drawPriority <= 5) {
-			DrawPriority.drawPriority = drawPriority;
-		} else {
-			Debug.warning("DrawPriority.setDrawPriotity", "Invalid draw priority (" + drawPriority + ") ... Defaulting to VBO_DRAWTEX_NORMAL");
-			DrawPriority.drawPriority = VBO_DRAWTEX_NORMAL;
-		}
-	}
-
 }

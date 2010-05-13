@@ -12,6 +12,7 @@ public class Device {
 	
 	protected static DisplayMetrics displayMetrics;	
 	protected static int widthPixels, heightPixels, halfWidthPixels, halfHeightPixels;
+	protected static boolean supportsVBO, supportsDrawTex, isOpenGL10;
 	
 	/**
 	 * Determines several characterstics of the physical device and stores for later usage
@@ -78,4 +79,17 @@ public class Device {
 		return halfHeightPixels;
 	}
 
+	/**
+	 * @return TRUE if the device supports VBOs
+	 */
+	public static boolean supportsVBO() {
+		return supportsVBO;
+	}
+	
+	/**
+	 * @return TRUE if the device supports the draw_tex extension
+	 */
+	public static boolean supportsDrawTex() {
+		return supportsDrawTex;
+	}
 }

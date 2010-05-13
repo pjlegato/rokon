@@ -33,6 +33,8 @@ public class Debug {
 	 */
 	public static void warning(String source, String message) {
 		Log.w(tag, source + " - " + message);
+		Exception e = new Exception(source + " - " + message);
+		e.printStackTrace();
 	}
 	
 	/**
