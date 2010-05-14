@@ -95,6 +95,7 @@ public class FP {
      public static final int E = 178145; 
      public static final int HALF = 2 << 15; 
      
+     public static final int ONE_THOUSAND = FP.fromInt(1000);
      
      public static final int ONE = 0x10000;
      public static final int TWO = ONE * 2;

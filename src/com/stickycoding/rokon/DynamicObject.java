@@ -6,6 +6,8 @@ package com.stickycoding.rokon;
  * @author Richard
  *
  */
-public class DynamicObject {
+public class DynamicObject extends StaticObject {
+	
+	public DynamicObject(int x, int y, int width, int height, int rotation)
 
 }
