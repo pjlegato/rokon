@@ -9,11 +9,13 @@ package com.stickycoding.rokon;
  */
 public class Layer {
 	
+	protected Scene parentScene;
 	protected FixedSizeArray<DrawableObject> drawableObjects;	
 	protected int maximumDrawableObjects;
 	protected DrawQueue drawQueue;
 	
-	public Layer(int maximumDrawableObjects) {
+	public Layer(Scene parentScene, int maximumDrawableObjects) {
+		this.parentScene = parentScene;
 		this.maximumDrawableObjects = maximumDrawableObjects;
 		drawQueue = new DrawQueue();
 		drawableObjects = new FixedSizeArray<DrawableObject>(maximumDrawableObjects);

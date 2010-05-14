@@ -11,6 +11,11 @@ package com.stickycoding.rokon;
 
 public class DrawableObject extends DynamicObject {
 	
+	protected Layer parentLayer;
+	
+	public DrawableObject(int x, int y, int width, int height) {
+		super(x, y, width, height);
+	}
 	
 
 }
