@@ -163,5 +163,14 @@ public class StaticObject {
 	public void rotate(int rotation) {
 		this.rotation += rotation;
 	}
+	
+	/**
+	 * @param distance the modulus of the distance to move
+	 * @param angle the angle, in radians, relative to north 
+	 */
+	public void moveVector(int distance, int angle) {
+		this.x += FP.mul(distance, FP.sin(angle));
+		this.y += FP.mul(distance, FP.cos(angle));
+	}
 
 }
