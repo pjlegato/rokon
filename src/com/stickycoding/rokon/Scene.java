@@ -25,7 +25,7 @@ public class Scene {
 		this.layerCount = layerCount;
 		layer = new Layer[layerCount];
 		for(int i = 0; i < layerCount; i++) {
-			layer[i] = new Layer(layerObjectCount[i]);
+			layer[i] = new Layer(this, layerObjectCount[i]);
 		}
 		prepareNewScene();
 	}
@@ -40,7 +40,7 @@ public class Scene {
 		this.layerCount = layerCount;
 		layer = new Layer[layerCount];
 		for(int i = 0; i < layerCount; i++) {
-			layer[i] = new Layer(layerObjectCount);
+			layer[i] = new Layer(this, layerObjectCount);
 		}
 		prepareNewScene();
 	}
