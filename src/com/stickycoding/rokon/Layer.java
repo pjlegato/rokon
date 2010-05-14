@@ -9,12 +9,14 @@ package com.stickycoding.rokon;
  */
 public class Layer {
 	
+	protected FixedSizeArray<DrawableObject> drawableObjects;	
 	protected int maximumDrawableObjects;
 	protected DrawQueue drawQueue;
 	
 	public Layer(int maximumDrawableObjects) {
 		this.maximumDrawableObjects = maximumDrawableObjects;
 		drawQueue = new DrawQueue();
+		drawableObjects = new FixedSizeArray<DrawableObject>(maximumDrawableObjects);
 	}
 	
 	/**
@@ -35,5 +37,30 @@ public class Layer {
 			drawQueue.method = DrawQueue.FASTEST;
 			return;
 		}
+		drawQueue.method = type;
+	}
+	
+	/**
+	 * Clears all the DrawableObjects off this Layer
+	 */
+	public void clear() {
+		drawableObjects.clear();
+	}
+	
+	/**
+	 * Adds a DrawableObject to this Layer
+	 * 
+	 * @param drawableObject a valid DrawableObject
+	 */
+	public void add(DrawableObject drawableObject) {
+		if(drawableObject == null) {
+			Debug.warning("Layer.add", "Tried adding an invalid DrawableObject");
+			return;
+		}
+		if(drawableObjects.getCount() == drawableObjects.getCapacity()) {
+			Debug.warning("Layer.add", "Tried adding to a Layer which is full, maximum=" + maximumDrawableObjects);
+			return;
+		}
+		drawableObjects.add(drawableObject);
 	}
 }
