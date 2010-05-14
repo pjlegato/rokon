@@ -55,7 +55,7 @@ public class DynamicObject extends StaticObject {
 	/**
 	 * Sets the TerminalAngularVelocityHandler for this DynamicObject
 	 * 
-	 * @param terminalAngularVelocityHandler a valid class interfacing TerminalAngularVelocityHandler
+	 * @param terminalAngularVelocityHandler a valid class interfacing TerminalAngularVelocityHandler, use NULL to remove
 	 */
 	public void setTerminalAngularVelocityHandler(TerminalAngularVelocityHandler terminalAngularVelocityHandler) {
 		this.terminalAngularVelocityHandler = terminalAngularVelocityHandler;
@@ -64,7 +64,7 @@ public class DynamicObject extends StaticObject {
 	/**
 	 * Sets the TerminalSpeedHandler for this DynamicObject
 	 * 
-	 * @param terminalSpeedHandler a valid class interfacing TerminalSpeedHandler
+	 * @param terminalSpeedHandler a valid class interfacing TerminalSpeedHandler, use NULL to remove
 	 */
 	public void setTerminalSpeedHandler(TerminalSpeedHandler terminalSpeedHandler) {
 		this.terminalSpeedHandler = terminalSpeedHandler;
@@ -73,7 +73,7 @@ public class DynamicObject extends StaticObject {
 	/**
 	 * Sets the TerminalVelocityHandler for this DynamicObject
 	 * 
-	 * @param terminalVelocityHandler a valid class interfacing TerminalSpeedHandler
+	 * @param terminalVelocityHandler a valid class interfacing TerminalSpeedHandler, use NULL to remove
 	 */
 	public void setTerminalVelocityHandler(TerminalVelocityHandler terminalVelocityHandler) {
 		this.terminalVelocityHandler = terminalVelocityHandler;
@@ -83,6 +83,7 @@ public class DynamicObject extends StaticObject {
 	 * Stops all the dynamics for this object
 	 */
 	public void stop() {
+		isMoveTo = false;
 		accelerationX = 0;
 		accelerationY = 0;
 		acceleration = 0;
@@ -331,60 +332,123 @@ public class DynamicObject extends StaticObject {
 		return useTerminalAngularVelocity;
 	}
 
+	/**
+	 * @return current acceleration to speed in X direction
+	 */
 	public int getAccelerationX() {
 		return accelerationX;
 	}
 	
+	/**
+	 * @return current acceleration to speed in Y direction
+	 */
 	public int getAccelerationY() {
 		return accelerationY;
 	}
 
+	/**
+	 * @return current acceleration to velocity
+	 */
 	public int getAcceleration() {
 		return acceleration;
 	}
 	
+	/**
+	 * @return angular acceleration
+	 */
+	public int getAngularAcceleration() {
+		return angularAcceleration;
+	}
+	
+	/**
+	 * @return angular velocity
+	 */
+	public int getAngularVelocity() {
+		return angularVelocity;
+	}
+	
+	/**
+	 * @return current angle at which the velocity is being applied
+	 */
 	public int getVelocityAngle() {
 		return velocityAngle;
 	}
 	
+	/**
+	 * @return magnitude of the velocity
+	 */
 	public int getVelocity() {
 		return velocity;
 	}
 	
+	/**
+	 * @return scalar speed in X direction
+	 */
 	public int getSpeedX() {
 		return speedX;
 	}
 	
+	/**
+	 * @return scalar speed in Y direction
+	 */
 	public int getSpeedY() {
 		return speedY;
 	}
 	
+	/**
+	 * @return terminal speed in X direction
+	 */
 	public int getTerminalSpeedX() {
 		return terminalSpeedX;
 	}
 	
+	/**
+	 * @return terminal speed in Y direction
+	 */
 	public int getTerminalSpeedY() {
 		return terminalSpeedY;
 	}
 	
+	/**
+	 * @return terminal velocity
+	 */
 	public int getTerminalVelocity() {
 		return terminalVelocity;
 	}
 	
-	public int getAngularVelocity() {
+	/**
+	 * @return terminal angular velocity
+	 */
+	public int getTerminalAngularVelocity() {
 		return terminalAngularVelocity;
 	}
 	
+	/**
+	 * Sets the terminal speed in the X direction
+	 * 
+	 * @param terminalSpeedX terminal speed in X
+	 */
 	public void setTerminalSpeedX(int terminalSpeedX) {
 		this.terminalSpeedX = terminalSpeedX;
 		useTerminalSpeedX =true;
 	}
 	
+	/**
+	 * Sets the terminal speed in the Y direction
+	 * 
+	 * @param terminalSpeedY terminal speed in Y
+	 */
 	public void setTerminalSpeedY(int terminalSpeedY) {
 		this.terminalSpeedY = terminalSpeedY;
 		useTerminalSpeedY = true;
 	}
 	
+	/**
+	 * Sets the terminal speed in both basic directions
+	 * 
+	 * @param terminalSpeedX terminal speed in X
+	 * @param terminalSpeedY terminal speed in Y
+	 */
 	public void setTerminalSpeed(int terminalSpeedX, int terminalSpeedY) {
 		this.terminalSpeedX = terminalSpeedX;
 		this.terminalSpeedY = terminalSpeedY;
@@ -392,11 +456,21 @@ public class DynamicObject extends StaticObject {
 		useTerminalSpeedY = true;
 	}
 	
+	/**
+	 * Sets the terminal velocity
+	 * 
+	 * @param terminalVelocity terminal velocity
+	 */
 	public void setTerminalVelocity(int terminalVelocity) {
 		this.terminalVelocity = terminalVelocity;
 		useTerminalVelocity = true;
 	}
 	
+	/**
+	 * Sets the terminal angular velocity
+	 * 
+	 * @param terminalAngularVelocity terminal angular velocity
+	 */
 	public void setTerminalAngularVelocity(int terminalAngularVelocity) {
 		this.terminalAngularVelocity = terminalAngularVelocity;
 		useTerminalAngularVelocity = true;
@@ -409,6 +483,26 @@ public class DynamicObject extends StaticObject {
 	 */
 	public void setAngularAcceleration(int acceleration) {
 		this.angularAcceleration = acceleration;
+	}
+	
+	protected boolean isMoveTo = false;
+	protected int startX, startY, finalX, finalY;
+	protected int movementType;
+	protected long startTime, endTime;
+	
+	/**
+	 * Linearly moves the DynamicObject to a given spot, in a given time using
+	 * All previous motion is cancelled. It may be possible to apply your own velocity
+	 * and acceleration changes while moveTo is running, though it should be avoided
+	 * 
+	 * @param x final X coordinate
+	 * @param y final Y coordinate
+	 * @param time the time 
+	 */
+	public void moveTo(int x, int y, int time) {
+		stop();
+		
+		isMoveTo = true;
 	}
 
 }

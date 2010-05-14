@@ -3,11 +3,14 @@ package com.stickycoding.rokon;
 /**
  * StaticObject.java
  * StaticObjects have a position and a dimension, but no functions for movement
+ * Has id and state functions, to aid with game design somewhat
+ * 
  * @author Richard
  *
  */
 public class StaticObject {
 	
+	protected int id = -1, state = -1;
 	protected int x, y, width, height, rotation;
 	
 	public StaticObject(int x, int y, int width, int height, int rotation) {
@@ -20,6 +23,22 @@ public class StaticObject {
 		this.width = width;
 		this.height = height;
 		this.rotation = rotation;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setState(int state) {
+		this.state = state;
+	}
+	
+	public int getState() {
+		return state;
 	}
 	
 	public StaticObject(int x, int y, int width, int height) {
