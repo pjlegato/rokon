@@ -1,5 +1,7 @@
 package com.stickycoding.rokon;
 
+import javax.microedition.khronos.opengles.GL10;
+
 /**
  * Scene.java
  * A Scene holds and prepares drawable objects or object groups
@@ -233,6 +235,30 @@ public class Scene {
 			return;
 		}
 		layer[layerIndex].add(drawableObject);
+	}
+	
+	/**
+	 * Removes a DrawableObject from the Scene
+	 * 
+	 * @param drawableObject a valid DrawableObject
+	 */
+	public void remove(DrawableObject drawableObject) {
+		drawableObject.remove();
+	}
+	
+	protected void onUpdate() {
+		
+	}
+	
+	protected void onGameLoop() {
+		
+	}
+	
+	protected void onDraw(GL10 gl) {
+		GLHelper.setGL(gl);
+		for(int i = 0; i < layerCount; i++) {
+			layer[i].onDraw(gl);
+		}
 	}
 	
 }

@@ -10,6 +10,11 @@ import javax.microedition.khronos.opengles.GL10;
  */
 public class Sprite extends DynamicObject implements Drawable {
 
+	public Sprite(int x, int y, int width, int height) {
+		super(x, y, width, height);
+		// TODO Auto-generated constructor stub
+	}
+
 	public void onDraw(GL10 gl) {
 		
 	}

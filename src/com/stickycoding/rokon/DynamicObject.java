@@ -501,8 +501,12 @@ public class DynamicObject extends StaticObject {
 	 */
 	public void moveTo(int x, int y, int time) {
 		stop();
-		
+		startX = this.x;
+		startY = this.y;
+		finalX = x;
+		finalY = y;
 		isMoveTo = true;
+		//TODO Finish off the MoveTo routines and Movement
 	}
 
 }

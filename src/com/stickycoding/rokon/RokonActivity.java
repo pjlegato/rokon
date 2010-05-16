@@ -164,7 +164,7 @@ public class RokonActivity extends Activity {
 			DrawPriority.drawPriority = drawPriority;
 		} else {
 			Debug.warning("RokonActivity.setDrawPriotity", "Invalid draw priority (" + drawPriority + ") ... Defaulting to VBO_DRAWTEX_NORMAL");
-			DrawPriority.drawPriority = DrawPriority.VBO_DRAWTEX_NORMAL;
+			DrawPriority.drawPriority = DrawPriority.PRIORITY_VBO_DRAWTEX_NORMAL;
 		}
 	}
 }

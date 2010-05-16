@@ -1,5 +1,7 @@
 package com.stickycoding.rokon;
 
+import javax.microedition.khronos.opengles.GL10;
+
 /**
  * Layer.java
  * A Layer is contained inside a Scene, and are drawn in ascending order
@@ -64,5 +66,13 @@ public class Layer {
 			return;
 		}
 		drawableObjects.add(drawableObject);
+		drawableObject.onAdd();
 	}
+	
+	protected void onDraw(GL10 gl) {
+		for(int i = 0; i < drawableObjects.getCapacity(); i++) {
+			drawableObjects.get(i).onDraw(gl);
+		}
+	}
+	
 }
