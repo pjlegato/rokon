@@ -21,6 +21,7 @@ public class RokonActivity extends Activity {
 	protected RokonSurfaceView surfaceView;
 	protected boolean engineLoaded = false;
 	protected float gameWidth, gameHeight;
+	protected static String graphicsPath;
 	
 	public void onCreate() {};
 	public void onLoadComplete() { };
@@ -53,12 +54,31 @@ public class RokonActivity extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
+		Rokon.currentActivity = this;
 		Debug.print("Engine Activity received onResume()");
 	}
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) { 
 		return false;
+	}
+	
+	/**
+	 * Sets a default location for the graphics.
+	 * All Texture objects created after this will have this prefix on their absolute path
+	 * If the path you give is invalid, an error will not be raised until you try creating a Texture
+	 * 
+	 * @param path valid Sting path, with trailing slash (eg, "textures/")
+	 */
+	public void setGraphicsPath(String path) {
+		graphicsPath = path;
+	}
+	
+	/**
+	 * @return the current default location for textures
+	 */
+	public String getGraphicsPath() {
+		return graphicsPath;
 	}
 	
 	/**
@@ -107,7 +127,11 @@ public class RokonActivity extends Activity {
 			currentScene = null;
 			return;
 		}
+		if(currentScene != null) {
+			currentScene.onEndScene();
+		}
 		currentScene = scene;
+		scene.onSetScene();
 	}
 	
 	/**

@@ -11,6 +11,7 @@ public class Rokon {
 	
 	protected static BlendFunction blendFunction;
 	protected static BufferObject defaultVertexBuffer;
+	protected static RokonActivity currentActivity;
 	
 	/**
 	 * Returns the default (1x1 square) Buffer object for normal/VBO drawing

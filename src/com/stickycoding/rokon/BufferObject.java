@@ -26,6 +26,11 @@ public class BufferObject {
 		byteBuffer.order(ByteOrder.nativeOrder());		
 	}
 	
+	public void free() {
+		byteBuffer.clear();
+		byteBuffer = null;
+	}
+	
 	public void update(float x, float y, float width, float height) {
 		byteBuffer.position(0);
 		byteBuffer.putFloat(x);

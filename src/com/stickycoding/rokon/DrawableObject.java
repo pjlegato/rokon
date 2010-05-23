@@ -34,8 +34,13 @@ public class DrawableObject extends DynamicObject {
 		setTexture(texture);
 	}
 	
+	/**
+	 * Uses a Texture rather than a blank square
+	 * 
+	 * @param texture valid Texture object
+	 */
 	public void setTexture(Texture texture) {
-		//TODO Handle new texture
+		this.texture = texture;
 	}
 	
 	/**
@@ -337,7 +342,6 @@ public class DrawableObject extends DynamicObject {
 			GLHelper.enableTextures();
 			GLHelper.enableTexCoordArray();
 			GLHelper.bindTexture(texture.textureIndex);
-			//TODO Bind the right texture, and get the right pointer
 			GLHelper.texCoordPointer(texture.buffer, GL10.GL_FLOAT);
 		} else {
 			GLHelper.disableTexCoordArray();

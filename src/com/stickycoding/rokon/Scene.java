@@ -10,12 +10,16 @@ import javax.microedition.khronos.opengles.GL10;
  */
 public class Scene {
 	
+	public static final int SCENE_TEXTURE_COUNT = 32;
 	public static final int DEFAULT_LAYER_COUNT = 1;
 	public static final int DEFAULT_LAYER_OBJECT_COUNT = 32;
 
 	protected Layer[] layer;
+	protected boolean loadedTextures;
 	protected int layerCount;
 	protected Window window = null;
+	
+	protected Texture[] textures;
 	
 	/**
 	 * Creates a new Scene with given layer count, and a corresponding maximum DrawableObject count 
@@ -65,7 +69,23 @@ public class Scene {
 	}
 	
 	private void prepareNewScene() {
-		
+		textures = new Texture[SCENE_TEXTURE_COUNT];
+	}
+	
+	/**
+	 * Flags a Texture to be loaded into this Scene
+	 * This must be called before RokonActivity.setScene
+	 * 
+	 * @param texture valid Texture object
+	 */
+	public void useTexture(Texture texture) {
+		for(int i = 0; i < textures.length; i++) {
+			if(textures[i] == null) {
+				textures[i] = texture;
+				return;
+			}
+		}
+		Debug.warning("Scene.useTexture", "Tried loading too many Textures onto the Scene, max is " + textures.length);
 	}
 	
 	/**
@@ -254,8 +274,26 @@ public class Scene {
 		
 	}
 	
+	protected void onSetScene() {
+		loadedTextures = false;
+	}
+	
+	protected void onEndScene() {
+		
+	}
+	
+	protected void onLoadTextures(GL10 gl) {
+		Debug.print("Loading textures onto the Scene");
+		for(int i = 0; i < textures.length; i++) {
+			if(textures[i] != null) {
+				textures[i].onLoadTexture(gl);
+				textures[i] = null;
+			}
+		}
+		loadedTextures = true;
+	}
+	
 	protected void onDraw(GL10 gl) {
-		GLHelper.setGL(gl);
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         gl.glMatrixMode(GL10.GL_MODELVIEW);
         gl.glLoadIdentity();
