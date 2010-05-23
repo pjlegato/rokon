@@ -12,6 +12,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class DrawableObject extends DynamicObject {
 
+	protected boolean isTouchable = false;
 	protected BlendFunction blendFunction;
 	protected int forceDrawType = DrawPriority.DEFAULT;
 	protected Layer parentLayer;
@@ -32,6 +33,27 @@ public class DrawableObject extends DynamicObject {
 		super(x, y, width, height);
 		onCreate();
 		setTexture(texture);
+	}
+	
+	/**
+	 * Sets the DrawableObject to a touchable, it will be checked when Scene handles input events 
+	 */
+	public void setTouchable() {
+		isTouchable = true;
+	}
+	
+	/**
+	 * Sets the DrawableObject as un-touchable
+	 */
+	public void removeTouchable() {
+		isTouchable = false;
+	}
+	
+	/**
+	 * @return TRUE if the object is touchable, FALSE otherwise
+	 */
+	public boolean isTouchable() {
+		return isTouchable;
 	}
 	
 	/**

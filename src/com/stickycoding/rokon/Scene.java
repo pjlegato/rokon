@@ -21,11 +21,52 @@ public class Scene {
 	protected int layerCount;
 	protected Window window = null;
 	protected Texture[] textures;
-	
+
+	public void onTouchDown(DrawableObject object, float x, float y, MotionEvent event) { }
+	public void onTouchUp(DrawableObject object, float x, float y, MotionEvent event) { }
+	public void onTouchMove(DrawableObject object, float x, float y, MotionEvent event) { }
+	public void onTouch(DrawableObject object, float x, float y, MotionEvent event) { }
 	public void onTouchDown(float x, float y, MotionEvent event) { }
 	public void onTouchMove(float x, float y, MotionEvent event) { }
 	public void onTouch(float x, float y, MotionEvent event) { }
 	public void onTouchUp(float x, float y, MotionEvent event) { }
+	
+	protected void handleTouch(MotionEvent event) {
+		event.setLocation(event.getX() * (Device.widthPixels / RokonActivity.gameWidth), event.getY() * (Device.heightPixels  / RokonActivity.gameHeight));
+		onTouch(event.getX(), event.getY(), event);
+		switch(event.getAction()) {
+			case MotionEvent.ACTION_DOWN:
+				onTouchDown(event.getX(), event.getY(), event);
+				break;
+			case MotionEvent.ACTION_UP:
+				onTouchUp(event.getX(), event.getY(), event);
+				break;
+			case MotionEvent.ACTION_MOVE:
+				onTouch(event.getX(), event.getY(), event);
+				break;
+		}
+		for(int i = 0; i < layerCount; i++) {
+			for(int j = 0; j < layer[i].maximumDrawableObjects; j++) {
+				DrawableObject object = layer[i].drawableObjects.get(j);
+				if(object != null && object.isTouchable) {
+					if(MathHelper.pointInRect(event.getX(), event.getY(), object.x, object.y, object.width, object.height)) {
+						onTouch(object, event.getX(), event.getY(), event);
+						switch(event.getAction()) {
+							case MotionEvent.ACTION_DOWN:
+								onTouchDown(object, event.getX(), event.getY(), event);
+								break;
+							case MotionEvent.ACTION_UP:
+								onTouchUp(object, event.getX(), event.getY(), event);
+								break;
+							case MotionEvent.ACTION_MOVE:
+								onTouch(object, event.getX(), event.getY(), event);
+								break;
+						}
+					}
+				}
+			}
+		}
+	}
 	
 	/**
 	 * Creates a new Scene with given layer count, and a corresponding maximum DrawableObject count 

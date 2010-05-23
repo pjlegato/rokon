@@ -15,12 +15,12 @@ import android.view.WindowManager;
  */
 public class RokonActivity extends Activity {
 	
-	protected boolean engineCreated;
-	protected Scene currentScene = null;
+	protected static boolean engineCreated;
+	protected static Scene currentScene = null;
 	protected boolean forceLandscape, forcePortrait, forceFullscreen;
 	protected RokonSurfaceView surfaceView;
-	protected boolean engineLoaded = false;
-	protected float gameWidth, gameHeight;
+	protected static boolean engineLoaded = false;
+	protected static float gameWidth, gameHeight;
 	protected static String graphicsPath;
 	
 	public void onCreate() {};
@@ -62,20 +62,7 @@ public class RokonActivity extends Activity {
 	public boolean onTouchEvent(MotionEvent event) {
 		if(currentScene == null)
 			return false;
-		
-		event.setLocation(event.getX() / gameWidth, event.getY() / gameHeight);
-		currentScene.onTouch(event.getX(), event.getY(), event);
-		switch(event.getAction()) {
-			case MotionEvent.ACTION_DOWN:
-				currentScene.onTouchDown(event.getX(), event.getY(), event);
-				break;
-			case MotionEvent.ACTION_UP:
-				currentScene.onTouchUp(event.getX(), event.getY(), event);
-				break;
-			case MotionEvent.ACTION_MOVE:
-				currentScene.onTouch(event.getX(), event.getY(), event);
-				break;
-		}
+		currentScene.handleTouch(event);
 		return false;
 	}
 	

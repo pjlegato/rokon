@@ -16,6 +16,8 @@ public class Movement {
 	public static final float PI_OVER_TWO = PI / 2f;
 	public static final float TWO_PI = 2f * PI;
 	
+	public static final int DEFAULT = 0, CLOCKWISE = 1, ANTICLOCKWISE = 2;
+	
 	/**
 	 * A linear movement, constant velocity
 	 */
