@@ -17,7 +17,7 @@ public class DrawableObject extends DynamicObject {
 	protected Layer parentLayer;
 	protected boolean isOnScene = false;
 	protected boolean killNextUpdate = false;
-	protected int red, green, blue, alpha;
+	protected float red, green, blue, alpha;
 	protected boolean useAlternativeVertex = false;
 	protected boolean useCoordinatesInVertices = false;
 	protected BufferObject buffer;
@@ -58,10 +58,10 @@ public class DrawableObject extends DynamicObject {
 	}
 	
 	protected void onCreate() {
-		red = FP.ONE;
-		green = FP.ONE;
-		blue = FP.ONE;
-		alpha = FP.ONE;
+		red = 1f;
+		green = 1f;
+		blue = 1f;
+		alpha = 1f;
 		isOnScene = false;
 		killNextUpdate = false;
 		useAlternativeVertex = false;
@@ -139,66 +139,66 @@ public class DrawableObject extends DynamicObject {
 	/**
 	 * @return current red value
 	 */
-	public int getRed() {
+	public float getRed() {
 		return red;
 	}
 	
 	/**
 	 * Sets the green value
 	 * 
-	 * @param green fixed point integer, 0 to ONE
+	 * @param green float, 0 to 1
 	 */
-	public void setGreen(int green) {
+	public void setGreen(float green) {
 		this.green = green;
 	}
 	
 	/**
 	 * @return current green value
 	 */
-	public int getGreen() {
+	public float getGreen() {
 		return green;
 	}
 	
 	/**
 	 * Sets the blue value
 	 * 
-	 * @param blue fixed point integer, 0 to ONE
+	 * @param blue float, 0 to 1
 	 */
-	public void setBlue(int blue) {
+	public void setBlue(float blue) {
 		this.blue = blue;
 	}
 	
 	/**
 	 * @return blue value
 	 */
-	public int getBlue() {
+	public float getBlue() {
 		return blue;
 	}
 	
 	/**
 	 * Sets the alpha value
 	 * 
-	 * @param alpha fixed point integer, 0 to ONE
+	 * @param alpha float, 0 to 1
 	 */
-	public void setAlpha(int alpha) {
+	public void setAlpha(float alpha) {
 		this.alpha = alpha;
 	}
 	
 	/**
 	 * @return alpha value
 	 */
-	public int getAlpha() {
+	public float getAlpha() {
 		return alpha;
 	}
 	
 	/**
 	 * Sets the red, green and blue values
 	 * 
-	 * @param red fixed point integer, 0 to ONE
-	 * @param green fixed point integer, 0 to ONE
-	 * @param blue fixed point integer, 0 to ONE
+	 * @param red float, 0 to 1
+	 * @param green float, 0 to 1
+	 * @param blue float, 0 to 1
 	 */
-	public void setRGB(int red, int green, int blue) {
+	public void setRGB(float red, float green, float blue) {
 		this.red = red;
 		this.green = green;
 		this.blue = blue;
@@ -298,7 +298,7 @@ public class DrawableObject extends DynamicObject {
 	
 	protected void onDrawNormal(GL10 gl) {
 		
-		GLHelper.color(red, green, blue, alpha);
+		GLHelper.color4f(red, green, blue, alpha);
 		if(blendFunction != null) {
 			GLHelper.blendMode(blendFunction);
 		} else {
@@ -309,35 +309,35 @@ public class DrawableObject extends DynamicObject {
 		GLHelper.enableVertexArray();
 		
 		if(useAlternativeVertex) {
-			GLHelper.vertexPointer(buffer, GL10.GL_FIXED);
+			GLHelper.vertexPointer(buffer, GL10.GL_FLOAT);
 			if(!useCoordinatesInVertices) {
-				gl.glTranslatex(x, y, 0);
+				gl.glTranslatef(x, y, 0);
 			}
 		} else {
-			GLHelper.vertexPointer(Rokon.defaultVertexBuffer, GL10.GL_FIXED);
-			gl.glTranslatex(x, y, 0);
+			GLHelper.vertexPointer(Rokon.defaultVertexBuffer, GL10.GL_FLOAT);
+			gl.glTranslatef(x, y, 0);
 		}
 		
 		if(rotation != 0) {
 			if(!rotateAboutPoint) {
-				gl.glTranslatex(FP.div(width, FP.TWO), FP.div(height, FP.TWO), 0);
-				gl.glRotatex(rotation, 0, 0, FP.ONE);
-				gl.glTranslatex(-FP.div(width, FP.TWO), -FP.div(height, FP.TWO), 0);
+				gl.glTranslatef(width / 2, height / 2, 0);
+				gl.glRotatef(rotation, 0, 0, 1);
+				gl.glTranslatef(-width / 2, -height / 2, 0);
 			} else {
-				gl.glTranslatex(rotationPivotX, rotationPivotY, 0);
-				gl.glRotatex(rotation, 0, 0, FP.ONE);
-				gl.glTranslatex(-rotationPivotX, -rotationPivotY, 0);
+				gl.glTranslatef(rotationPivotX, rotationPivotY, 0);
+				gl.glRotatef(rotation, 0, 0, 1);
+				gl.glTranslatef(-rotationPivotX, -rotationPivotY, 0);
 			}
 		}
 		
-		gl.glScalex(width, height, 0);
+		gl.glScalef(width, height, 0);
 		
 		if(texture != null) {
 			GLHelper.enableTextures();
 			GLHelper.enableTexCoordArray();
 			GLHelper.bindTexture(texture.textureIndex);
 			//TODO Bind the right texture, and get the right pointer
-			GLHelper.texCoordPointer(texture.buffer, GL10.GL_FIXED);
+			GLHelper.texCoordPointer(texture.buffer, GL10.GL_FLOAT);
 		} else {
 			GLHelper.disableTexCoordArray();
 			GLHelper.disableTextures();

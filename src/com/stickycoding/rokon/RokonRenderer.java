@@ -42,8 +42,8 @@ public class RokonRenderer implements GLSurfaceView.Renderer {
 		gl.glViewport(0, 0, w, h);
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
-		Debug.print("gluOrtho2D : " + FP.toFloat(rokonActivity.gameWidth) + "x" + FP.toFloat(rokonActivity.gameHeight));
-        GLU.gluOrtho2D(gl, 0, FP.toFloat(rokonActivity.gameWidth), FP.toFloat(rokonActivity.gameHeight), 0);
+		Debug.print("gluOrtho2D : " + rokonActivity.gameWidth + "x" + rokonActivity.gameHeight);
+        GLU.gluOrtho2D(gl, 0, rokonActivity.gameWidth, rokonActivity.gameHeight, 0);
 	}
 
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -76,7 +76,7 @@ public class RokonRenderer implements GLSurfaceView.Renderer {
         Debug.print("Graphics Support - " + version + ": " +(Device.supportsDrawTex ?  "draw texture," : "") + (Device.supportsVBO ? "vbos" : ""));
         
 
-        GLU.gluOrtho2D(gl, 0, FP.toFloat(rokonActivity.gameWidth), FP.toFloat(rokonActivity.gameHeight), 0);
+        GLU.gluOrtho2D(gl, 0, rokonActivity.gameWidth, rokonActivity.gameHeight, 0);
 	}
 
 	 /**

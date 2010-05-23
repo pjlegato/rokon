@@ -24,10 +24,10 @@ public class Device {
 	public static void determine(Activity activity) {
 		displayMetrics = new DisplayMetrics();
 		activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-		widthPixels = FP.fromInt(displayMetrics.widthPixels);
-		heightPixels = FP.fromInt(displayMetrics.heightPixels);
-		halfWidthPixels = FP.div(widthPixels, FP.TWO);
-		halfHeightPixels = FP.div(heightPixels, FP.TWO);
+		widthPixels = displayMetrics.widthPixels;
+		heightPixels = displayMetrics.heightPixels;
+		halfWidthPixels = widthPixels / 2;
+		halfHeightPixels = heightPixels / 2;
 	}
 	
 	/**
@@ -44,7 +44,7 @@ public class Device {
 	/**
 	 * Returns the width of the screen, in pixels
 	 * 
-	 * @return a fixed point integer
+	 * @return integer
 	 */
 	public static int getWidthPixels() {
 		return widthPixels;
@@ -54,7 +54,7 @@ public class Device {
 	/**
 	 * Returns the height of the screen, in pixels
 	 * 
-	 * @return a fixed point integer
+	 * @return integer
 	 */
 	public static int getHeightPixels() {
 		return heightPixels;
@@ -64,7 +64,7 @@ public class Device {
 	/**
 	 * Returns half the width of the screen, in pixels
 	 * 
-	 * @return a fixed point integer
+	 * @return integer
 	 */
 	public static int getHalfWidthPixels() {
 		return halfWidthPixels;
@@ -74,7 +74,7 @@ public class Device {
 	/**
 	 * Returns half the height of the screen, in pixels
 	 * 
-	 * @return a fixed point integer
+	 * @return integer
 	 */
 	public static int getHalfHeightPixel() {
 		return halfHeightPixels;

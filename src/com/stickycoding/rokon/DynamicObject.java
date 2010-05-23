@@ -20,11 +20,11 @@ public class DynamicObject extends StaticObject {
 	protected TerminalSpeedHandler terminalSpeedHandler;
 	protected TerminalVelocityHandler terminalVelocityHandler;
 	
-	protected int accelerationX, accelerationY, speedX, speedY, terminalSpeedX, terminalSpeedY;
+	protected float accelerationX, accelerationY, speedX, speedY, terminalSpeedX, terminalSpeedY;
 	protected boolean useTerminalSpeedX, useTerminalSpeedY;
-	protected int acceleration, velocity, velocityAngle, velocityXFactor, velocityYFactor, terminalVelocity;
+	protected float acceleration, velocity, velocityAngle, velocityXFactor, velocityYFactor, terminalVelocity;
 	protected boolean useTerminalVelocity;
-	protected int angularVelocity, angularAcceleration, terminalAngularVelocity;
+	protected float angularVelocity, angularAcceleration, terminalAngularVelocity;
 	protected boolean useTerminalAngularVelocity;
 	
 	public DynamicObject(int x, int y, int width, int height) {
@@ -99,7 +99,7 @@ public class DynamicObject extends StaticObject {
 	
 	protected void onUpdate() {
 		if(accelerationX != 0) {
-			speedX += FP.mul(accelerationX, Time.ticksFraction);
+			speedX += accelerationX * Time.ticksFraction;
 			if(useTerminalSpeedX && ((accelerationX > 0 && speedX > terminalSpeedX) || (accelerationX < 0 && speedY < terminalSpeedX))) {
 				accelerationX = 0;
 				speedX = terminalSpeedX;
@@ -109,7 +109,7 @@ public class DynamicObject extends StaticObject {
 			}
 		}
 		if(accelerationY != 0) {
-			speedY += FP.mul(accelerationY, Time.ticksFraction);
+			speedY += accelerationY * Time.ticksFraction;
 			if(useTerminalSpeedY && ((accelerationY > 0 && speedY > terminalSpeedY) || (accelerationY < 0 && speedY < terminalSpeedY))) {
 				accelerationY = 0;
 				speedY = terminalSpeedY;
@@ -119,13 +119,13 @@ public class DynamicObject extends StaticObject {
 			}
 		}
 		if(speedX != 0) {
-			x += FP.mul(speedX, Time.ticksFraction);
+			x += speedX * Time.ticksFraction;
 		}
 		if(speedY != 0) {
-			y += FP.mul(speedY, Time.ticksFraction);
+			y += speedY * Time.ticksFraction;
 		}
 		if(acceleration != 0) {
-			velocity += FP.mul(acceleration, Time.ticksFraction);
+			velocity += acceleration * Time.ticksFraction;
 			if(useTerminalVelocity && ((acceleration > 0 && velocity > terminalVelocity) || (acceleration < 0 && velocity < terminalVelocity))) {
 				acceleration = 0;
 				velocity = terminalVelocity;
@@ -135,11 +135,11 @@ public class DynamicObject extends StaticObject {
 			}
 		}
 		if(velocity != 0) {
-			x += FP.mul(velocityXFactor, FP.mul(velocity, Time.ticksFraction));
-			y += FP.mul(velocityYFactor, FP.mul(velocity, Time.ticksFraction));
+			x += velocityXFactor * (velocity * Time.ticksFraction);
+			y += velocityYFactor * (velocity * Time.ticksFraction);
 		}
 		if(angularAcceleration != 0) {
-			angularVelocity += FP.mul(angularAcceleration, Time.ticksFraction);
+			angularVelocity += angularAcceleration * Time.ticksFraction;
 			if(useTerminalAngularVelocity && ((angularAcceleration > 0 && angularVelocity > terminalAngularVelocity) || (angularAcceleration < 0 && angularVelocity < terminalAngularVelocity))) {
 				angularAcceleration = 0;
 				angularVelocity = terminalAngularVelocity;
@@ -149,33 +149,33 @@ public class DynamicObject extends StaticObject {
 			}
 		}
 		if(angularVelocity != 0) {
-			rotation += FP.mul(angularVelocity, Time.ticksFraction);
+			rotation += angularVelocity * Time.ticksFraction;
 		}
 	}
 	
 	/**
 	 * Sets speed of the DynamicObject in the X direction
 	 * 
-	 * @param x positive or negative fixed point integer
+	 * @param x positive or negative floating point
 	 */
-	public void setSpeedX(int x) {
+	public void setSpeedX(float x) {
 		speedX = x;
 	}
 	
 	/**
 	 * Sets speed of the DynamicObject in the Y direction
 	 * 
-	 * @param y positive or negative fixed point integer
+	 * @param y positive or negative floating point
 	 */
-	public void setSpeedY(int y) {
+	public void setSpeedY(float y) {
 		speedY = y;
 	}
 	
 	/**
 	 * Sets the speed of the DynamicObject on both X and Y axis
 	 * 
-	 * @param x positive or negative fixed point integer
-	 * @param y positive or negative fixed point integer
+	 * @param x positive or negative floating point
+	 * @param y positive or negative floating point
 	 */
 	public void setSpeed(int x, int y) {
 		speedX = x;
@@ -186,7 +186,7 @@ public class DynamicObject extends StaticObject {
 	 * Sets the velocity of the DynamicObject
 	 * This is along the velocityAngle, and will be north if previously unset
 	 * 
-	 * @param velocity positive or negative fixed point integer
+	 * @param velocity positive or negative floating point
 	 */
 	public void setVelocity(int velocity) {
 		this.velocity = velocity;
@@ -195,26 +195,26 @@ public class DynamicObject extends StaticObject {
 	/**
 	 * Sets the velocity of the DynamicObject
 	 * 
-	 * @param velocity positive or negative fixed point integer
+	 * @param velocity positive or negative floating point
 	 * @param angle relative to north, in radians
 	 */
-	public void setVelocity(int velocity, int angle) {
+	public void setVelocity(float velocity, float angle) {
 		this.velocity = velocity;
 		this.velocityAngle = angle;
-		this.velocityXFactor = FP.sin(angle);
-		this.velocityYFactor = FP.cos(angle);
+		this.velocityXFactor = (float)Math.sin(angle);
+		this.velocityYFactor = (float)Math.cos(angle);
 	}
 	
 	/**
 	 * Accelerates along the X direction
 	 * 
-	 * @param accelerationX positive or negative fixed point integer
+	 * @param accelerationX positive or negative floating point
 	 */
-	public void accelerateX(int accelerationX) {
+	public void accelerateX(float accelerationX) {
 		this.accelerationX = accelerationX;
 	}
 	
-	public void accelerateX(int accelerationX, int terminalSpeedX) {
+	public void accelerateX(float accelerationX, float terminalSpeedX) {
 		this.accelerationX = accelerationX;
 		this.terminalSpeedX = terminalSpeedX;
 		useTerminalSpeedX = true;
@@ -223,19 +223,19 @@ public class DynamicObject extends StaticObject {
 	/**
 	 * Accelerates along the Y direction
 	 * 
-	 * @param accelerationY positive or negative fixed point integer
+	 * @param accelerationY positive or negative floating point
 	 */
-	public void accelerateY(int accelerationY) {
+	public void accelerateY(float accelerationY) {
 		this.accelerationY = accelerationY;
 	}
 	
 	/**
 	 * Accelerates along the Y direction to a maximum speed
 	 *
-	 * @param accelerationY positive or negative fixed point integer
+	 * @param accelerationY positive or negative floating point
 	 * @param terminalSpeedY the maximum speed to achieve in Y direction
 	 */
-	public void accelerateY(int accelerationY, int terminalSpeedY) {
+	public void accelerateY(float accelerationY, float terminalSpeedY) {
 		this.accelerationY = accelerationY;
 		this.terminalSpeedY = terminalSpeedY;
 		useTerminalSpeedY = true;
@@ -247,11 +247,11 @@ public class DynamicObject extends StaticObject {
 	 * @param acceleration magnitude of acceleration
 	 * @param angle relative to north, in radians
 	 */
-	public void accelerate(int acceleration, int angle) {
+	public void accelerate(float acceleration, float angle) {
 		this.acceleration = acceleration;
 		this.velocityAngle = angle;
-		this.velocityXFactor = FP.sin(angle);
-		this.velocityYFactor = FP.cos(angle);
+		this.velocityXFactor = (float)Math.sin(angle);
+		this.velocityYFactor = (float)Math.cos(angle);
 	}
 	
 	/**
@@ -261,7 +261,7 @@ public class DynamicObject extends StaticObject {
 	 * @param angle relative to north, in radians
 	 * @param terminalVelocity maximum velocity to reach
 	 */
-	public void accelerate(int acceleration, int angle, int terminalVelocity) {
+	public void accelerate(float acceleration, float angle, float terminalVelocity) {
 		accelerate(acceleration, angle);
 		this.terminalVelocity = terminalVelocity;
 		useTerminalVelocity = true;
@@ -334,91 +334,91 @@ public class DynamicObject extends StaticObject {
 	/**
 	 * @return current acceleration to speed in X direction
 	 */
-	public int getAccelerationX() {
+	public float getAccelerationX() {
 		return accelerationX;
 	}
 	
 	/**
 	 * @return current acceleration to speed in Y direction
 	 */
-	public int getAccelerationY() {
+	public float getAccelerationY() {
 		return accelerationY;
 	}
 
 	/**
 	 * @return current acceleration to velocity
 	 */
-	public int getAcceleration() {
+	public float getAcceleration() {
 		return acceleration;
 	}
 	
 	/**
 	 * @return angular acceleration
 	 */
-	public int getAngularAcceleration() {
+	public float getAngularAcceleration() {
 		return angularAcceleration;
 	}
 	
 	/**
 	 * @return angular velocity
 	 */
-	public int getAngularVelocity() {
+	public float getAngularVelocity() {
 		return angularVelocity;
 	}
 	
 	/**
 	 * @return current angle at which the velocity is being applied
 	 */
-	public int getVelocityAngle() {
+	public float getVelocityAngle() {
 		return velocityAngle;
 	}
 	
 	/**
 	 * @return magnitude of the velocity
 	 */
-	public int getVelocity() {
+	public float getVelocity() {
 		return velocity;
 	}
 	
 	/**
 	 * @return scalar speed in X direction
 	 */
-	public int getSpeedX() {
+	public float getSpeedX() {
 		return speedX;
 	}
 	
 	/**
 	 * @return scalar speed in Y direction
 	 */
-	public int getSpeedY() {
+	public float getSpeedY() {
 		return speedY;
 	}
 	
 	/**
 	 * @return terminal speed in X direction
 	 */
-	public int getTerminalSpeedX() {
+	public float getTerminalSpeedX() {
 		return terminalSpeedX;
 	}
 	
 	/**
 	 * @return terminal speed in Y direction
 	 */
-	public int getTerminalSpeedY() {
+	public float getTerminalSpeedY() {
 		return terminalSpeedY;
 	}
 	
 	/**
 	 * @return terminal velocity
 	 */
-	public int getTerminalVelocity() {
+	public float getTerminalVelocity() {
 		return terminalVelocity;
 	}
 	
 	/**
 	 * @return terminal angular velocity
 	 */
-	public int getTerminalAngularVelocity() {
+	public float getTerminalAngularVelocity() {
 		return terminalAngularVelocity;
 	}
 	
@@ -427,7 +427,7 @@ public class DynamicObject extends StaticObject {
 	 * 
 	 * @param terminalSpeedX terminal speed in X
 	 */
-	public void setTerminalSpeedX(int terminalSpeedX) {
+	public void setTerminalSpeedX(float terminalSpeedX) {
 		this.terminalSpeedX = terminalSpeedX;
 		useTerminalSpeedX =true;
 	}
@@ -437,7 +437,7 @@ public class DynamicObject extends StaticObject {
 	 * 
 	 * @param terminalSpeedY terminal speed in Y
 	 */
-	public void setTerminalSpeedY(int terminalSpeedY) {
+	public void setTerminalSpeedY(float terminalSpeedY) {
 		this.terminalSpeedY = terminalSpeedY;
 		useTerminalSpeedY = true;
 	}
@@ -448,7 +448,7 @@ public class DynamicObject extends StaticObject {
 	 * @param terminalSpeedX terminal speed in X
 	 * @param terminalSpeedY terminal speed in Y
 	 */
-	public void setTerminalSpeed(int terminalSpeedX, int terminalSpeedY) {
+	public void setTerminalSpeed(float terminalSpeedX, float terminalSpeedY) {
 		this.terminalSpeedX = terminalSpeedX;
 		this.terminalSpeedY = terminalSpeedY;
 		useTerminalSpeedX = true;
@@ -460,7 +460,7 @@ public class DynamicObject extends StaticObject {
 	 * 
 	 * @param terminalVelocity terminal velocity
 	 */
-	public void setTerminalVelocity(int terminalVelocity) {
+	public void setTerminalVelocity(float terminalVelocity) {
 		this.terminalVelocity = terminalVelocity;
 		useTerminalVelocity = true;
 	}
@@ -470,7 +470,7 @@ public class DynamicObject extends StaticObject {
 	 * 
 	 * @param terminalAngularVelocity terminal angular velocity
 	 */
-	public void setTerminalAngularVelocity(int terminalAngularVelocity) {
+	public void setTerminalAngularVelocity(float terminalAngularVelocity) {
 		this.terminalAngularVelocity = terminalAngularVelocity;
 		useTerminalAngularVelocity = true;
 	}
@@ -478,14 +478,14 @@ public class DynamicObject extends StaticObject {
 	/**
 	 * Sets the angular acceleration
 	 * 
-	 * @param acceleration fixed point integer, in radians 
+	 * @param acceleration floating point integer, in radians 
 	 */
-	public void setAngularAcceleration(int acceleration) {
+	public void setAngularAcceleration(float acceleration) {
 		this.angularAcceleration = acceleration;
 	}
 	
 	protected boolean isMoveTo = false;
-	protected int startX, startY, finalX, finalY;
+	protected float startX, startY, finalX, finalY;
 	protected int movementType;
 	protected long startTime, endTime;
 	
@@ -498,7 +498,7 @@ public class DynamicObject extends StaticObject {
 	 * @param y final Y coordinate
 	 * @param time the time 
 	 */
-	public void moveTo(int x, int y, int time) {
+	public void moveTo(float x, float y, float time) {
 		stop();
 		startX = this.x;
 		startY = this.y;

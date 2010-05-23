@@ -10,7 +10,7 @@ public class Time {
 	
 	protected static long ticks;
 	protected static int ticksSinceLastFrame;
-	protected static int ticksFraction;
+	protected static float ticksFraction;
 	protected static long lastTicks;
 	
 	protected static void update() {
@@ -19,8 +19,8 @@ public class Time {
 		if(lastTicks == 0) {
 			return;
 		}
-		ticksSinceLastFrame = FP.fromInt((int)(ticks - lastTicks));
-		ticksFraction = FP.div(ticksSinceLastFrame, FP.ONE_THOUSAND);
+		ticksSinceLastFrame = (int)(ticks - lastTicks);
+		ticksFraction = ticksSinceLastFrame / 1000f;
 	}
 	
 	public static long getTicks() {
@@ -31,7 +31,7 @@ public class Time {
 		return ticksSinceLastFrame;
 	}
 	
-	public static int getTicksFraction() {
+	public static float getTicksFraction() {
 		return ticksFraction;
 	}
 	

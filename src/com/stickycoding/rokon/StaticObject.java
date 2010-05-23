@@ -11,7 +11,7 @@ package com.stickycoding.rokon;
 public class StaticObject {
 	
 	protected int id = -1, state = -1;
-	protected int x, y, width, height, rotation, rotationPivotX, rotationPivotY;
+	protected float x, y, width, height, rotation, rotationPivotX, rotationPivotY;
 	protected boolean rotateAboutPoint;
 	
 	public StaticObject(int x, int y, int width, int height) {
@@ -45,59 +45,59 @@ public class StaticObject {
 		return state;
 	}
 	
-	public int getX() {
+	public float getX() {
 		return x;
 	}
 	
-	public int getY() {
+	public float getY() {
 		return y;
 	}
 	
-	public int getWidth() {
+	public float getWidth() {
 		return width;
 	}
 	
-	public int getHeight() {
+	public float getHeight() {
 		return height;
 	}
 	
-	public int getRotation() {
+	public float getRotation() {
 		return rotation;
 	}
 	
-	public void setX(int x) {
+	public void setX(float x) {
 		this.x = x;
 		onChange();
 	}
 	
-	public void setY(int y) {
+	public void setY(float y) {
 		this.y = y;
 		onChange();
 	}
 	
-	public void setXY(int x, int y) {
+	public void setXY(float x, float y) {
 		this.x = x;
 		this.y = y;
 		onChange();
 	}
 	
-	public void moveX(int x) {
+	public void moveX(float x) {
 		this.x += x;
 		onChange();
 	}
 	
-	public void moveY(int y) {
+	public void moveY(float y) {
 		this.y += y;
 		onChange();
 	}
 	
-	public void move(int x, int y) {
+	public void move(float x, float y) {
 		this.x += x;
 		this.y += y;
 		onChange();
 	}
 	
-	public void setWidth(int width) {
+	public void setWidth(float width) {
 		this.width = width;
 		if(this.width < 0 || this.height < 0) {
 			Debug.warning("StaticObject.setWidth", "Dimensions < 0");
@@ -107,7 +107,7 @@ public class StaticObject {
 		onChange();
 	}
 	
-	public void setHeight(int height) {
+	public void setHeight(float height) {
 		this.height = height;
 		if(this.width < 0 || this.height < 0) {
 			Debug.warning("StaticObject.setHeight", "Dimensions < 0");
@@ -117,7 +117,7 @@ public class StaticObject {
 		onChange();
 	}
 	
-	public void setSize(int width, int height) {
+	public void setSize(float width, float height) {
 		this.width = width;
 		this.height = height;
 		if(this.width < 0 || this.height < 0) {
@@ -128,7 +128,7 @@ public class StaticObject {
 		onChange();
 	}
 	
-	public void growWidth(int width) {
+	public void growWidth(float width) {
 		this.width += width;
 		if(this.width < 0 || this.height < 0) {
 			Debug.warning("StaticObject.growWidth", "Dimensions < 0");
@@ -138,7 +138,7 @@ public class StaticObject {
 		onChange();
 	}
 	
-	public void growHeight(int height) {
+	public void growHeight(float height) {
 		this.height += height;
 		if(this.width < 0 || this.height < 0) {
 			Debug.warning("StaticObject.growHeight", "Dimensions < 0");
@@ -148,7 +148,7 @@ public class StaticObject {
 		onChange();
 	}
 	
-	public void shrinkWidth(int width) {
+	public void shrinkWidth(float width) {
 		this.width -= width;
 		if(this.width < 0 || this.height < 0) {
 			Debug.warning("StaticObject.shrinkWidth", "Dimensions < 0");
@@ -158,7 +158,7 @@ public class StaticObject {
 		onChange();
 	}
 	
-	public void shrinkHeight(int height) {
+	public void shrinkHeight(float height) {
 		this.height -= height;
 		if(this.width < 0 || this.height < 0) {
 			Debug.warning("StaticObject.shrinkHeight", "Dimensions < 0");
@@ -168,7 +168,7 @@ public class StaticObject {
 		onChange();
 	}
 	
-	public void shrink(int width, int height) {
+	public void shrink(float width, float height) {
 		this.width -= width;
 		this.height -= height;
 		if(this.width < 0 || this.height < 0) {
@@ -179,7 +179,7 @@ public class StaticObject {
 		onChange();
 	}
 	
-	public void grow(int width, int height) {
+	public void grow(float width, float height) {
 		this.width += width;
 		this.height += height;
 		if(this.width < 0 || this.height < 0) {
@@ -190,11 +190,11 @@ public class StaticObject {
 		onChange();
 	}
 	
-	public void setRotation(int rotation) {
+	public void setRotation(float rotation) {
 		this.rotation = rotation;
 	}
 	
-	public void setRotation(int rotation, int rotationPivotX, int rotationPivotY) {
+	public void setRotation(float rotation, float rotationPivotX, float rotationPivotY) {
 		this.rotation = rotation;
 		this.rotationPivotX = rotationPivotX;
 		this.rotationPivotY = rotationPivotY;
@@ -205,11 +205,11 @@ public class StaticObject {
 		return false;
 	}
 	
-	public int getRotationPivotX() {
+	public float getRotationPivotX() {
 		return rotationPivotX;
 	}
 	
-	public int getRotationPivotY() {
+	public float getRotationPivotY() {
 		return rotationPivotY;
 	}
 	
@@ -217,12 +217,12 @@ public class StaticObject {
 		rotateAboutPoint = false;
 	}
 	
-	public void rotateAboutPoint(int rotationPivotX, int rotationPivotY) {
+	public void rotateAboutPoint(float rotationPivotX, float rotationPivotY) {
 		this.rotationPivotX = rotationPivotX;
 		this.rotationPivotY = rotationPivotY;
 	}
 	
-	public void rotate(int rotation) {
+	public void rotate(float rotation) {
 		this.rotation += rotation;
 	}
 	
@@ -230,9 +230,9 @@ public class StaticObject {
 	 * @param distance the modulus of the distance to move
 	 * @param angle the angle, in radians, relative to north 
 	 */
-	public void moveVector(int distance, int angle) {
-		this.x += FP.mul(distance, FP.sin(angle));
-		this.y += FP.mul(distance, FP.cos(angle));
+	public void moveVector(float distance, float angle) {
+		this.x += distance * (float)Math.sin(angle);
+		this.y += distance * (float)Math.cos(angle);
 		onChange();
 	}
 

@@ -18,14 +18,14 @@ public class Movement {
 	 * @param endTime ticks at the end
 	 * @return the velocity, as a factor of maximum
 	 */
-	public static int getVelocity(int type, int distance, long startTime, long now, long endTime) {
+	public static float getVelocity(int type, float distance, long startTime, long now, long endTime) {
 		if(now > endTime || now < startTime) {
 			return 0;
 		}
-		return getVelocity(type, distance, FP.fromInt((int)(endTime - startTime)), FP.div(FP.fromInt((int)(endTime - now)), FP.fromInt((int)(endTime - startTime))));
+		return getVelocity(type, distance, (int)(endTime - startTime), (int)(endTime - now) / (int)(endTime - startTime));
 	}
 	
-	public static int getVelocity(int type, int distance, int time, int position) {
+	public static float getVelocity(int type, float distance, int time, int position) {
 		switch(type) {
 			case LINEAR:
 				return getVelocityLinear(distance, time, position);
@@ -33,8 +33,8 @@ public class Movement {
 		return 1;
 	}
 	
-	public static int getVelocityLinear(int distance, int time, int position) {
-		return FP.div(distance, time);
+	public static float getVelocityLinear(float distance, int time, float position) {
+		return distance / time;
 	}
 
 }

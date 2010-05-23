@@ -20,7 +20,7 @@ public class RokonActivity extends Activity {
 	protected boolean forceLandscape, forcePortrait, forceFullscreen;
 	protected RokonSurfaceView surfaceView;
 	protected boolean engineLoaded = false;
-	protected int gameWidth, gameHeight;
+	protected float gameWidth, gameHeight;
 	
 	public void onCreate() {};
 	public void onLoadComplete() { };
@@ -41,7 +41,7 @@ public class RokonActivity extends Activity {
 	private void createStatics() {
 		Rokon.blendFunction = new BlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		Rokon.defaultVertexBuffer = new BufferObject();
-		Rokon.defaultVertexBuffer.update(0, 0, FP.ONE, FP.ONE);
+		Rokon.defaultVertexBuffer.update(0, 0, 1, 1);
 	}
 	
 	@Override
@@ -67,7 +67,7 @@ public class RokonActivity extends Activity {
 	 * 
 	 * @param width
 	 */
-	public void setGameWidth(int width) {
+	public void setGameWidth(float width) {
 		this.gameWidth = width;
 		if(engineLoaded) {
 			
@@ -80,7 +80,7 @@ public class RokonActivity extends Activity {
 	 * 
 	 * @param height
 	 */
-	public void setGameHeight(int height) {
+	public void setGameHeight(float height) {
 		this.gameHeight = height;
 	}
 	
@@ -91,7 +91,7 @@ public class RokonActivity extends Activity {
 	 * @param width
 	 * @param height
 	 */
-	public void setGameSize(int width, int height) {
+	public void setGameSize(float width, float height) {
 		this.gameWidth = width;
 		this.gameHeight = height;
 	}
