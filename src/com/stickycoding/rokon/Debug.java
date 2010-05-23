@@ -54,5 +54,16 @@ public class Debug {
 	public static void print(String message) {
 		Log.v(tag, message);
 	}
+	
+	/**
+	 * Prints to the error stream of LogCat with information from the engine
+	 * 
+	 * @param message The message to be passed on
+	 */
+	public static void error(String message) {
+		Log.e(tag, message);
+		Exception e = new Exception(message);
+		e.printStackTrace();
+	}
 
 }

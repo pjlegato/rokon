@@ -71,7 +71,9 @@ public class Layer {
 	
 	protected void onDraw(GL10 gl) {
 		for(int i = 0; i < drawableObjects.getCapacity(); i++) {
-			drawableObjects.get(i).onDraw(gl);
+			if(drawableObjects.get(i) != null) {
+				drawableObjects.get(i).onDraw(gl);
+			}
 		}
 	}
 	

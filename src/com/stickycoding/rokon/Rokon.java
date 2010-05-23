@@ -9,6 +9,16 @@ package com.stickycoding.rokon;
 public class Rokon {
 	
 	protected static BlendFunction blendFunction;
+	protected static BufferObject defaultVertexBuffer;
+	
+	/**
+	 * Returns the default (1x1 square) Buffer object for normal/VBO drawing
+	 * 
+	 * @return Buffer
+	 */
+	public static BufferObject defaultVertexBuffer() {
+		return defaultVertexBuffer;
+	}
 	
 	/**
 	 * Sets the default BlendFunction to be used when rendering

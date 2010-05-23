@@ -11,11 +11,13 @@ import android.view.MotionEvent;
  */
 public class RokonSurfaceView extends GLSurfaceView {
         
-	RokonRenderer renderer;
+	private RokonRenderer renderer;
+	private RokonActivity rokonActivity;
 	
-	public RokonSurfaceView(Context context) {
-	    super(context);
-	    renderer  = new RokonRenderer();
+	public RokonSurfaceView(RokonActivity rokonActivity) {
+	    super(rokonActivity);
+	    this.rokonActivity = rokonActivity;
+	    renderer = new RokonRenderer(rokonActivity);
 	    setRenderer(renderer);
 	}
 

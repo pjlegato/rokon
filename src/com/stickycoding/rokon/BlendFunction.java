@@ -4,9 +4,10 @@ package com.stickycoding.rokon;
  * BlendFunction.java
  * Holds parameters for OpenGL blend function
  * See glBlendFunc parameters for details on each different setting
+ * 
  * @author Richard
- *
  */
+
 public class BlendFunction {
 
     private int _blendFunctionSrc, _blendFunctionDst;

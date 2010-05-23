@@ -1,7 +1,5 @@
 package com.stickycoding.rokon;
 
-import java.nio.Buffer;
-
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 import javax.microedition.khronos.opengles.GL11Ext;
@@ -19,8 +17,8 @@ public class GLHelper {
 	private static float glColor4fRed = -1, glColor4fGreen = -1, glColor4fBlue = -1, glColor4fAlpha = -1;
 	private static float glColorRed = -1, glColorGreen = -1, glColorBlue = -1, glColorAlpha = -1;
     private static float drawTexCrop0 = -1, drawTexCrop1 = -1, drawTexCrop2 = -1, drawTexCrop3 = -1;
-    private static Buffer lastVertexPointerBuffer;
-    private static Buffer lastTexCoordPointerBuffer;
+    private static BufferObject lastVertexPointerBuffer;
+    private static BufferObject lastTexCoordPointerBuffer;
 	
 	protected static void setGL(GL10 gl) {
 		GLHelper.gl = gl;
@@ -125,9 +123,9 @@ public class GLHelper {
         }
     }
 
-    public static void texCoordPointer(Buffer buffer, int type) {
+    public static void texCoordPointer(BufferObject buffer, int type) {
         if(lastTexCoordPointerBuffer != buffer) {
-        	gl.glTexCoordPointer(2, type , 0, buffer);
+        	gl.glTexCoordPointer(2, type , 0, buffer.get());
             lastTexCoordPointerBuffer = buffer;
         }
     }
@@ -137,9 +135,9 @@ public class GLHelper {
     	((GL11)gl).glVertexPointer(2, type, 0, 0);
     }
 
-    public static void vertexPointer(Buffer buffer, int type) {
+    public static void vertexPointer(BufferObject buffer, int type) {
         if(lastVertexPointerBuffer != buffer) {
-        	gl.glVertexPointer(2, type, 0, buffer);
+        	gl.glVertexPointer(2, type, 0, buffer.get());
             lastVertexPointerBuffer = buffer;
         }
     }

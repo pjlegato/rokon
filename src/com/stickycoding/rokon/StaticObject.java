@@ -11,9 +11,10 @@ package com.stickycoding.rokon;
 public class StaticObject {
 	
 	protected int id = -1, state = -1;
-	protected int x, y, width, height, rotation;
+	protected int x, y, width, height, rotation, rotationPivotX, rotationPivotY;
+	protected boolean rotateAboutPoint;
 	
-	public StaticObject(int x, int y, int width, int height, int rotation) {
+	public StaticObject(int x, int y, int width, int height) {
 		if(width < 0 || height < 0) {
 			Debug.warning("StaticObject()", "Tried creating StaticObject with dimensions < 0");
 			return;
@@ -22,7 +23,10 @@ public class StaticObject {
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		this.rotation = rotation;
+	}
+	
+	protected void onChange() {
+
 	}
 	
 	public void setId(int id) {
@@ -39,10 +43,6 @@ public class StaticObject {
 	
 	public int getState() {
 		return state;
-	}
-	
-	public StaticObject(int x, int y, int width, int height) {
-		this(x, y, width, height, 0);
 	}
 	
 	public int getX() {
@@ -67,28 +67,34 @@ public class StaticObject {
 	
 	public void setX(int x) {
 		this.x = x;
+		onChange();
 	}
 	
 	public void setY(int y) {
 		this.y = y;
+		onChange();
 	}
 	
 	public void setXY(int x, int y) {
 		this.x = x;
 		this.y = y;
+		onChange();
 	}
 	
 	public void moveX(int x) {
 		this.x += x;
+		onChange();
 	}
 	
 	public void moveY(int y) {
 		this.y += y;
+		onChange();
 	}
 	
 	public void move(int x, int y) {
 		this.x += x;
 		this.y += y;
+		onChange();
 	}
 	
 	public void setWidth(int width) {
@@ -98,6 +104,7 @@ public class StaticObject {
 			if(this.width < 0) this.width = 0;
 			if(this.height < 0) this.height = 0;
 		}
+		onChange();
 	}
 	
 	public void setHeight(int height) {
@@ -107,6 +114,7 @@ public class StaticObject {
 			if(this.width < 0) this.width = 0;
 			if(this.height < 0) this.height = 0;
 		}
+		onChange();
 	}
 	
 	public void setSize(int width, int height) {
@@ -117,6 +125,7 @@ public class StaticObject {
 			if(this.width < 0) this.width = 0;
 			if(this.height < 0) this.height = 0;
 		}
+		onChange();
 	}
 	
 	public void growWidth(int width) {
@@ -126,6 +135,7 @@ public class StaticObject {
 			if(this.width < 0) this.width = 0;
 			if(this.height < 0) this.height = 0;
 		}
+		onChange();
 	}
 	
 	public void growHeight(int height) {
@@ -135,6 +145,7 @@ public class StaticObject {
 			if(this.width < 0) this.width = 0;
 			if(this.height < 0) this.height = 0;
 		}
+		onChange();
 	}
 	
 	public void shrinkWidth(int width) {
@@ -144,6 +155,7 @@ public class StaticObject {
 			if(this.width < 0) this.width = 0;
 			if(this.height < 0) this.height = 0;
 		}
+		onChange();
 	}
 	
 	public void shrinkHeight(int height) {
@@ -153,6 +165,7 @@ public class StaticObject {
 			if(this.width < 0) this.width = 0;
 			if(this.height < 0) this.height = 0;
 		}
+		onChange();
 	}
 	
 	public void shrink(int width, int height) {
@@ -163,6 +176,7 @@ public class StaticObject {
 			if(this.width < 0) this.width = 0;
 			if(this.height < 0) this.height = 0;
 		}
+		onChange();
 	}
 	
 	public void grow(int width, int height) {
@@ -173,10 +187,39 @@ public class StaticObject {
 			if(this.width < 0) this.width = 0;
 			if(this.height < 0) this.height = 0;
 		}
+		onChange();
 	}
 	
 	public void setRotation(int rotation) {
 		this.rotation = rotation;
+	}
+	
+	public void setRotation(int rotation, int rotationPivotX, int rotationPivotY) {
+		this.rotation = rotation;
+		this.rotationPivotX = rotationPivotX;
+		this.rotationPivotY = rotationPivotY;
+		rotateAboutPoint = true;
+	}
+	
+	public boolean isRotateAboutPoint() {
+		return false;
+	}
+	
+	public int getRotationPivotX() {
+		return rotationPivotX;
+	}
+	
+	public int getRotationPivotY() {
+		return rotationPivotY;
+	}
+	
+	public void rotateAboutCentre() {
+		rotateAboutPoint = false;
+	}
+	
+	public void rotateAboutPoint(int rotationPivotX, int rotationPivotY) {
+		this.rotationPivotX = rotationPivotX;
+		this.rotationPivotY = rotationPivotY;
 	}
 	
 	public void rotate(int rotation) {
@@ -190,6 +233,7 @@ public class StaticObject {
 	public void moveVector(int distance, int angle) {
 		this.x += FP.mul(distance, FP.sin(angle));
 		this.y += FP.mul(distance, FP.cos(angle));
+		onChange();
 	}
 
 }

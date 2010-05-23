@@ -1,5 +1,7 @@
 package com.stickycoding.rokon;
 
+import javax.microedition.khronos.opengles.GL10;
+
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -17,14 +19,29 @@ public class RokonActivity extends Activity {
 	protected Scene currentScene = null;
 	protected boolean forceLandscape, forcePortrait, forceFullscreen;
 	protected RokonSurfaceView surfaceView;
+	protected boolean engineLoaded = false;
+	protected int gameWidth, gameHeight;
 	
 	public void onCreate() {};
+	public void onLoadComplete() { };
 	
 	@Override
 	public void onCreate(Bundle savedState) {
 		super.onCreate(savedState);
 		Debug.print("Engine Activity created");
+		createStatics();
 		onCreate();
+		if(!engineCreated) {
+			Debug.error("The engine was not created");
+			finish();
+			return;
+		}
+	}
+	
+	private void createStatics() {
+		Rokon.blendFunction = new BlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+		Rokon.defaultVertexBuffer = new BufferObject();
+		Rokon.defaultVertexBuffer.update(0, 0, FP.ONE, FP.ONE);
 	}
 	
 	@Override
@@ -42,6 +59,41 @@ public class RokonActivity extends Activity {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) { 
 		return false;
+	}
+	
+	/**
+	 * Sets the game width of the OpenGL surface
+	 * This must be called before createEngine
+	 * 
+	 * @param width
+	 */
+	public void setGameWidth(int width) {
+		this.gameWidth = width;
+		if(engineLoaded) {
+			
+		}
+	}
+	
+	/**
+	 * Sets the game height of the OpenGL surface
+	 * This must be called before createEngine
+	 * 
+	 * @param height
+	 */
+	public void setGameHeight(int height) {
+		this.gameHeight = height;
+	}
+	
+	/**
+	 * Sets the game width and height of the OpenGL surface
+	 * This must be called before createEngine
+	 * 
+	 * @param width
+	 * @param height
+	 */
+	public void setGameSize(int width, int height) {
+		this.gameWidth = width;
+		this.gameHeight = height;
 	}
 	
 	/**
@@ -69,6 +121,7 @@ public class RokonActivity extends Activity {
 	
 	/**
 	 * Forces the engine to stick to a portrait screen, must be set before createEngine() 
+	 * This should be backed up by the correct android:screenSize parameter in AndroidManifest.xml
 	 */
 	public void forcePortrait() {
 		if(engineCreated) {
@@ -81,6 +134,7 @@ public class RokonActivity extends Activity {
 	
 	/**
 	 * Forces the engine to stick to a landscape screen, must be set before createEngine()
+	 * This should be backed up by the correct android:screenSize parameter in AndroidManifest.xml
 	 */
 	public void forceLandscape() {
 		if(engineCreated) {

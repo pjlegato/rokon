@@ -27,10 +27,6 @@ public class DynamicObject extends StaticObject {
 	protected int angularVelocity, angularAcceleration, terminalAngularVelocity;
 	protected boolean useTerminalAngularVelocity;
 	
-	public DynamicObject(int x, int y, int width, int height, int rotation) {
-		super(x, y, width, height, rotation);
-	}
-	
 	public DynamicObject(int x, int y, int width, int height) {
 		super(x, y, width, height);
 	}
@@ -151,6 +147,9 @@ public class DynamicObject extends StaticObject {
 					terminalAngularVelocityHandler.onTerminalAngularVelocity(this);
 				}
 			}
+		}
+		if(angularVelocity != 0) {
+			rotation += FP.mul(angularVelocity, Time.ticksFraction);
 		}
 	}
 	

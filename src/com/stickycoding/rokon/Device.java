@@ -6,6 +6,7 @@ import android.util.DisplayMetrics;
 /**
  * Device.java
  * Discovers and retrieves information about the devices hardware
+ * 
  * @author Richard 
  */
 public class Device {

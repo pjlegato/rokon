@@ -2,7 +2,6 @@ package com.stickycoding.rokon;
 
 import javax.microedition.khronos.opengles.GL10;
 
-
 /**
  * DrawableObject.java
  * An extension of DynamicObject, for objects which are to be drawn 
@@ -11,10 +10,6 @@ import javax.microedition.khronos.opengles.GL10;
  * @author Richard
  */
 
-/**
- * @author Richard
- *
- */
 public class DrawableObject extends DynamicObject {
 
 	protected BlendFunction blendFunction;
@@ -23,10 +18,24 @@ public class DrawableObject extends DynamicObject {
 	protected boolean isOnScene = false;
 	protected boolean killNextUpdate = false;
 	protected int red, green, blue, alpha;
+	protected boolean useAlternativeVertex = false;
+	protected boolean useCoordinatesInVertices = false;
+	protected BufferObject buffer;
+	protected Texture texture;
 	
 	public DrawableObject(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		onCreate();
+	}
+	
+	public DrawableObject(int x, int y, int width, int height, Texture texture) {
+		super(x, y, width, height);
+		onCreate();
+		setTexture(texture);
+	}
+	
+	public void setTexture(Texture texture) {
+		//TODO Handle new texture
 	}
 	
 	/**
@@ -55,6 +64,38 @@ public class DrawableObject extends DynamicObject {
 		alpha = FP.ONE;
 		isOnScene = false;
 		killNextUpdate = false;
+		useAlternativeVertex = false;
+	}
+	
+	/**
+	 * Use its own vertex buffer, rather than scaling the default quad
+	 * This will increase rendering speed, by sacrificing memory space
+	 * This shouldn't be used if dimensions of the DrawableObject are changed regularly
+	 * This doesn't make any changes in drawTex mode
+	 * The default mode should be fine in most situations, but you can try this to see
+	 * 
+	 * If this is a mostly static object, it may help to set useCoordinates TRUE
+	 * This will give Buffer control of the translational motion too, cutting glTranslate
+	 * This speeds up the rendering routine, but needs more processing time when changing
+	 * the objects position. Work out what works best for you.
+	 * 
+	 * @param useCoordinates TRUE  
+	 */
+	public void useAlternativeVertex(boolean useCoordinates) {
+		useAlternativeVertex = true;
+		this.useCoordinatesInVertices = true;
+		//TODO Sort buffers
+	}
+	
+	/**
+	 * Uses the default buffer, scaling to the required size
+	 * This means an extra call to hardware, but saves on memory space
+	 * This is best for DrawableObjects that change dimensions often
+	 * This doesn't make any changes in drawTex mode
+	 */
+	public void useDefaultVertex() {
+		useAlternativeVertex = false;
+		//TODO Remove buffer types
 	}
 	
 	public void forceDrawType(int drawType) {
@@ -62,8 +103,19 @@ public class DrawableObject extends DynamicObject {
 		onDrawType();
 	}
 	
+	protected void onChange() {
+		//TODO Handle change of position and size
+		if(useAlternativeVertex) {
+			if(useCoordinatesInVertices) {
+				//TODO Update, including X & Y
+			} else {
+				//TODO Update dimensions only
+			}
+		}
+	}
+	
 	protected void onDrawType() {
-		//TODO 
+		//TODO Handle change of draw type
 	}
 	
 	protected void onAdd() {
@@ -182,6 +234,7 @@ public class DrawableObject extends DynamicObject {
 	}
 	
 	protected void onDraw(GL10 gl) {
+		onUpdate();
 		switch(forceDrawType) {
 			case DrawPriority.DEFAULT:
 				switch(DrawPriority.drawPriority) {
@@ -244,14 +297,54 @@ public class DrawableObject extends DynamicObject {
 	}
 	
 	protected void onDrawNormal(GL10 gl) {
+		
 		GLHelper.color(red, green, blue, alpha);
 		if(blendFunction != null) {
 			GLHelper.blendMode(blendFunction);
 		} else {
 			GLHelper.blendMode(Rokon.blendFunction);
 		}
+		
 		gl.glPushMatrix();
 		GLHelper.enableVertexArray();
+		
+		if(useAlternativeVertex) {
+			GLHelper.vertexPointer(buffer, GL10.GL_FIXED);
+			if(!useCoordinatesInVertices) {
+				gl.glTranslatex(x, y, 0);
+			}
+		} else {
+			GLHelper.vertexPointer(Rokon.defaultVertexBuffer, GL10.GL_FIXED);
+			gl.glTranslatex(x, y, 0);
+		}
+		
+		if(rotation != 0) {
+			if(!rotateAboutPoint) {
+				gl.glTranslatex(FP.div(width, FP.TWO), FP.div(height, FP.TWO), 0);
+				gl.glRotatex(rotation, 0, 0, FP.ONE);
+				gl.glTranslatex(-FP.div(width, FP.TWO), -FP.div(height, FP.TWO), 0);
+			} else {
+				gl.glTranslatex(rotationPivotX, rotationPivotY, 0);
+				gl.glRotatex(rotation, 0, 0, FP.ONE);
+				gl.glTranslatex(-rotationPivotX, -rotationPivotY, 0);
+			}
+		}
+		
+		gl.glScalex(width, height, 0);
+		
+		if(texture != null) {
+			GLHelper.enableTextures();
+			GLHelper.enableTexCoordArray();
+			GLHelper.bindTexture(texture.textureIndex);
+			//TODO Bind the right texture, and get the right pointer
+			GLHelper.texCoordPointer(texture.buffer, GL10.GL_FIXED);
+		} else {
+			GLHelper.disableTexCoordArray();
+			GLHelper.disableTextures();
+		}
+		
+		gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
+		gl.glPopMatrix();
 
 	}
 	

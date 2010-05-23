@@ -4,38 +4,52 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLSurfaceView;
+import android.opengl.GLU;
 import android.os.Build;
 
 /**
  * RokonRenderer.java
- * The Renderer class for OpenGL
+ * The GLSurfaceView.Renderer class for OpenGL
+ * 
  * @author Richard
  */
 
-/**
- * @author Richard
- *
- */
 public class RokonRenderer implements GLSurfaceView.Renderer {
 	
+	private RokonActivity rokonActivity;
+	
+	public RokonRenderer(RokonActivity rokonActivity) {
+		this.rokonActivity = rokonActivity;
+	}
+	
 	public void onDrawFrame(GL10 gl) {
-		
+		Time.update();
+		if(!rokonActivity.engineLoaded) {
+			rokonActivity.engineLoaded = true;
+			System.gc();
+			rokonActivity.onLoadComplete();
+			return;
+		}
+		FPSCounter.onFrame();
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		if(rokonActivity.currentScene != null) {
+			rokonActivity.currentScene.onDraw(gl);			
+		}
 	}
 
 	public void onSurfaceChanged(GL10 gl, int w, int h) {
 		Debug.print("Surface Size Changed: " + w + " " + h);
 		gl.glViewport(0, 0, w, h);
-		
-		float ratio = (float)w/h;
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
-		gl.glFrustumf(-ratio, ratio, -1, 1, 1, 10);
+		Debug.print("gluOrtho2D : " + FP.toFloat(rokonActivity.gameWidth) + "x" + FP.toFloat(rokonActivity.gameHeight));
+        GLU.gluOrtho2D(gl, 0, FP.toFloat(rokonActivity.gameWidth), FP.toFloat(rokonActivity.gameHeight), 0);
 	}
 
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
 		
-		gl.glClearColor(0, 0, 0, 1);
+		gl.glClearColor(0, 0, 1, 1);
 		gl.glShadeModel(GL10.GL_FLAT);
 		gl.glDisable(GL10.GL_DEPTH_TEST);
 		gl.glEnable(GL10.GL_TEXTURE_2D);
@@ -60,6 +74,9 @@ public class RokonRenderer implements GLSurfaceView.Renderer {
         hackBrokenDevices();
 
         Debug.print("Graphics Support - " + version + ": " +(Device.supportsDrawTex ?  "draw texture," : "") + (Device.supportsVBO ? "vbos" : ""));
+        
+
+        GLU.gluOrtho2D(gl, 0, FP.toFloat(rokonActivity.gameWidth), FP.toFloat(rokonActivity.gameHeight), 0);
 	}
 
 	 /**
