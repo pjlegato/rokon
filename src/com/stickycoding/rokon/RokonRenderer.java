@@ -53,7 +53,7 @@ public class RokonRenderer implements GLSurfaceView.Renderer {
 		gl.glShadeModel(GL10.GL_FLAT);
 		gl.glDisable(GL10.GL_DEPTH_TEST);
 		gl.glEnable(GL10.GL_TEXTURE_2D);
-		
+		gl.glEnable(GL10.GL_BLEND);
 		gl.glDisable(GL10.GL_DITHER);
 		gl.glDisable(GL10.GL_LIGHTING);
 

@@ -20,12 +20,13 @@ public class Launcher extends RokonActivity {
 	
 	public void onLoadComplete() {
 		Debug.print("Loading is complete");
-		Scene scene = new Scene();
+		Scene scene = new Scene(1, 128);
 		
-		for(int i = 1; i < 20; i++) {
-			sprite = new Sprite(100 + (i * 5), 100 + (i * 5), 100, 100);
+		for(float i = 1; i < 128; i++) {
+			sprite = new Sprite(50 + (i * 4), 50 + (i * 9), 100, 100);
+			sprite.setSize(100 - (20 - i), 100 - (20 - i));
 			sprite.setAngularAcceleration(i);
-			sprite.setAlpha(1 / i);
+			sprite.setAlpha(3f / (2f*i));
 			scene.add(sprite);
 		}
 		

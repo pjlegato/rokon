@@ -27,7 +27,7 @@ public class DynamicObject extends StaticObject {
 	protected float angularVelocity, angularAcceleration, terminalAngularVelocity;
 	protected boolean useTerminalAngularVelocity;
 	
-	public DynamicObject(int x, int y, int width, int height) {
+	public DynamicObject(float x, float y, float width, float height) {
 		super(x, y, width, height);
 	}
 	

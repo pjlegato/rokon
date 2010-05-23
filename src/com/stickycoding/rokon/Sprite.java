@@ -9,7 +9,7 @@ package com.stickycoding.rokon;
  */
 public class Sprite extends DrawableObject {
 
-	public Sprite(int x, int y, int width, int height) {
+	public Sprite(float x, float y, float width, float height) {
 		super(x, y, width, height);
 		// TODO Auto-generated constructor stub
 	}

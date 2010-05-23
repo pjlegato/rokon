@@ -6,6 +6,7 @@ package com.stickycoding.rokon;
  * 
  * @author Richard
  */
+
 public class Rokon {
 	
 	protected static BlendFunction blendFunction;

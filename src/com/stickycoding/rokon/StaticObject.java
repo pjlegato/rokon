@@ -14,7 +14,7 @@ public class StaticObject {
 	protected float x, y, width, height, rotation, rotationPivotX, rotationPivotY;
 	protected boolean rotateAboutPoint;
 	
-	public StaticObject(int x, int y, int width, int height) {
+	public StaticObject(float x, float y, float width, float height) {
 		if(width < 0 || height < 0) {
 			Debug.warning("StaticObject()", "Tried creating StaticObject with dimensions < 0");
 			return;

@@ -23,12 +23,12 @@ public class DrawableObject extends DynamicObject {
 	protected BufferObject buffer;
 	protected Texture texture;
 	
-	public DrawableObject(int x, int y, int width, int height) {
+	public DrawableObject(float x, float y, float width, float height) {
 		super(x, y, width, height);
 		onCreate();
 	}
 	
-	public DrawableObject(int x, int y, int width, int height, Texture texture) {
+	public DrawableObject(float x, float y, float width, float height, Texture texture) {
 		super(x, y, width, height);
 		onCreate();
 		setTexture(texture);
@@ -299,6 +299,7 @@ public class DrawableObject extends DynamicObject {
 	protected void onDrawNormal(GL10 gl) {
 		
 		GLHelper.color4f(red, green, blue, alpha);
+		
 		if(blendFunction != null) {
 			GLHelper.blendMode(blendFunction);
 		} else {
