@@ -1,6 +1,5 @@
 package com.stickycoding.rokon;
 
-import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
 
@@ -10,9 +9,9 @@ import android.view.MotionEvent;
  * @author Richard
  */
 public class RokonSurfaceView extends GLSurfaceView {
-        
-	private RokonRenderer renderer;
+
 	private RokonActivity rokonActivity;
+	private RokonRenderer renderer;
 	
 	public RokonSurfaceView(RokonActivity rokonActivity) {
 	    super(rokonActivity);
@@ -21,8 +20,9 @@ public class RokonSurfaceView extends GLSurfaceView {
 	    setRenderer(renderer);
 	}
 
-    public boolean onTouchEvent(final MotionEvent event) {
-
+	@Override
+    public boolean onTouchEvent(MotionEvent event) {
+    	rokonActivity.onTouchEvent(event);
         try {
         	Thread.sleep(16);
         } catch (Exception e) { }

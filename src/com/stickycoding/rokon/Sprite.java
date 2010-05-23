@@ -11,7 +11,12 @@ public class Sprite extends DrawableObject {
 
 	public Sprite(float x, float y, float width, float height) {
 		super(x, y, width, height);
-		// TODO Auto-generated constructor stub
+	}
+	
+	@Override
+	protected void onUpdate() {
+		super.onUpdate();
+		
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.stickycoding.rokon;
 
+import com.stickycoding.rokon.Handler.ObjectHandler;
 import com.stickycoding.rokon.Handler.TerminalAngularVelocityHandler;
 import com.stickycoding.rokon.Handler.TerminalSpeedHandler;
 import com.stickycoding.rokon.Handler.TerminalVelocityHandler;
@@ -98,6 +99,12 @@ public class DynamicObject extends StaticObject {
 	}
 	
 	protected void onUpdate() {
+		if(isMoveTo) {
+			onUpdateMoveTo();
+		}
+		if(isRotateTo) {
+			onUpdateRotateTo();
+		}
 		if(accelerationX != 0) {
 			speedX += accelerationX * Time.ticksFraction;
 			if(useTerminalSpeedX && ((accelerationX > 0 && speedX > terminalSpeedX) || (accelerationX < 0 && speedY < terminalSpeedX))) {
@@ -484,28 +491,200 @@ public class DynamicObject extends StaticObject {
 		this.angularAcceleration = acceleration;
 	}
 	
+	protected boolean isRotateTo = false;
+	protected float rotateToAngleStart, rotateToAngle;
+	protected long rotateToStartTime;
+	protected int rotateToTime, rotateToType, rotateToDirection;
+	protected ObjectHandler rotateToHandler;
+	
+	public static final int ROTATE_TO_AUTOMATIC = 0, ROTATE_TO_CLOCKWISE = 1, ROTATE_TO_ANTI_CLOCKWISE = 2;
+	
+	/**
+	 * Rotates to a given angle over a period of time
+	 * 
+	 * @param angle the final angle, in radians
+	 * @param direction automatic, clockwise or anticlockwise - defined by ROTATE_TO_ constants
+	 * @param time in milliseconds
+	 * @param type movement type, through Movement constants
+	 * @param handler ObjectHandler for completion and cancellation callbacks
+	 */
+	public void rotateTo(float angle, int direction, int time, int type, ObjectHandler handler) {
+		if(isRotateTo && this.rotateToHandler != null) {
+			this.rotateToHandler.onCancel(this);
+			this.rotateToHandler.onCancel();
+		}
+
+		angularVelocity = 0;
+		angularAcceleration = 0;
+		terminalAngularVelocity = 0;
+		
+		rotateToAngleStart = this.rotation;
+		rotateToAngle = angle;
+		rotateToDirection = direction;
+		isRotateTo = true;
+		rotateToType = type;
+		rotateToStartTime = Time.ticks;
+		rotateToTime = time;
+		rotateToHandler = handler;
+		
+		rotation = rotation % Movement.TWO_PI;
+
+		
+		//TODO Fix this rubbish, there has to be a better way
+		if(rotateToDirection == ROTATE_TO_AUTOMATIC) {
+			if(rotation > 180f) {
+				if(angle > 180f) {
+					if(angle > rotation) {
+						rotateToDirection = ROTATE_TO_ANTI_CLOCKWISE;
+					} else {
+						rotateToDirection = ROTATE_TO_CLOCKWISE;
+					}
+				} else {
+					if(angle > rotation - 180) {
+						rotateToDirection = ROTATE_TO_ANTI_CLOCKWISE;
+					} else {
+						rotateToDirection = ROTATE_TO_CLOCKWISE;
+					}
+				}
+			} else {
+				if(angle > 180f) {
+					if(angle > rotation + 180) {
+						rotateToDirection = ROTATE_TO_ANTI_CLOCKWISE;
+						rotateToAngleStart += 360;
+					} else {
+						rotateToDirection = ROTATE_TO_CLOCKWISE;
+					}
+				} else {
+					if(angle > rotation) {
+						rotateToDirection = ROTATE_TO_CLOCKWISE;
+					} else {
+						rotateToDirection = ROTATE_TO_ANTI_CLOCKWISE;
+					}
+				}
+			}
+		}
+		Debug.print("Rotating from " + rotation + " to " + angle + " by "+ rotateToDirection);
+	}
+	
+	protected void onUpdateRotateTo() {
+		float position = (float)(Time.ticks - rotateToStartTime) / (float)rotateToTime;
+		float movementFactor = Movement.getPosition(position, rotateToType);
+		if(position >= 1) {
+			rotation = rotateToAngle;
+			isRotateTo = false;
+			if(rotateToHandler != null) {
+				rotateToHandler.onComplete(this);
+				rotateToHandler.onComplete();
+				rotateToHandler = null;
+			}
+			isRotateTo = false;
+			angularVelocity = 0;
+			angularAcceleration = 0;
+			terminalAngularVelocity = 0;
+			return;
+		}
+		
+		if(rotateToDirection == ROTATE_TO_CLOCKWISE) {
+			rotation = rotateToAngleStart + (rotateToAngle - rotateToAngleStart) * movementFactor;
+		} else {
+			rotation = rotateToAngleStart - (rotateToAngleStart - rotateToAngle) * movementFactor;
+		}
+	}
+	
 	protected boolean isMoveTo = false;
-	protected float startX, startY, finalX, finalY;
-	protected int movementType;
-	protected long startTime, endTime;
+	protected float moveToStartX, moveToStartY, moveToFinalX, moveToFinalY;
+	protected int moveToType;
+	protected long moveToStartTime, moveToTime;
+	protected ObjectHandler moveToHandler;
 	
 	/**
 	 * Linearly moves the DynamicObject to a given spot, in a given time using
 	 * All previous motion is cancelled. It may be possible to apply your own velocity
 	 * and acceleration changes while moveTo is running, though it should be avoided
+	 * A MoveToHandler will be called when complete.
+	 * If the object is already moving, the previous movements onCancel will be triggered if attached to a handler
+	 * 
+	 * @param x final X coordinate
+	 * @param y final Y coordinate
+	 * @param time the time 
+	 * @param type the movement type, from Movement constants
+	 * @param handler a valid MoveToHandler
+	 */
+	public void moveTo(float x, float y, long time, int type, ObjectHandler handler) {
+		if(isMoveTo && this.moveToHandler != null) {
+			this.moveToHandler.onCancel(this);
+			this.moveToHandler.onCancel();
+		}
+
+		isMoveTo = false;
+		accelerationX = 0;
+		accelerationY = 0;
+		acceleration = 0;
+		speedX = 0;
+		speedY = 0;
+		velocity = 0;
+		velocityXFactor = 0;
+		velocityYFactor = 0;
+		velocityAngle = 0;
+		terminalSpeedX = 0;
+		terminalSpeedY = 0;
+		terminalVelocity = 0;		
+		
+		moveToStartX = this.x;
+		moveToStartY = this.y;
+		moveToFinalX = x;
+		moveToFinalY = y;
+		isMoveTo = true;
+		moveToType = type;
+		moveToStartTime = Time.ticks;
+		this.moveToTime = time;
+		this.moveToHandler = handler;
+	}
+
+	/**
+	 * Linearly moves the DynamicObject to a given spot, in a given time using
+	 * All previous motion is cancelled. It may be possible to apply your own velocity
+	 * and acceleration changes while moveTo is running, though it should be avoided.
+	 * If the object is already moving, the previous movements onCancel will be triggered if attached to a handler
 	 * 
 	 * @param x final X coordinate
 	 * @param y final Y coordinate
 	 * @param time the time 
 	 */
-	public void moveTo(float x, float y, float time) {
-		stop();
-		startX = this.x;
-		startY = this.y;
-		finalX = x;
-		finalY = y;
-		isMoveTo = true;
-		//TODO Finish off the MoveTo routines and Movement
+	public void moveTo(float x, float y, long time) {
+		moveTo(x, y, time, Movement.LINEAR, null);
+	}
+	
+	protected void onUpdateMoveTo() {
+		float position = (float)(Time.ticks - moveToStartTime) / (float)moveToTime;
+		float movementFactor = Movement.getPosition(position, moveToType);
+		if(position >= 1) {
+			x = moveToFinalX;
+			y = moveToFinalY;
+			isMoveTo = false;
+			if(moveToHandler != null) {
+				moveToHandler.onComplete(this);
+				moveToHandler.onComplete();
+				moveToHandler = null;
+			}
+
+			isMoveTo = false;
+			accelerationX = 0;
+			accelerationY = 0;
+			acceleration = 0;
+			speedX = 0;
+			speedY = 0;
+			velocity = 0;
+			velocityXFactor = 0;
+			velocityYFactor = 0;
+			velocityAngle = 0;
+			terminalSpeedX = 0;
+			terminalSpeedY = 0;
+			terminalVelocity = 0;
+			return;
+		}
+		x = moveToStartX + ((moveToFinalX - moveToStartX) * movementFactor);
+		y = moveToStartY + ((moveToFinalY - moveToStartY) * movementFactor);
 	}
 
 }

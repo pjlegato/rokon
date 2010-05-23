@@ -1,11 +1,16 @@
 package com.stickycoding.rokonexamples;
 
+import android.view.MotionEvent;
+
 import com.stickycoding.rokon.Debug;
 import com.stickycoding.rokon.DrawPriority;
+import com.stickycoding.rokon.DynamicObject;
+import com.stickycoding.rokon.Movement;
 import com.stickycoding.rokon.RokonActivity;
 import com.stickycoding.rokon.Scene;
 import com.stickycoding.rokon.Sprite;
 import com.stickycoding.rokon.Texture;
+import com.stickycoding.rokon.Handler.ObjectHandler;
 
 public class Launcher extends RokonActivity {
 	
@@ -22,28 +27,34 @@ public class Launcher extends RokonActivity {
 	
 	public void onLoadComplete() {
 		Debug.print("Loading is complete");
-		Scene scene = new Scene(1, 128);
 
 		Texture texture = new Texture("face.png");
-		Texture sad = new Texture("sad.png");
 		
-		for(float i = 1; i < 32; i++) {
-			sprite = new Sprite(50 + (i * 4), 50 + (i * 15), 100, 100);
-			sprite.setSize(100 - (20 - i), 100 - (20 - i));
-			sprite.setAngularAcceleration(i);
-			sprite.setAlpha(3f / (2f*i));
-			if(i % 2 == 0)
-				sprite.setTexture(texture);
-			else
-				sprite.setTexture(sad);
-			scene.add(sprite);
-		}
+		myScene.useTexture(texture);
 		
-		scene.useTexture(texture);
-		scene.useTexture(sad);
+		sprite = new Sprite(50, 50, 100, 100);
+		sprite.setTexture(texture);
+		myScene.add(sprite);
 		
-		setScene(scene);
+		setScene(myScene);
 		
 	}
+	
+	public Scene myScene = new Scene(1, 128) {
+		@Override
+		public void onTouchDown(float x, float y, MotionEvent event) {
+			sprite.rotateTo(190, DynamicObject.ROTATE_TO_AUTOMATIC, 2000, Movement.SMOOTH, null);
+			
+			/*sprite.moveTo(200, 500, 2000, Movement.SMOOTH, new ObjectHandler() { 
+				public void onComplete(DynamicObject dynamicObject) {
+					Debug.print("Complete!");
+				}
+				
+				public void onCancel() {
+					Debug.print("CANCELLED!");
+				}
+			});*/
+		}
+	};
 	
 }

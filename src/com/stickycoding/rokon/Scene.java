@@ -2,6 +2,8 @@ package com.stickycoding.rokon;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.view.MotionEvent;
+
 /**
  * Scene.java
  * A Scene holds and prepares drawable objects or object groups
@@ -18,8 +20,12 @@ public class Scene {
 	protected boolean loadedTextures;
 	protected int layerCount;
 	protected Window window = null;
-	
 	protected Texture[] textures;
+	
+	public void onTouchDown(float x, float y, MotionEvent event) { }
+	public void onTouchMove(float x, float y, MotionEvent event) { }
+	public void onTouch(float x, float y, MotionEvent event) { }
+	public void onTouchUp(float x, float y, MotionEvent event) { }
 	
 	/**
 	 * Creates a new Scene with given layer count, and a corresponding maximum DrawableObject count 

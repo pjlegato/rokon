@@ -6,35 +6,59 @@ package com.stickycoding.rokon;
  * 
  * @author Richard
  */
+/**
+ * @author Richard
+ *
+ */
 public class Movement {
 	
+	public static final float PI = 3.14159265f;
+	public static final float PI_OVER_TWO = PI / 2f;
+	public static final float TWO_PI = 2f * PI;
+	
+	/**
+	 * A linear movement, constant velocity
+	 */
 	public static final int LINEAR = 0;
 	
 	/**
-	 * @param type method used for movement
-	 * @param distance length to be travelled
-	 * @param startTime ticks at the start of movement
-	 * @param now ticks right now
-	 * @param endTime ticks at the end
-	 * @return the velocity, as a factor of maximum
+	 * A smooth cosinal movement
 	 */
-	public static float getVelocity(int type, float distance, long startTime, long now, long endTime) {
-		if(now > endTime || now < startTime) {
-			return 0;
+	public static final int SMOOTH = 1;
+	
+	/**
+	 * Begins slowly, accelerates
+	 */
+	public static final int SQUARED = 2;
+	
+	/**
+	 * Begins slowly, accelerates harder
+	 */
+	public static final int CUBIC = 3;
+	
+	/**
+	 * Begins slowly, accelerates harder
+	 */
+	public static final int QUADRATIC = 4;
+	
+	/**
+	 * Begins quickly, ends slowly
+	 */
+	public static final int SLOWING = 3;
+	
+	public static float getPosition(float position, int method) {
+		switch(method) {
+			case SMOOTH:
+				return 1f - (1f + (float)Math.cos(position * PI)) / 2f;
+			case SQUARED:
+				return position * position;
+			case CUBIC:
+				return position * position * position;
+			case QUADRATIC:
+				return position * position * position * position;
+			default:
+				return position;
 		}
-		return getVelocity(type, distance, (int)(endTime - startTime), (int)(endTime - now) / (int)(endTime - startTime));
-	}
-	
-	public static float getVelocity(int type, float distance, int time, int position) {
-		switch(type) {
-			case LINEAR:
-				return getVelocityLinear(distance, time, position);
-			}
-		return 1;
-	}
-	
-	public static float getVelocityLinear(float distance, int time, float position) {
-		return distance / time;
 	}
 
 }

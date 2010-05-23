@@ -58,12 +58,11 @@ public class Texture {
 		this.rows = rows;
 		textureWidth = nextPowerOfTwo(width);
 		textureHeight = nextPowerOfTwo(height);
-		Debug.print("Created a texture, tw=" + textureWidth + " th=" + textureHeight);
 	}
 	
 	protected void prepareBuffers() {
 		buffer = new BufferObject();
-		buffer.update(0, 0, textureWidth / width, textureHeight / height);
+		buffer.update(0, 0, (float)width / (float)textureWidth, (float)height / (float)textureHeight);
 	}
 	
 	protected void freeBuffers() {
@@ -90,6 +89,7 @@ public class Texture {
 		}
 		int i = 0;
 		while(true) {
+			i++;
 			if(Math.pow(2, i) >= minimum) {
 				return (int)Math.pow(2, i);
 			}
@@ -97,7 +97,6 @@ public class Texture {
 	}
 	
 	protected void onLoadTexture(GL10 gl) {
-		Debug.print("LOAD ME");
 		prepareBuffers();
 		int[] nameArray = new int[1];
 		GLHelper.enableTextures();
@@ -121,7 +120,6 @@ public class Texture {
         GLUtils.texSubImage2D(GL10.GL_TEXTURE_2D, 0, 0, 0, bmp);
         bmp.recycle();
         bmp = null;
-        Debug.print("LOAD COMPLETE");
 	}
 
 }

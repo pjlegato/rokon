@@ -59,7 +59,23 @@ public class RokonActivity extends Activity {
 	}
 	
 	@Override
-	public boolean onTouchEvent(MotionEvent event) { 
+	public boolean onTouchEvent(MotionEvent event) {
+		if(currentScene == null)
+			return false;
+		
+		event.setLocation(event.getX() / gameWidth, event.getY() / gameHeight);
+		currentScene.onTouch(event.getX(), event.getY(), event);
+		switch(event.getAction()) {
+			case MotionEvent.ACTION_DOWN:
+				currentScene.onTouchDown(event.getX(), event.getY(), event);
+				break;
+			case MotionEvent.ACTION_UP:
+				currentScene.onTouchUp(event.getX(), event.getY(), event);
+				break;
+			case MotionEvent.ACTION_MOVE:
+				currentScene.onTouch(event.getX(), event.getY(), event);
+				break;
+		}
 		return false;
 	}
 	
@@ -220,7 +236,6 @@ public class RokonActivity extends Activity {
 		setContentView(surfaceView);
 		engineCreated = true;
 	}
-
 
 	/**
 	 * Returns the current draw priority
