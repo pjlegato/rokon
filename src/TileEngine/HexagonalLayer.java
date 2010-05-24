@@ -11,6 +11,9 @@ import com.stickycoding.rokon.Scene;
 
 public class HexagonalLayer extends TiledLayer {
 	
+	//TODO Support alternative hexagons (flat along horizontal)
+	//TODO Impprove getTile routines, very basic right now
+	
 	protected int size, halfSize;
 	protected int separation;
 
