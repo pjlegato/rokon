@@ -1,5 +1,6 @@
 package com.stickycoding.rokonexamples;
 
+import TileEngine.HexagonalLayer;
 import TileEngine.RectangularLayer;
 import TileEngine.TiledSprite;
 import android.view.MotionEvent;
@@ -7,17 +8,14 @@ import android.view.MotionEvent;
 import com.stickycoding.rokon.Debug;
 import com.stickycoding.rokon.DrawPriority;
 import com.stickycoding.rokon.DrawableObject;
-import com.stickycoding.rokon.DynamicObject;
-import com.stickycoding.rokon.Movement;
 import com.stickycoding.rokon.RokonActivity;
 import com.stickycoding.rokon.Scene;
 import com.stickycoding.rokon.Texture;
-import com.stickycoding.rokon.Handler.ObjectHandler;
 
 public class Launcher extends RokonActivity {
 	
-	TiledSprite sprite;
-	RectangularLayer layer;
+	public TiledSprite sprite;
+	public HexagonalLayer layer;
 
 	public void onCreate() {
 		forceFullscreen();
@@ -31,18 +29,20 @@ public class Launcher extends RokonActivity {
 	public void onLoadComplete() {
 		Debug.print("Loading is complete");
 
-		Texture texture = new Texture("face.png");
-		layer = new RectangularLayer(myScene, 32, 100, 100);
+		Texture texture = new Texture("hex.png");
+		layer = new HexagonalLayer(myScene, 64, 100, 73);
 		myScene.setLayer(0, layer);
 		
 		myScene.useTexture(texture);
 		
-		sprite = new TiledSprite(layer, 0, 0, 100, 100);
-		sprite.setTargetTile(1, 0);
-		sprite.setTileOffset(0.5f);
-		sprite.setTexture(texture);
-		sprite.setTouchable();
-		myScene.add(sprite);
+		for(int i = 0; i < 6; i++) {
+			for(int j = 0; j < 10; j++) {
+				sprite = new TiledSprite(layer, 0, 0, 100, 100);
+				sprite.setTexture(texture);
+				sprite.setTile(i, j);
+				myScene.add(sprite);
+			}
+		}
 		
 		setScene(myScene);
 		
@@ -52,22 +52,13 @@ public class Launcher extends RokonActivity {
 		
 		@Override
 		public void onTouchDown(DrawableObject object, float x, float y, MotionEvent event) {
-			sprite.moveTo(200, 500, 5000, Movement.SMOOTH, new ObjectHandler() { 
-				public void onComplete(DynamicObject dynamicObject) {
-					Debug.print("Complete!");
-				}
-				
-				public void onCancel() {
-					Debug.print("CANCELLED!");
-				}
-			});
+			//sprite.setTileX(sprite.getTileX() + 1);
 		}
 		
 		@Override
-		public void onTouchDown(float x, float y, MotionEvent event) {
-			if(true) return;
-			sprite.rotateTo(190, DynamicObject.ROTATE_TO_AUTOMATIC, 500, Movement.SMOOTH, null);
-			
+		public void onTouch(float x, float y, MotionEvent event) {
+			HexagonalLayer layer = (HexagonalLayer)getLayer(0);
+			sprite.setTile(layer.getTileX(x, y), layer.getTileY(x, y));
 		}
 	};
 	

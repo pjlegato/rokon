@@ -19,21 +19,35 @@ public class RectangularLayer extends TiledLayer {
 		this.width = width;
 		this.height = height;
 	}
-	
+
+	@Override
 	public float getDrawX(int x, int y) { 
 		return x * width;
 	}
-	
+
+	@Override
 	public float getDrawY(int x, int y) { 
 		return y * height; 
 	}
-	
-	public float getDrawX(int x, int targetX, float offset) {
+
+	@Override
+	public float getDrawX(int x, int y, int targetX, int targetY, float offset) {
 		return (x * width) + ((targetX - x) * offset * width);
 	}
-	
-	public float getDrawY(int y, int targetY, float offset) {
+
+	@Override
+	public float getDrawY(int x, int y, int targetX, int targetY, float offset) {
 		return (y * height) + ((targetY - y) * offset * height);
+	}
+
+	@Override
+	public int getTileX(float x, float y) { 
+		return (int)((x - (x % width)) / width);
+	}
+
+	@Override
+	public int getTileY(float x, float y) { 
+		return (int)((y - (y % height)) / height);
 	}
 
 }

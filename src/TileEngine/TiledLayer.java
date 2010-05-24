@@ -44,7 +44,7 @@ public class TiledLayer extends Layer {
 	 * @param x X (or column) location of the tile
 	 * @return float
 	 */
-	public float getDrawX(int x) { return -1; }
+	public float getDrawX(int x, int y) { return -1; }
 
 	/**
 	 * Determines the Y location of a TiledSprite on the layer, taking into account the tilemap
@@ -52,7 +52,7 @@ public class TiledLayer extends Layer {
 	 * @param y Y (or row) location of the tile
 	 * @return float
 	 */
-	public float getDrawY(int y) { return -1; }
+	public float getDrawY(int x, int y) { return -1; }
 
 	/**
 	 * Determines the X location of a TiledSprite on the layer, taking into account the tilemap
@@ -62,7 +62,7 @@ public class TiledLayer extends Layer {
 	 * @param offset the offset beween current and target sprite (0 to 1)
 	 * @return float
 	 */
-	public float getDrawX(int x, int targetX, float offset) { return -1; }
+	public float getDrawX(int x, int y, int targetX, int targetY, float offset) { return -1; }
 
 
 	/**
@@ -73,6 +73,24 @@ public class TiledLayer extends Layer {
 	 * @param offset the offset beween current and target sprite (0 to 1)
 	 * @return float
 	 */
-	public float getDrawY(int y, int targetY, float offset) { return -1; }
+	public float getDrawY(int x, int y, int targetX, int targetY, float offset) { return -1; }
+	
+	/**
+	 * Determines the X location of the nearest tile to a given position
+	 * 
+	 * @param x float
+	 * @param y float
+	 * @return the X (or column) location of the nearest tile
+	 */
+	public int getTileX(float x, float y) { return -1; }
+	
+	/**
+	 * Determines the Y location of the nearest tile to a given position
+	 * 
+	 * @param x float
+	 * @param y float
+	 * @return the Y (or column) location of the nearest tile
+	 */
+	public int getTileY(float x, float y) { return -1; }
 
 }
