@@ -707,4 +707,59 @@ public class DrawableObject extends BasicGameObject implements Drawable, Updatea
 	public void removeColourBuffer() {
 		colourBuffer = null;
 	}
+
+
+    /**
+     * Returns true if the object is being drawn and is located off
+     * the left edge of the visible screen.
+     */
+    public boolean isLeftOfScreen() {
+        if(parentLayer == null) {
+          return false;
+        }
+        float maxSize = width;
+        if(height > width) maxSize = height;
+        
+        return getX() + maxSize < parentScene.getX();
+    }
+
+    /**
+     * Returns true if the object is being drawn and is located off
+     * the right edge of the visible screen.
+     */
+    public boolean isRightOfScreen() {
+        if(parentLayer == null) {
+          return false;
+        }
+        
+        return getX() > parentScene.getX() + parentScene.getWidth();
+    }
+
+    /**
+     * Returns true if the object is being drawn and is located above
+     * the top edge of the visible screen.
+     */
+    public boolean isAboveScreen() {
+        if(parentLayer == null) {
+          return false;
+        }
+        float maxSize = width;
+        if(height > width) maxSize = height;
+        
+        return getY() + maxSize < parentScene.getY();
+    }
+
+    /**
+     * Returns true if the object is being drawn and is located below
+     * the bottom edge of the visible screen.
+     */
+    public boolean isBelowScreen() {
+        if(parentLayer == null) {
+          return false;
+        }
+        
+        return getY() > parentScene.getY() + parentScene.getHeight();
+    }
+
+	
 }
