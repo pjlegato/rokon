@@ -102,7 +102,7 @@ public class RokonRenderer implements GLSurfaceView.Renderer {
         //GLU.gluOrtho2D(gl, 0, RokonActivity.gameWidth, RokonActivity.gameHeight, 0);
 	}
 
-	@Override
+	////Override
 	public void onSurfaceLost() {
 		Debug.print("onSurfaceLost");
 		GLHelper.reset();
