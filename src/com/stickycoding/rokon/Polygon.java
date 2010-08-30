@@ -140,6 +140,7 @@ public class Polygon {
 	 */
 	public void addVertex(Point location) {
 		vertex[vertexCount++] = location;
+		buffer = null; // old buffer is now invalid
 	}
 	
 	/**
