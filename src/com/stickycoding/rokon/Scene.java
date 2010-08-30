@@ -1020,5 +1020,55 @@ public abstract class Scene {
 		RokonActivity.toastHandler.sendEmptyMessage(0);
 	}
 	
+
+    /**
+     * Returns the effective visible width of the scene. If the scene
+     * uses a window, then it returns the window's height; otherwise,
+     * returns the width of the RokonActivity.
+     *
+     */
+    public float getWidth() {
+        if(window == null)
+            return RokonActivity.gameWidth;
+        else
+            return window.width;
+    }
+
+    /**
+     * Returns the effective visible height of the scene. If the scene
+     * uses a window, then it returns the window's height; otherwise,
+     * returns the height of the RokonActivity.
+     *
+     */
+    public float getHeight() {
+        if(window == null)
+            return RokonActivity.gameHeight;
+        else
+            return window.height;
+    }
+
+    /**
+     * Returns the x value of the scene's left edge.
+     * If the scene uses a window, returns getWindow().getX().
+     * Otherwise, returns 0.
+     */
+    public float getX() {
+        if(window == null)
+            return 0;
+        else
+            return window.getX();
+    }
+
+    /**
+     * Returns the x value of the scene's top edge.
+     * If the scene uses a window, returns getWindow().getY().
+     * Otherwise, returns 0.
+     */
+    public float getY() {
+        if(window == null)
+            return 0;
+        else
+            return window.getY();
+    }
 	
 }
